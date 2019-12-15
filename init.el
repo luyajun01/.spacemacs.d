@@ -39,6 +39,14 @@ This function should only modify configuration layer settings."
      ;; lsp
      ;; dap
      colors
+     lpy
+     tabnine
+     (ess :variables
+          ess-enable-smart-equals t
+          ess-assign-key "M--"
+          )
+     imenu-list
+     ipython-notebook
      prodigy
      ;; github
      search-engine
@@ -59,10 +67,33 @@ This function should only modify configuration layer settings."
           magit-refs-show-commit-count 'all
           magit-revision-show-gravatars nil)
      (ibuffer :variables ibuffer-group-buffers-by 'projects)
-     (auto-completion :variables auto-completion-enable-sort-by-usage t
-                      auto-completion-enable-snippets-in-popup t
+     ;; (auto-completion :variables auto-completion-enable-sort-by-usage t
+     ;;                  auto-completion-enable-snippets-in-popup t
+     ;;                  auto-completion-tab-key-behavior 'cycle
+     ;;                  :disabled-for org markdown)
+     (auto-completion :variables
+                      spacemacs-default-company-backends '(company-etags
+                                                           company-gtags
+                                                           company-files
+                                                           company-capf
+                                                           ;; company-anaconda
+                                                           company-keywords
+                                                           ;; company-yasnippet
+                                                           company-dabbrev
+                                                           )
+                      auto-completion-idle-delay 0
+                      auto-completion-return-key-behavior 'complete
                       auto-completion-tab-key-behavior 'cycle
-                      :disabled-for org markdown)
+                      auto-completion-complete-with-key-sequence nil
+                      auto-completion-complete-with-key-sequence-delay 0.1
+                      auto-completion-enable-sort-by-usage t
+                      auto-completion-enable-help-tooltip t
+                      auto-completion-use-company-box t
+                      auto-completion-private-snippets-directory "~/dot-spacemacs/snippets/"
+                      auto-completion-enable-snippets-in-popup t
+                      ;; :disabled-for org markdown
+                      )
+
      (osx :variables osx-dictionary-dictionary-choice "Simplified Chinese - English"
           osx-command-as 'super)
      restclient
@@ -91,7 +122,7 @@ This function should only modify configuration layer settings."
      (typescript :variables
                  typescript-fmt-on-save nil
                  typescript-fmt-tool 'typescript-formatter
-                typescript-backend 'lsp)
+                 typescript-backend 'lsp)
      emacs-lisp
      (clojure :variables clojure-enable-fancify-symbols t)
      racket
@@ -110,8 +141,69 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(sicp ssh-agency anki-editor)
-
+   dotspacemacs-additional-packages '(sicp
+                                      ssh-agency
+                                      anki-editor
+                                      company-box
+                                      keyfreq
+                                      emojify
+                                      fzf
+                                      lsp-python-ms
+                                      ;; evil-org
+                                      general
+                                      window-numbering
+                                      ace-jump-zap
+                                      ;; evil-leader
+                                      bm
+                                      company-jedi
+                                      tabbar
+                                      sicp ssh-agency anki-editor
+                                        ;powerline
+                                        ;smartparens
+                                      ranger
+                                      ;; pophint
+                                      ;; all-the-icons
+                                      xah-replace-pairs
+                                      hydra
+                                      ;; spaceline-all-the-icons
+                                        ;ace-window
+                                      eval-in-repl
+                                      lispy
+                                      jedi
+                                      function-args
+                                      elpy
+                                      jupyter
+                                      ;; counsel-etags
+                                      ;; company-ctags
+                                      mmm-mode
+                                        ;lsp-mode
+                                        ;lsp-ui
+                                      ;; org-journal
+                                      ;; company-lsp
+                                      org-alert
+                                        ;el2org
+                                      cdlatex
+                                      posframe ;emacs26.0以上使用
+                                        ;flymd
+                                        ;websocket
+                                        ;simple-httpd
+                                      ;; org-wiki
+                                      plain-org-wiki
+                                        ;real-auto-save
+                                      ;; company-tabnine
+                                      ;; yasnippet-snippets
+                                        ;rainbow-mode
+                                        ;ivy-yasnippet
+                                      cnfonts
+                                      electric-operator
+                                        ;leuven-theme
+                                        ;helm-bm
+                                      polymode
+                                      poly-R
+                                      poly-noweb
+                                      poly-markdown
+                                      poly-org
+                                      )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages
@@ -240,7 +332,9 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(solarized-light
+   dotspacemacs-themes '(;; leuven
+                         underwater
+                         solarized-light
                          solarized-dark)
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
@@ -519,11 +613,720 @@ dump."
   )
 
 (defun dotspacemacs/user-config ()
-   
-  ;;解决org表格里面中英文对齐的问题 
-  (when (configuration-layer/layer-usedp 'chinese)
-    (when (and (spacemacs/system-is-mac) window-system)
-      (spacemacs//set-monospaced-font "Source Code Pro" "Hiragino Sans GB" 14 16)))
+  ;; Transparency
+  (spacemacs/enable-transparency)
+  ;;company
+  ;; company-english
+  ;;  helm-company choose from company completions with C-:
+  (with-eval-after-load 'company
+    (define-key company-mode-map (kbd "C-:") 'helm-company)
+    (define-key company-active-map (kbd "C-:") 'helm-company)
+    (setq ess-use-company t)
+    ;; (require 'company-tabnine);以后要用的时候，再打开
+    ;; (add-to-list 'company-backends #'company-tabnine)
+                                        ;以后要用的时候打开
+    ;; (setq company-idle-delay 0)
+    (setq company-show-numbers t)
+    (setq company-frontends
+          '(company-tng-frontend
+            company-pseudo-tooltip-frontend
+            company-echo-metadata-frontend))
+    ;; Add yasnippet support for all company backends
+    ;; https://github.com/syl20bnr/spacemacs/pull/179
+    (defvar company-mode/enable-yas t
+      "Enable yasnippet for all backends.")
+    (defun company-mode/backend-with-yas (backend)
+      (if (or (not company-mode/enable-yas) (and (listp backend) (member 'company-yasnippet backend)))
+          backend
+        (append (if (consp backend) backend (list backend))
+                '(:with company-yasnippet))))
+    (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends)
+          )
+    ;;company-english-
+    ;; (add-to-list 'load-path (expand-file-name "~/dot-spacemacs/private/company-english-helper"))
+    ;; (require 'company-english-helper)
+    ;; (setq company-english-helper-fuzz-search-p t);模糊匹配
+    ;; (add-hook 'after-init-hook 'company-statistics-mode)
+    ;;        ;; workaround for company-transformers
+    ;; (setq company-tabnine--disable-next-transform nil)
+    ;; (defun my-company--transform-candidates (func &rest args)
+    ;;   (if (not company-tabnine--disable-next-transform)
+    ;;       (apply func args)
+    ;;     (setq company-tabnine--disable-next-transform nil)
+    ;;     (car args)))
+    ;; (defun my-company-tabnine (func &rest args)
+    ;;   (when (eq (car args) 'candidates)
+    ;;     (setq company-tabnine--disable-next-transform t))
+    ;;   (apply func args))
+
+    ;; (advice-add #'company--transform-candidates :around #'my-company--transform-candidates)
+    ;; (advice-add #'company-tabnine :around #'my-company-tabnine)
+    ;; (defun company//sort-by-tabnine (candidates)
+    ;;   (if (or (functionp company-backend)
+    ;;           (not (and (listp company-backend) (memq 'company-tabnine company-backend))))
+    ;;       candidates
+    ;;     (let ((candidates-table (make-hash-table :test #'equal))
+    ;;           candidates-1
+    ;;           candidates-2)
+    ;;       (dolist (candidate candidates)
+    ;;         (if (eq (get-text-property 0 'company-backend candidate)
+    ;;                 'company-tabnine)
+    ;;             (unless (gethash candidate candidates-table)
+    ;;               (push candidate candidates-2))
+    ;;           (push candidate candidates-1)
+    ;;           (puthash candidate t candidates-table)))
+    ;;       (setq candidates-1 (nreverse candidates-1))
+    ;;       (setq candidates-2 (nreverse candidates-2))
+    ;;       (nconc (seq-take candidates-1 2)
+    ;;              (seq-take candidates-2 2)
+    ;;              (seq-drop candidates-1 2)
+    ;;              (seq-drop candidates-2 2)))))
+    ;; (add-to-list 'company-transformers 'company//sort-by-tabnine t)
+    (global-company-mode)
+    )
+  ;; 改变evil-insert-mode光标形状
+  (setq-default evil-insert-state-cursor '("green" (bar . 2)))
+  ;; ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  ;;      Show key bind for currently entered incomplete command
+  ;; ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  (use-package which-key
+    :config
+    (progn
+      (which-key-mode)
+      (which-key-setup-side-window-bottom)))
+  ;;bm 管理书签
+  (use-package bm
+    :ensure t
+    :demand t
+    :init
+    ;; restore on load (even before you require bm)
+    (setq bm-restore-repository-on-load t)
+
+
+    :config
+    ;; Allow cross-buffer 'next'
+    (setq bm-cycle-all-buffers t)
+
+    ;; where to store persistant files
+    (setq bm-repository-file "~/.emacs.d/bm-repository")
+
+    ;; save bookmarks
+    (setq-default bm-buffer-persistence t)
+
+    ;; Loading the repository from file when on start up.
+    (add-hook 'after-init-hook 'bm-repository-load)
+
+    ;; Saving bookmarks
+    (add-hook 'kill-buffer-hook #'bm-buffer-save)
+
+    ;; Saving the repository to file when on exit.
+    ;; kill-buffer-hook is not called when Emacs is killed, so we
+    ;; must save all bookmarks first.
+    (add-hook 'kill-emacs-hook #'(lambda nil
+                                   (bm-buffer-save-all)
+                                   (bm-repository-save)))
+
+    ;; The `after-save-hook' is not necessary to use to achieve persistence,
+    ;; but it makes the bookmark data in repository more in sync with the file
+    ;; state.
+    (add-hook 'after-save-hook #'bm-buffer-save)
+
+    ;; Restoring bookmarks
+    (add-hook 'find-file-hooks   #'bm-buffer-restore)
+    (add-hook 'after-revert-hook #'bm-buffer-restore)
+
+    ;; The `after-revert-hook' is not necessary to use to achieve persistence,
+    ;; but it makes the bookmark data in repository more in sync with the file
+    ;; state. This hook might cause trouble when using packages
+    ;; that automatically reverts the buffer (like vc after a check-in).
+    ;; This can easily be avoided if the package provides a hook that is
+    ;; called before the buffer is reverted (like `vc-before-checkin-hook').
+    ;; Then new bookmarks can be saved before the buffer is reverted.
+    ;; Make sure bookmarks is saved before check-in (and revert-buffer)
+    (add-hook 'vc-before-checkin-hook #'bm-buffer-save)
+    :bind (("<f2>" . bm-next)
+           ("S-<f2>" . bm-previous)
+           ("C-<f2>" . bm-toggle))
+    )
+  ;;pdf-tools
+;;; pdf-tools package and reinstall both as at the start.
+  ;; (use-package pdf-tools
+  ;;   :ensure t
+  ;;   :config
+  ;;   (custom-set-variables
+  ;;    '(pdf-tools-handle-upgrades nil)) ; Use brew upgrade pdf-tools instead.
+  ;;   (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo"))
+  ;; (pdf-tools-install)
+  ;;ace-window
+  (global-set-key (kbd "M-o") 'ace-window)
+  (defvar aw-dispatch-alist
+    '((?x aw-delete-window "Delete Window")
+	  (?m aw-swap-window "Swap Windows")
+	  (?M aw-move-window "Move Window")
+	  (?c aw-copy-window "Copy Window")
+	  (?j aw-switch-buffer-in-window "Select Buffer")
+	  (?n aw-flip-window)
+	  (?u aw-switch-buffer-other-window "Switch Buffer Other Window")
+	  (?c aw-split-window-fair "Split Fair Window")
+	  (?v aw-split-window-vert "Split Vert Window")
+	  (?b aw-split-window-horz "Split Horz Window")
+	  (?o delete-other-windows "Delete Other Windows")
+	  (?? aw-show-dispatch-help))
+    "List of actions for `aw-dispatch-default'.")
+  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+
+  ;;hydra
+;;;yank
+  (defhydra hydra-yank-pop ()
+    "yank"
+    ("C-y" yank nil)
+    ("M-y" yank-pop nil)
+    ("y" (yank-pop 1) "next")
+    ("Y" (yank-pop -1) "prev")
+    ("l" helm-show-kill-ring "list" :color blue)) ; or browse-kill-ring
+  (global-set-key (kbd "M-y") #'hydra-yank-pop/yank-pop)
+  (global-set-key (kbd "C-y") #'hydra-yank-pop/yank)
+
+  ;;movement
+  (global-set-key
+   (kbd "C-n")
+   (defhydra hydra-move
+     (:body-pre (next-line))
+     "move"
+     ("n" next-line)
+     ("p" previous-line)
+     ("f" forward-char)
+     ("b" backward-char)
+     ("a" beginning-of-line)
+     ("e" move-end-of-line)
+     ("v" scroll-up-command)
+     ;; Converting M-v to V here by analogy.
+     ("V" scroll-down-command)
+     ("l" recenter-top-bottom)))
+
+  ;;page navigation
+  (defhydra hydra-page (ctl-x-map "" :pre (widen))
+    "page"
+    ("]" forward-page "next")
+    ("[" backward-page "prev")
+    ("n" narrow-to-page "narrow" :bind nil :exit t))
+  ;;goto line
+  (defhydra hydra-goto-line (goto-map ""
+                                      :pre (linum-mode 1)
+                                      :post (linum-mode -1))
+    "goto-line"
+    ("g" goto-line "go")
+    ("m" set-mark-command "mark" :bind nil)
+    ("q" nil "quit"))
+  (global-set-key (kbd "M-g C-m") #'hydra-goto-line/set-mark-command)
+  ;;Move Text
+  (defhydra hydra-move-text ()
+    "Move text"
+    ("u" move-text-up "up")
+    ("d" move-text-down "down"))
+
+  ;;find file with xf
+  (defun x-hydra-pre ()
+    (insert "x")
+    (let ((timer (timer-create)))
+      (timer-set-time timer (timer-relative-time (current-time) 0.5))
+      (timer-set-function timer 'hydra-keyboard-quit)
+      (timer-activate timer)))
+
+  (defhydra x-hydra (:body-pre x-hydra-pre
+                               :color blue
+                               :hint nil)
+    ("f" (progn (zap-to-char -1 ?x) (ido-find-file))))
+
+  (global-set-key "x" #'x-hydra/body)
+
+  ;;outline minor mode
+  (defhydra hydra-outline (:color pink :hint nil)
+    "
+^Hide^             ^Show^           ^Move
+^^^^^^------------------------------------------------------
+_q_: sublevels     _a_: all         _u_: up
+_t_: body          _e_: entry       _n_: next visible
+_o_: other         _i_: children    _p_: previous visible
+_c_: entry         _k_: branches    _f_: forward same level
+_l_: leaves        _s_: subtree     _b_: backward same level
+_d_: subtree
+
+"
+    ;; Hide
+    ("q" hide-sublevels)      ; Hide everything but the top-level headings
+    ("t" hide-body)           ; Hide everything but headings (all body lines)
+    ("o" hide-other)          ; Hide other branches
+    ("c" hide-entry)          ; Hide this entry's body
+    ("l" hide-leaves)         ; Hide body lines in this entry and sub-entries
+    ("d" hide-subtree)        ; Hide everything in this entry and sub-entries
+    ;; Show
+    ("a" show-all)            ; Show (expand) everything
+    ("e" show-entry)          ; Show this heading's body
+    ("i" show-children)       ; Show this heading's immediate child sub-headings
+    ("k" show-branches)       ; Show all sub-headings under this heading
+    ("s" show-subtree)        ; Show (expand) everything in this heading & below
+    ;; Move
+    ("u" outline-up-heading)               ; Up
+    ("n" outline-next-visible-heading)     ; Next
+    ("p" outline-previous-visible-heading) ; Previous
+    ("f" outline-forward-same-level)       ; Forward - same level
+    ("b" outline-backward-same-level)      ; Backward - same level
+    ("z" nil "leave"))
+  (global-set-key (kbd "C-c #") 'hydra-outline/body) ; by example
+                                        ;goto
+  (defhydra goto (:color blue :hint nil)
+    "
+Goto:
+^Char^              ^Word^                ^org^                    ^search^
+^^^^^^^^---------------------------------------------------------------------------
+_c_: 2 chars        _w_: word by char     _h_: headline in buffer  _o_: helm-occur
+_C_: char           _W_: some word        _a_: heading in agenda   _p_: helm-swiper
+_L_: char in line   _s_: subword by char  _q_: swoop org buffers   _f_: search forward
+^  ^                _S_: some subword     ^ ^                      _b_: search backward
+-----------------------------------------------------------------------------------
+_B_: helm-buffers       _l_: avy-goto-line
+_m_: helm-mini          _i_: ace-window
+_R_: helm-recentf
+
+_n_: Navigate           _._: mark position _/_: jump to mark
+"
+    ("c" avy-goto-char-2)
+    ("C" avy-goto-char)
+    ("L" avy-goto-char-in-line)
+    ("w" avy-goto-word-1)
+    ;; jump to beginning of some word
+    ("W" avy-goto-word-0)
+    ;; jump to subword starting with a char
+    ("s" avy-goto-subword-1)
+    ;; jump to some subword
+    ("S" avy-goto-subword-0)
+
+    ("l" avy-goto-line)
+    ("i" ace-window)
+
+    ("h" helm-org-headlines)
+    ("a" helm-org-agenda-files-headings)
+    ("q" helm-multi-swoop-org)
+
+    ("o" helm-occur)
+    ("p" swiper-helm)
+
+    ("f" isearch-forward)
+    ("b" isearch-backward)
+
+    ("." org-mark-ring-push :color red)
+    ("/" org-mark-ring-goto :color blue)
+    ("B" helm-buffers-list)
+    ("m" helm-mini)
+    ("R" helm-recentf)
+    ("n" hydra-navigate/body))
+
+  (global-set-key (kbd "s-g") 'goto/body)
+  ;;hydra skan-user-buffer
+  (defun my/name-of-buffers (n)
+    "Return the names of the first N buffers from `buffer-list'."
+    (let ((bns
+           (delq nil
+                 (mapcar
+                  (lambda (b)
+                    (unless (string-match "^ " (setq b (buffer-name b)))
+                      b))
+                  (buffer-list)))))
+      (subseq bns 1 (min (1+ n) (length bns)))))
+
+  ;; Given ("a", "b", "c"), return "1. a, 2. b, 3. c".
+  (defun my/number-names (list)
+    "Enumerate and concatenate LIST."
+    (let ((i 0))
+      (mapconcat
+       (lambda (x)
+         (format "%d. %s" (cl-incf i) x))
+       list
+       ", ")))
+
+  (defvar my/last-buffers nil)
+
+  (defun my/switch-to-buffer (arg)
+    (interactive "p")
+    (switch-to-buffer
+     (nth (1- arg) my/last-buffers)))
+
+  (defun my/switch-to-buffer-other-window (arg)
+    (interactive "p")
+    (switch-to-buffer-other-window
+     (nth (1- arg) my/last-buffers)))
+  (global-set-key
+   "\C-o"
+   (defhydra my/switch-to-buffer (:exit t
+                                        :body-pre (setq my/last-buffers
+                                                        (my/name-of-buffers 4)))
+     "
+other buffers: %s(my/number-names my/last-buffers)
+
+"
+     ("o" (my/switch-to-buffer 1))
+     ("1" (my/switch-to-buffer 1))
+     ("2" (my/switch-to-buffer 2))
+     ("3" (my/switch-to-buffer 3))
+     ("4" (my/switch-to-buffer 4))
+     ("<escape>" nil)))
+
+  ;;flycheck
+  (global-flycheck-mode)
+  ;;spaceline-all-the-icons
+  ;; (use-package spaceline-all-the-icons 
+  ;;   :after spaceline
+  ;;   :config (spaceline-all-the-icons-theme)
+  ;;   (spaceline-all-the-icons--setup-anzu)            ;; Enable anzu searching
+  ;;   ;(spaceline-all-the-icons--setup-package-updates) ;; Enable package update indicator
+  ;;   ;(spaceline-all-the-icons--setup-git-ahead)       ;; Enable # of commits ahead of upstream in git
+  ;;   ;(spaceline-all-the-icons--setup-paradox)         ;; Enable Paradox mode line
+  ;;   ;(spaceline-all-the-icons--setup-neotree)         ;; Enable Neotree mode line
+  ;;   )
+  ;;补充搜索括号特别有用
+  (require 'evil-matchit)
+  (global-evil-matchit-mode 1)
+  ;; 文字自动转行
+  (global-visual-line-mode 1)
+  ;; 行号
+  (global-linum-mode 1)
+  ;;evil-leader-mode
+  (window-numbering-mode 1)
+  (require 'evil-surround)
+  (global-evil-surround-mode)
+  (evilnc-default-hotkeys)
+  (define-key evil-normal-state-map (kbd ",/") 'evilnc-comment-or-uncomment-lines)
+  (define-key evil-visual-state-map (kbd ",/") 'evilnc-comment-or-uncomment-lines)
+  (evil-leader/set-key
+    "ff" 'find-file
+    "fs" 'save-buffer
+    "j" 'pyim-convert-string-at-point
+    "fr" 'counsel-recentf
+    "s"  'swiper
+    "cmr" 'counsel-mark-ring
+    "gl"  'avy-goto-line
+    "yd" 'youdao-dictionary-search
+    "gw0"  'avy-goto-word-0
+    "gw1"  'avy-goto-word-1
+                                        ;"ob" 'org-bold ;org-bold命令有错误
+    "m"  'hydra-goto-line/set-mark-command
+    "bb" 'switch-to-buffer
+    "0"  'select-window-0
+    "1"  'select-window-1
+    "2"  'select-window-2
+    "3"  'select-window-3
+    "w/" 'split-window-right
+    "w-" 'split-window-below
+                                        ;";"  'counsel-M-x
+    "wM" 'delete-other-windows
+    )
+  ;; ivy
+  (use-package ivy
+    :ensure t
+    :defer t
+    :diminish ivy-mode
+    :config
+    (progn
+      (ivy-mode)
+      (with-eval-after-load 'recentf
+        (setq ivy-use-virtual-buffers t))
+      (setq ivy-height 12
+            ivy-do-completion-in-region nil
+            ivy-wrap t
+            ivy-extra-directories nil
+            ivy-fixed-height-minibuffer t
+            ;; Don't use ^ as initial input
+            ivy-initial-inputs-alist nil
+            ;; highlight til EOL
+            ivy-format-function #'ivy-format-function-line
+            ;; disable magic slash on non-match
+            ;; ~ to /home/user
+            ;; ivy-magic-tilde nil
+            ivy-magic-slash-non-match-action nil)
+      ;; (setq ivy-re-builders-alist
+      ;;       '((t . ivy--regex-fuzzy)))
+      ;; (setq confirm-nonexistent-file-or-buffer t)
+      (setq ivy-re-builders-alist
+            '((t   . ivy--regex-ignore-order)))
+      (evil-make-overriding-map ivy-occur-mode-map 'normal)
+      ))
+  ;; dired-mode
+  ;;返回上层目录，我绑定了快捷键i, 特别好按，非常流畅
+  (add-hook 'dired-mode-hook
+            (lambda ()
+              (define-key dired-mode-map (kbd "i")
+                (lambda () (interactive) (find-alternate-file "..")))))
+
+  ;;Chinese and English fonts alignment
+  (use-package cnfonts
+    :config
+    (cnfonts-enable)
+    (setq cnfonts-use-face-font-rescale t)
+    )
+  ;; org
+  (with-eval-after-load 'org
+    (defun my-org-config ()
+      (make-variable-buffer-local 'company-backends)
+      (add-to-list 'company-backends
+                   '(company-yasnippet company-tabnine company-dabbrev-code :separate))
+      )
+    (add-hook 'org-mode-hook #'my-org-config)
+    )
+  ;; poly-R
+;;; R related modes
+  (use-package polymode
+    :mode
+    (("\\.Rmd" . poly-markdown+r-mode))
+    :init
+    (autoload 'r-mode "ess-site.el" "Major mode for editing R source." t)
+    :defer t
+    )
+                                        ;(add-to-list 'auto-mode-alist '("\\.md" . poly-markdown-mode))
+                                        ;(add-to-list 'auto-mode-alist '("\\.Snw" . poly-noweb+r-mode))
+                                        ;(add-to-list 'auto-mode-alist '("\\.Rnw" . poly-noweb+r-mode))
+                                        ;(add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode))
+  (add-to-list 'auto-mode-alist '("\\.Snw$" . poly-noweb+r-mode))
+  (add-to-list 'auto-mode-alist '("\\.Rnw$" . poly-noweb+r-mode))
+  (add-to-list 'auto-mode-alist '("\\.Rmd$" .  poly-markdown+r-mode))
+  (add-to-list 'auto-mode-alist '("\\.rapport$" . poly-rapport-mode))
+  (add-to-list 'auto-mode-alist '("\\.Rhtml$" . poly-html+r-mode))
+  (add-to-list 'auto-mode-alist '("\\.Rbrew$" . poly-brew+r-mode))
+  (add-to-list 'auto-mode-alist '("\\.Rcpp$" . poly-r+c++-mode))
+  (add-to-list 'auto-mode-alist '("\\.cppR$" . poly-c++r-mode))
+  ;; (defun ess/init-polymode ()
+  ;;   (use-package poly-R
+  ;;     :defer t)
+  ;;   (use-package poly-markdown
+  ;;     :defer t)
+  ;;   (use-package poly-markdown+r
+  ;;     :defer t)
+  ;;   ;;  ;   (use-package poly-noweb+r
+  ;;   ;;  ; :defer t)
+  ;;   )
+;;;  ESS (Emacs Speaks Statistics)
+  (with-eval-after-load 'ess
+    (ess-set-style 'RStudio)
+    (setq ess-offset-arguments 'prev-line)
+    ;;一定要记得加company-yasnipet
+    (defun my-ess-config ()
+      (make-variable-buffer-local 'company-backends)
+      (add-to-list 'company-backends
+                   '(company-R-args company-yasnippet company-tabnine company-R-library  company-R-objects company-dabbrev-code :separate))
+      )
+    (add-hook 'ess-mode-hook #'my-ess-config)
+    ;; (add-hook 'find-file-hook 'my-r-style-hook)
+    ;; (defun my-r-style-hook ()
+    ;;   (when (string-match (file-name-extension buffer-file-name) "[r|R]$")
+    ;;     (ess-set-style 'RStudio)
+    ;;     )
+    ;;   )
+    ;; ;;highlight color code
+    (add-hook 'ess-mode-hook
+              '(lambda()
+                 (font-lock-add-keywords
+                  nil
+                  '(                  ("\\<\\(if\\|for\\|function\\|return\\|$\\|@\\)\\>[\n[:blank:]]*(" 1
+                                       font-lock-keyword-face) ; must go first to override highlighting below
+                                      ("\\<\\([.A-Za-z][._A-Za-z0-9]*\\)[\n[:blank:]]*(" 1
+                                       font-lock-function-name-face) ; highlight function names
+                                      ("\\([(,]\\|[\n[:blank:]]*\\)\\([.A-Za-z][._A-Za-z0-9]*\\)[\n[:blank:]]*=[^=]"
+                                       2 font-lock-reference-face)
+                                      ;; highlight numbers
+                                      ("\\(-?[0-9]*\\.?[0-9]*[eE]?-?[0-9]+[iL]?\\)" 1 font-lock-type-face)
+                                      ;; highlight operators
+                                      ("\\(\\$\\|\\@\\|\\!\\|\\%\\|\\^\\|\\&\\|\\*\\|\(\\|\)\\|\{\\|\}\\|\\[\\|\\]\\|\\-\\|\\+\\|\=\\|\\/\\|\<\\|\>\\|:\\)" 1 font-lock-builtin-face)
+                                      highlight S4 methods
+                                      ("\\(setMethod\\|setGeneric\\|setGroupGeneric\\|setClass\\|setRefClass\\|setReplaceMethod\\)" 1 font-lock-reference-face)
+                                      ;; highlight packages called through ::, :::
+                                      ("\\(\\w+\\):\\{2,3\\}" 1 font-lock-constant-face)
+                                      ))
+                 ))
+    )
+  ;;pipe function %>% key
+  (defun then_R_operator ()
+    "R - %>% operator or 'then' pipe operator"
+    (interactive)
+    (just-one-space 1)
+    (insert "%>%")
+                                        ;(reindent-then-newline-and-indent)
+    (just-one-space 1))
+  (define-key ess-mode-map (kbd "C-c C-m") 'then_R_operator)
+  (define-key inferior-ess-mode-map (kbd "C-c C-m") 'then_R_operator)
+  ;;pipe function <- key
+  (defun assign_R_operator ()
+    "R - <- operator or 'assign' operator"
+    (interactive)
+    (just-one-space 1)
+    (insert "<-")
+    (just-one-space 1)
+                                        ;(reindent-then-newline-and-indent)
+    )
+  (define-key ess-mode-map (kbd "C-c C--") 'assign_R_operator)
+  (define-key inferior-ess-mode-map (kbd "M--") 'assign_R_operator)
+  ;;bracket function () key
+  (defun bracket_R_operator ()
+    "R - () operator or 'bracket' operator"
+    (interactive)
+                                        ; (just-one-space 1)
+    (insert "()")
+    (backward-char 1)
+                                        ;(reindent-then-newline-and-indent)
+    )
+  (define-key ess-mode-map (kbd "C-c C-b") 'bracket_R_operator)
+  (define-key inferior-ess-mode-map (kbd "C-c C-b") 'bracket_R_operator)
+  ;; ;;indent-region-as-r
+  ;; (defun ess-indent-region-as-r (beg end)
+  ;;   "Format region of code R using the R parser."
+  ;;   (interactive "r")
+  ;;   (let ((string (replace-regexp-in-string
+  ;;                  "\"" "\\\\\\&"
+  ;;                  (replace-regexp-in-string ;; how to avoid this double matching?
+  ;;                   "\\\\\"" "\\\\\\&" (buffer-substring-no-properties beg end))))
+  ;;         (buf (get-buffer-create "*ess-command-output*")))
+  ;;     (ess-force-buffer-current "Process to load into:")
+  ;;     (ess-command
+  ;;      (format
+  ;;       "local({oo <- options(keep.source = FALSE);
+  ;; cat('\n', paste(deparse(parse(text = \"%s\")[[1L]]), collapse = '\n'), '\n', sep = '')
+  ;; options(oo)})\n"
+  ;;       string) buf)
+  ;;     (with-current-buffer buf
+  ;;       (goto-char (point-max))
+  ;;       ;; (skip-chars-backward "\n")
+  ;;       (let ((end (point)))
+  ;;         (goto-char (point-min))
+  ;;         (goto-char (1+ (point-at-eol)))
+  ;;         (setq string (buffer-substring-no-properties (point) end))
+  ;;         ))
+  ;;     (delete-region beg end)
+  ;;     (insert string)
+  ;;     ))
+  ;;from iqss.github.io
+  ;; (add-hook 'ess-r-mode-hook
+  ;;            (lambda()
+  ;;              'eglot-ensure
+  ;;              (make-local-variable 'company-backends)
+  ;;              (delete-dups (push 'company-capf company-backends))
+  ;;             (delete-dups (push 'company-files company-backends))))
+  ;; Set ESS options
+  ;; (setq
+  ;;  ess-auto-width 'window
+  ;;  ess-use-auto-complete nil
+  ;;  ess-use-company 't
+  ;;  ;; ess-r-package-auto-set-evaluation-env nil
+  ;;  inferior-ess-same-window nil
+  ;;  ess-indent-with-fancy-comments nil   ; don't indent comments
+  ;;  ess-eval-visibly t                   ; enable echoing input
+  ;;  ess-eval-empty t                     ; don't skip non-code lines.
+  ;;  ess-ask-for-ess-directory nil        ; start R in the working directory by default
+  ;;  ess-ask-for-ess-directory nil        ; start R in the working directory by default
+  ;;  ess-R-font-lock-keywords             ; font-lock, but not too much
+  ;;  (quote
+  ;;   ((ess-R-fl-keyword:modifiers)
+  ;;    (ess-R-fl-keyword:fun-defs . t)
+  ;;    (ess-R-fl-keyword:keywords . t)
+  ;;    (ess-R-fl-keyword:assign-ops  . t)
+  ;;    (ess-R-fl-keyword:constants . 1)
+  ;;    (ess-fl-keyword:fun-calls . t)
+  ;;    (ess-fl-keyword:numbers)
+  ;;    (ess-fl-keyword:operators . t)
+  ;;    (ess-fl-keyword:delimiters)
+  ;;    (ess-fl-keyword:=)
+  ;;    (ess-R-fl-keyword:F&T))))
+  ;; ;;formatR
+  ;; From Walmes Zeviani
+  ;; https://github.com/basille/.emacs.d/issues/1
+  (defun ess-indent-region-with-formatr (beg end)
+    "Format region of code R using formatR::tidy_source()."
+    (interactive "r")
+    (let ((string
+           (replace-regexp-in-string
+            "\"" "\\\\\\&"
+            (replace-regexp-in-string ;; how to avoid this double matching?
+             "\\\\\"" "\\\\\\&"
+             (buffer-substring-no-properties beg end))))
+	      (buf (get-buffer-create "*ess-command-output*")))
+      (ess-force-buffer-current "Process to load into:")
+      (ess-command
+       (format                          ; R parser use 'width.cutoff = 60L'
+        "local({formatR::tidy_source(text = \"\n%s\", arrow = TRUE, width.cutoff = 60L) })\n"
+        string) buf)
+      (with-current-buffer buf
+        (goto-char (point-max))
+        ;; (skip-chars-backward "\n")
+        (let ((end (point)))
+	      (goto-char (point-min))
+	      (goto-char (1+ (point-at-eol)))
+	      (setq string (buffer-substring-no-properties (point) end))
+	      ))
+      (delete-region beg end)
+      (insert string)
+      (delete-char -1)
+      ))
+  (defun ess-indent-region-with-formatR-tidy-source (beg end)
+    "Format region of code R using formatR::tidy_source()."
+    (interactive "r")
+    (let ((string
+           (replace-regexp-in-string
+            "\"" "\\\\\\&"
+            (replace-regexp-in-string ;; how to avoid this double matching?
+             "\\\\\"" "\\\\\\&"
+             (buffer-substring-no-properties beg end))))
+          (buf (get-buffer-create "*ess-command-output*")))
+      (ess-force-buffer-current "Process to load into:")
+      (ess-command
+       (format
+        "local({
+          formatR::tidy_source(text=\"\n%s\",
+                               arrow=TRUE, width.cutoff=60) })\n"
+        string) buf)
+      (with-current-buffer buf
+        (goto-char (point-max))
+        ;; (skip-chars-backward "\n")
+        (let ((end (point)))
+          (goto-char (point-min))
+          (goto-char (1+ (point-at-eol)))
+          (setq string (buffer-substring-no-properties (point) end))
+          ))
+      (delete-region beg end)
+      (insert string)
+      (delete-backward-char 2)
+      ))
+  ;;styler
+  (defun ess-indent-region-with-styler (beg end)
+    "Format region of code R using styler::style_text()."
+    (interactive "r")
+    (let ((string
+           (replace-regexp-in-string
+            "\"" "\\\\\\&"
+            (replace-regexp-in-string ;; how to avoid this double matching?
+             "\\\\\"" "\\\\\\&"
+             (buffer-substring-no-properties beg end))))
+	      (buf (get-buffer-create "*ess-command-output*")))
+      (ess-force-buffer-current "Process to load into:")
+      (ess-command
+       (format
+        "local({options(styler.colored_print.vertical = FALSE);styler::style_text(text = \"\n%s\", reindention = styler::specify_reindention(regex_pattern = \"###\", indention = 0), indent_by = 4)})\n"
+        string) buf)
+      (with-current-buffer buf
+        (goto-char (point-max))
+        ;; (skip-chars-backward "\n")
+        (let ((end (point)))
+	      (goto-char (point-min))
+	      (goto-char (1+ (point-at-eol)))
+	      (setq string (buffer-substring-no-properties (point) end))
+	      ))
+      (delete-region beg end)
+      (insert string)
+      (delete-char -1)
+      ))
+
+  ;; 以下是zilongshanren配置 
+  ;; ;;解决org表格里面中英文对齐的问题 
+  ;; (when (configuration-layer/layer-usedp 'chinese)
+  ;;   (when (and (spacemacs/system-is-mac) window-system)
+  ;;     (spacemacs//set-monospaced-font "Source Code Pro" "Hiragino Sans GB" 14 16)))
 
 
   ;; Setting Chinese Font
@@ -667,8 +1470,8 @@ unwanted space when exporting org-mode to hugo markdown."
     (transient-bind-q-to-quit))
 
   ;; fix for the lsp error
-  (defvar spacemacs-jump-handlers-fundamental-mode nil))
-
+  (defvar spacemacs-jump-handlers-fundamental-mode nil)
+  )
 (setq custom-file (expand-file-name "custom.el" dotspacemacs-directory))
 (load custom-file 'no-error 'no-message)
 (defun dotspacemacs/emacs-custom-settings ()

@@ -1008,12 +1008,20 @@ Search for a search tool in the order provided by `dotspacemacs-search-tools'."
         (setq pyim-page-tooltip 'posframe)
         (setq pyim-page-length 9)
 
+        ;; (setq-default pyim-english-input-switch-functions
+        ;;               '(pyim-probe-program-mode
+        ;;                 ;; pyim-probe-auto-english
+        ;;                 pyim-probe-org-structure-template))
         (setq-default pyim-english-input-switch-functions
-                      '(pyim-probe-program-mode
-                        ;; pyim-probe-auto-english
+                      '(pyim-probe-dynamic-english
+                        pyim-probe-isearch-mode
+                        pyim-probe-program-mode
                         pyim-probe-org-structure-template))
-
-
+        ;; 开启拼音搜索功能
+        (pyim-isearch-mode 1)
+        (setq-default pyim-punctuation-half-width-functions
+                      '(pyim-probe-punctuation-line-beginning
+                        pyim-probe-punctuation-after-punctuation))
         ;; 不用频率切换输入法了。这个东西太好使了
         (bind-key* "s-j" 'pyim-convert-code-at-point)
 
@@ -1021,7 +1029,8 @@ Search for a search tool in the order provided by `dotspacemacs-search-tools'."
         ;; 使用这个来查看当前输入法有哪些，不错
         ;; (liberime-get-schema-list)
 
-        (liberime-select-schema "wubi_pinyin")
+        ;; (liberime-select-schema "wubi_pinyin")
+        (liberime-select-schema "double_pinyin_flypy")
         (setq pyim-default-scheme 'rime)))))
 
 ;; deprecated

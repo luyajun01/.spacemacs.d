@@ -283,6 +283,7 @@
          (ruby . t)
          (shell . t)
          (dot . t)
+         (R . t)
          (typescript . t)
          (js . t)
          (latex .t)
