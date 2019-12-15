@@ -194,7 +194,7 @@ This function should only modify configuration layer settings."
                                       ;; yasnippet-snippets
                                         ;rainbow-mode
                                         ;ivy-yasnippet
-                                      cnfonts
+                                      ;; cnfonts
                                       electric-operator
                                         ;leuven-theme
                                         ;helm-bm
@@ -350,7 +350,7 @@ It should only modify the values of Spacemacs settings."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 14
+                               :size 18
                                :weight normal
                                :width normal)
 
@@ -619,11 +619,12 @@ dump."
   ;; company-english
   ;;  helm-company choose from company completions with C-:
   (with-eval-after-load 'company
+    (global-company-mode)
     (define-key company-mode-map (kbd "C-:") 'helm-company)
     (define-key company-active-map (kbd "C-:") 'helm-company)
     (setq ess-use-company t)
-    ;; (require 'company-tabnine);以后要用的时候，再打开
-    ;; (add-to-list 'company-backends #'company-tabnine)
+    (require 'company-tabnine)
+    (add-to-list 'company-backends #'company-tabnine)
                                         ;以后要用的时候打开
     ;; (setq company-idle-delay 0)
     (setq company-show-numbers t)
@@ -682,7 +683,6 @@ dump."
     ;;              (seq-drop candidates-1 2)
     ;;              (seq-drop candidates-2 2)))))
     ;; (add-to-list 'company-transformers 'company//sort-by-tabnine t)
-    (global-company-mode)
     )
   ;; 改变evil-insert-mode光标形状
   (setq-default evil-insert-state-cursor '("green" (bar . 2)))
@@ -1058,13 +1058,7 @@ other buffers: %s(my/number-names my/last-buffers)
               (define-key dired-mode-map (kbd "i")
                 (lambda () (interactive) (find-alternate-file "..")))))
 
-  ;;Chinese and English fonts alignment
-  (use-package cnfonts
-    :config
-    (cnfonts-enable)
-    (setq cnfonts-use-face-font-rescale t)
-    )
-  ;; org
+  ;;org 
   (with-eval-after-load 'org
     (defun my-org-config ()
       (make-variable-buffer-local 'company-backends)
@@ -1073,7 +1067,13 @@ other buffers: %s(my/number-names my/last-buffers)
       )
     (add-hook 'org-mode-hook #'my-org-config)
     )
-  ;; poly-R
+  ;;Chinese and English fonts alignment
+  ;; (use-package cnfonts
+  ;;   :config
+  ;;   (cnfonts-enable)
+  ;;   (setq cnfonts-use-face-font-rescale t)
+  ;;   )
+                                        ; poly-R
 ;;; R related modes
   (use-package polymode
     :mode
@@ -1106,7 +1106,7 @@ other buffers: %s(my/number-names my/last-buffers)
   ;;   )
 ;;;  ESS (Emacs Speaks Statistics)
   (with-eval-after-load 'ess
-    (ess-set-style 'RStudio)
+    ;; (ess-set-style 'RStudio)
     (setq ess-offset-arguments 'prev-line)
     ;;一定要记得加company-yasnipet
     (defun my-ess-config ()

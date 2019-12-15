@@ -82,7 +82,7 @@
 	  ;;                                   (TeX-current-macro))
 	  ;;                          #'th/TeX-goto-macro-end)))
       
-      (spacemacs|disable-company org-mode)
+      ;; (spacemacs|disable-company org-mode)
       (spacemacs/set-leader-keys-for-major-mode 'org-mode
         "," 'org-priority)
       (require 'org-compat)

@@ -1003,11 +1003,9 @@ Search for a search tool in the order provided by `dotspacemacs-search-tools'."
         (setq load-path (cons (file-truename "~/.spacemacs.d/") load-path))
         (require 'liberime)
         (require 'posframe)
-
         (setq default-input-method "pyim")
         (setq pyim-page-tooltip 'posframe)
         (setq pyim-page-length 9)
-
         ;; (setq-default pyim-english-input-switch-functions
         ;;               '(pyim-probe-program-mode
         ;;                 ;; pyim-probe-auto-english
@@ -1017,6 +1015,7 @@ Search for a search tool in the order provided by `dotspacemacs-search-tools'."
                         pyim-probe-isearch-mode
                         pyim-probe-program-mode
                         pyim-probe-org-structure-template))
+        ;; (setq pyim-page-tooltip 'minibuffer) ;展示方式为minibuffer mode
         ;; 开启拼音搜索功能
         (pyim-isearch-mode 1)
         (setq-default pyim-punctuation-half-width-functions
