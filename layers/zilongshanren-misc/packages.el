@@ -655,7 +655,6 @@ Search for a search tool in the order provided by `dotspacemacs-search-tools'."
       (global-set-key (kbd "C-c d") 'osx-dictionary-search-pointer)
       )))
 
-
 (defun zilongshanren-misc/init-4clojure ()
   (use-package 4clojure
     :init
@@ -962,6 +961,7 @@ Search for a search tool in the order provided by `dotspacemacs-search-tools'."
       :body
       (find-file "~/Github/HlMJ_js/assets/scripts/Login/LoginScene.js"))))
 
+ ;; deprecated
 (defun zilongshanren-misc/post-init-pyim ()
   (progn
     ;; use librime as wubi input
@@ -1022,17 +1022,15 @@ Search for a search tool in the order provided by `dotspacemacs-search-tools'."
                       '(pyim-probe-punctuation-line-beginning
                         pyim-probe-punctuation-after-punctuation))
         ;; 不用频率切换输入法了。这个东西太好使了
-        (bind-key* "s-j" 'pyim-convert-code-at-point)
-
+        (bind-key* "C-S-p" 'pyim-convert-code-at-point)
         (liberime-start "/Library/Input Methods/Squirrel.app/Contents/SharedSupport" (file-truename "~/Library/Rime"))
         ;; 使用这个来查看当前输入法有哪些，不错
         ;; (liberime-get-schema-list)
 
         ;; (liberime-select-schema "wubi_pinyin")
-        (liberime-select-schema "double_pinyin_flypy")
+        ;;(liberime-select-schema "double_pinyin_flypy")
+        (liberime-select-schema "xhup_fluency")
         (setq pyim-default-scheme 'rime)))))
-
-;; deprecated
 (defun zilongshanren-misc/post-init-chinese-wbim ()
   (progn
     

@@ -24,7 +24,7 @@
     ;; ox-reveal
     ;; worf
     ;; org-download
-    ;; plain-org-wiki
+    ;plain-org-wiki
     )
   )
 
@@ -49,7 +49,6 @@
   (add-hook 'org-mode-hook (lambda () (spacemacs/toggle-line-numbers-off)) 'append)
   (with-eval-after-load 'org
     (progn
-
       ;; disable < auto pair for org mode
       ;; disable {} auto pairing in electric-pair-mode for web-mode
       (add-hook
@@ -428,16 +427,12 @@ See `org-capture-templates' for more information."
                )
               ("blog" :components ("blog-notes" "blog-static"))))
 
-
-
       (add-hook 'org-after-todo-statistics-hook 'zilong/org-summary-todo)
       ;; used by zilong/org-clock-sum-today-by-tags
-
       (define-key org-mode-map (kbd "s-p") 'org-priority)
       (spacemacs/set-leader-keys-for-major-mode 'org-mode
         "tl" 'org-toggle-link-display)
       (define-key evil-normal-state-map (kbd "C-c C-w") 'org-refile)
-
       ;; hack for org headline toc
       (defun org-html-headline (headline contents info)
         "Transcode a HEADLINE element from Org to HTML.
@@ -543,10 +538,10 @@ holding contextual information."
     :init
     (org-download-enable)))
 
-(defun zilongshanren-org/init-plain-org-wiki ()
-  (use-package plain-org-wiki
-    :init
-    (setq pow-directory "~/org-notes")))
+;(defun zilongshanren-org/init-plain-org-wiki ()
+;  (use-package plain-org-wiki
+;    :init
+;    (setq plain-org-wiki-directory "~/Documents/坚果云/我的坚果云/github/wiki/")))
 
 (defun zilongshanren-org/init-ob-typescript ()
   (use-package ob-typescript

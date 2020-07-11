@@ -16,7 +16,7 @@
       '(
         css-mode
         paredit
-        lispy
+        ;lispy
         caps-lock
         cmake-font-lock
         cmake-mode
@@ -34,7 +34,7 @@
         (cc-mode :location built-in)
         ;; flycheck-clojure
         ;; etags-select
-        (python :location built-in)
+        ;(python :location built-in)
         (emacs-lisp :location built-in)
         ;; clojure-mode
         company
@@ -44,13 +44,17 @@
         cider
         ;; editorconfig
         robe
-        exec-path-from-shell
+        ;; exec-path-from-shell
         lsp-mode
         typescript-mode
         ))
 
 (defun zilongshanren-programming/post-init-typescript-mode ()
   (add-hook 'typescript-mode-hook 'my-ts-mode-hook))
+
+;; (defun zilongshanren-programming/post-init-ess-mode ()
+  
+;;   )
 
 (defun zilongshanren-programming/post-init-lsp-mode ()
   (progn
@@ -112,11 +116,11 @@
     :commands (compile-dwim-run compile-dwim-compile)
     :init))
 
-(defun zilongshanren-programming/init-exec-path-from-shell ()
-  (use-package exec-path-from-shell
-    :init
-    (when (memq window-system '(mac ns))
-      (exec-path-from-shell-initialize))))
+;; (defun zilongshanren-programming/init-exec-path-from-shell ()
+;;   (use-package exec-path-from-shell
+;;     :init
+;;     (when (memq window-system '(mac ns))
+;;       (exec-path-from-shell-initialize))))
 
 (defun zilongshanren-programming/post-init-robe ()
   (progn
@@ -201,10 +205,10 @@
 (defun zilongshanren-programming/post-init-emacs-lisp ()
     (remove-hook 'emacs-lisp-mode-hook 'auto-compile-mode))
 
-(defun zilongshanren-programming/post-init-python ()
-  (add-hook 'python-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
+;(defun zilongshanren-programming/post-init-python ()
+;  (add-hook 'python-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
   ;; if you use pyton3, then you could comment the following line
-  (setq python-shell-interpreter "python"))
+;  (setq python-shell-interpreter "python"))
 
 (defun zilongshanren-programming/post-init-js-doc ()
   (setq js-doc-mail-address "guanghui8827@gmail.com"
@@ -248,8 +252,6 @@
                                      company-etags)
                                     company-files company-dabbrev)))
 
-
-
 (defun zilongshanren-programming/post-init-yasnippet ()
   (progn
     (set-face-background 'secondary-selection "gray")
@@ -292,38 +294,6 @@
 
 (defun zilongshanren-programming/init-flycheck-package ()
   (use-package flycheck-package))
-
-(defun zilongshanren-programming/init-lispy ()
-  (use-package lispy
-    :defer t
-    :init
-    (progn
-      (add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1)))
-      (add-hook 'ielm-mode-hook (lambda () (lispy-mode 1)))
-      (add-hook 'inferior-emacs-lisp-mode-hook (lambda () (lispy-mode 1)))
-      ;; (add-hook 'spacemacs-mode-hook (lambda () (lispy-mode 1)))
-      (add-hook 'clojure-mode-hook (lambda () (lispy-mode 1)))
-      (add-hook 'scheme-mode-hook (lambda () (lispy-mode 1)))
-      (add-hook 'cider-repl-mode-hook (lambda () (lispy-mode 1)))
-      )
-    :config
-    (progn
-      (push '(cider-repl-mode . ("[`'~@]+" "#" "#\\?@?")) lispy-parens-preceding-syntax-alist)
-
-      (spacemacs|hide-lighter lispy-mode)
-      (define-key lispy-mode-map (kbd "M-s") 'lispy-splice)
-      (define-key lispy-mode-map (kbd "s-k") 'paredit-splice-sexp-killing-backward)
-
-      (with-eval-after-load 'cider-repl
-        (define-key cider-repl-mode-map (kbd "C-s-j") 'cider-repl-newline-and-indent))
-
-      (add-hook
-       'minibuffer-setup-hook
-       'conditionally-enable-lispy)
-      (define-key lispy-mode-map (kbd "s-m") 'lispy-mark-symbol)
-      (define-key lispy-mode-map (kbd "s-u") 'lispy-undo)
-      (define-key lispy-mode-map (kbd "s-1") 'lispy-describe-inline)
-      (define-key lispy-mode-map (kbd "s-2") 'lispy-arglist-inline))))
 
 
 (defun zilongshanren-programming/init-cmake-font-lock ()
@@ -525,10 +495,8 @@
     (spacemacs/set-leader-keys-for-major-mode 'c++-mode
       "gd" 'etags-select-find-tag-at-point)
 
-
     (add-hook 'c++-mode-hook 'my-setup-develop-environment)
     (add-hook 'c-mode-hook 'my-setup-develop-environment)
-
 
     ;; http://stackoverflow.com/questions/23553881/emacs-indenting-of-c11-lambda-functions-cc-mode
     (defadvice c-lineup-arglist (around my activate)
@@ -563,7 +531,7 @@
   (progn
     (setq ycmd-tag-files 'auto)
     (setq ycmd-request-message-level -1)
-    (set-variable 'ycmd-server-command `("python" ,(expand-file-name "~/Github/ycmd/ycmd/__main__.py")))
+    ;(set-variable 'ycmd-server-command `("python" ,(expand-file-name "~/Github/ycmd/ycmd/__main__.py")))
     (setq company-backends-c-mode-common '((company-c-headers
                                             company-dabbrev-code
                                             company-keywords
@@ -633,8 +601,9 @@
     (setq company-minimum-prefix-length 1
           company-idle-delay 0.08)
 
-    (when (configuration-layer/package-usedp 'company)
-      (spacemacs|add-company-backends :modes shell-script-mode makefile-bsdmake-mode sh-mode lua-mode nxml-mode conf-unix-mode json-mode graphviz-dot-mode js2-mode js-mode))
+    ;; (when (configuration-layer/package-usedp 'company)
+    ;;   (spacemacs|add-company-backends :modes shell-script-mode makefile-bsdmake-mode sh-mode lua-mode nxml-mode conf-unix-mode json-mode graphviz-dot-mode js2-mode js-mode))
+
     ))
 (defun zilongshanren-programming/post-init-company-c-headers ()
   (progn
