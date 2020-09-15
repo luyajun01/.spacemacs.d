@@ -59,7 +59,8 @@ then check whether emacs should to modify theme, if so, modify it."
     (cancel-timer mp-ui--interval-timer)
     (message "themes auto change close.")
     )
-  (mp-ui/config-time-themes-table '(("6" . spacemacs-light) ("17" . monokai)))
+;; (mp-ui/config-time-themes-table '(("6" . spacemacs-light) ("17" . monokai)))
+(mp-ui/config-time-themes-table '(("6" . leuven) ("17" . monokai)))
   (mp-ui/open-themes-auto-change)
   ;;timer for automatically changing themes
   (setq mp-ui--interval-timer nil)

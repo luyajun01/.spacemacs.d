@@ -209,7 +209,6 @@ If the character before and after CH is space or tab, CH is NOT slash"
 (setq evil-escape-excluded-major-modes '(dired-mode))
 (setq-default evil-escape-key-sequence "kj")
 ;; disable evil-escape when input method is on
-(local-require 'evil-escape)
 (evil-escape-mode 1)
 ;; }}
 
@@ -229,11 +228,6 @@ If the character before and after CH is space or tab, CH is NOT slash"
 ;; with uppercased character or 'g' or special character except "=" and "-"
 (evil-declare-key 'normal org-mode-map
   "gh" 'outline-up-heading
-  "gb" 'spacemacs/org-bold            ;org-bold命令有错误
-  "gn" 'org-next-visible-heading
-  "gp" 'org-previous-visible-heading
-  "gf" 'org-forward-heading-same-level
-;  "gh" 'org-backward-heading-same-level
   "gl" 'outline-next-visible-heading
   "$" 'org-end-of-line ; smarter behaviour on headlines etc.
   "^" 'org-beginning-of-line ; ditto
@@ -427,17 +421,9 @@ If the character before and after CH is space or tab, CH is NOT slash"
                         ;; flash, Emacs v25 only API
                         (xref-pulse-momentarily)))))
 ;; }}
+
 (local-require 'general)
 (general-evil-setup t)
-
-;;{{ use `<spc>' as leader key
-(general-create-definer my-bracket-leader-def
-:prefix "["
-:states '(normal visual))
-(my-bracket-leader-def
-"w" 'avy-goto-word-1
-"c" 'avy-goto-char-in-line
-)
 
 ;; {{ use `,` as leader key
 (general-create-definer my-comma-leader-def
@@ -643,54 +629,40 @@ If the character before and after CH is space or tab, CH is NOT slash"
   "pp" 'my-goto-previous-hunk
   "pc" 'my-dired-redo-from-commands-history
   "pw" 'pwd
+  "ho" 'hydra-org/body
   "mm" 'counsel-evil-goto-global-marker
   "mf" 'mark-defun
   "xc" 'save-buffers-kill-terminal ; not used frequently
   "cc" 'my-dired-redo-last-command
- ;"ss" 'wg-create-workgroup ; save windows layout
-  "ss" 'swiper-isearch
+  ;; "ss" 'wg-create-workgroup ; save windows layout
   "se" 'evil-iedit-state/iedit-mode ; start iedit in emacs
   "sc" 'shell-command
- ; "ll" 'my-wg-switch-workgroup ; load windows layout
+  ;; "ll" 'my-wg-switch-workgroup ; load windows layout
   "kk" 'scroll-other-window
   "jj" 'scroll-other-window-up
   "rt" 'random-healthy-color-theme
   "yy" 'hydra-launcher/body
   "tt" 'my-toggle-indentation
   "g" 'hydra-git/body
-  "ha" 'hydra-avy/body
-  "hg" 'hydra-goto-line/body
-  "hd" 'hydra-dired/body
-  "hu" 'hydra-outline/body
-  "hs" 'hydra-smartparens/body
-  "hp" 'hydra-page/body
-  "hj" 'hydra-projectile/body
-  "hf" 'hydra-flycheck/body
-  "og" 'goto/body
-  "hb" 'hydra-buffer-menu/body 
-  "hm" 'hydra-zoom/body
-  "ht" 'hydra-toggle/body
-  "ot" 'hydra-org-template/body
-  "hy" 'hydra-yasnippet/body
-  "hl" 'hydra-lsp/body
-  "ho" 'hydra-org/body
-  "ag" 'avy-goto-line
-  "hv" 'hydra-vi/body
-  "ch" 'goto-last-change
   "ps" 'profiler-start
   "pr" 'profiler-report
-  ;"ud" 'my-gud-gdb
-  ;"uk" 'gud-kill-yes
- ; "ur" 'gud-remove
- ; "ub" 'gud-break
- ; "uu" 'gud-run
- ; "up" 'gud-print
- ; "ue" 'gud-cls
- ; "un" 'gud-next
- ; "us" 'gud-step
- ; "ui" 'gud-stepi
- ; "uc" 'gud-cont
- ; "uf" 'gud-finish
+  "w"  'avy-goto-word-1
+  "ms" 'magit-status
+  "ho" 'hydra-org/body
+  "cm" 'counsel-mark-ring
+  "a" 'avy-goto-line
+  ;; "ud" 'my-gud-gdb
+  ;; "uk" 'gud-kill-yes
+  ;; "ur" 'gud-remove
+  ;; "ub" 'gud-break
+  ;; "uu" 'gud-run
+  ;; "up" 'gud-print
+  ;; "ue" 'gud-cls
+  ;; "un" 'gud-next
+  ;; "us" 'gud-step
+  ;; "ui" 'gud-stepi
+  ;; "uc" 'gud-cont
+  ;; "uf" 'gud-finish
   )
 
 ;; per-major-mode setup
@@ -856,8 +828,7 @@ If the character before and after CH is space or tab, CH is NOT slash"
 ;; press gx twice to exchange, gX to cancel
 ;; change default key bindings (if you want) HERE
 ;; (setq evil-exchange-key (kbd "zx"))
-(local-require 'evil-exchange)
-(evil-exchange-install)
+;; (evil-exchange-install)
 ;; }}
 
 ;; {{ evil-lion
@@ -947,205 +918,3 @@ If the character before and after CH is space or tab, CH is NOT slash"
      (setq evil-default-cursor t)))
 
 (provide 'init-evil)
-
-;; jjpandari config files
-  ;; (with-eval-after-load 'evil
-  ;;   ;; if the open tag is the first in its line and the close tag is the last in its,
-  ;;   ;;   mark the whole lines containing the this tag pair
-  ;;   ;; else only mark the tag pair
-  ;;   (evil-define-text-object jjpandari/evil-a-tag-dwim (count &optional beg end type)
-  ;;     "Select a tag block's whole lines."
-  ;;     :extend-selection nil
-  ;;     (let* ((point-list (evil-select-xml-tag beg end type count t))
-  ;;            (tag-beg (car point-list))
-  ;;            (tag-end (cadr point-list))
-  ;;            (line-beg (progn (goto-char tag-beg) (line-beginning-position))))
-  ;;       (if (and (looking-back "^\s*")
-  ;;                (progn (goto-char tag-end) (looking-at "\s*$"))
-  ;;                (not (equal (progn (print (car command-history)) (car command-history)) '(evil-surround-delete 116))))
-  ;;           (evil-range line-beg (line-end-position) 'line)
-  ;;         point-list)))
-
-  ;;   (evil-define-text-object jjpandari/evil-a-attribute (count &optional beg end type)
-  ;;     "Select an attribute, including the leading space."
-  ;;     :extend-selection nil
-  ;;     (list (- (web-mode-attribute-beginning-position) 1)
-  ;;           (+ (web-mode-attribute-end-position) 1)))
-  ;;   (evil-define-text-object jjpandari/evil-inner-attribute (count &optional beg end type)
-  ;;     "Select an attribute."
-  ;;     :extend-selection nil
-  ;;     (list (web-mode-attribute-beginning-position)
-  ;;           (+ (web-mode-attribute-end-position) 1)))
-  ;;   )
-
-  ;; (defun jjpandari/goto-kill-end (kill-fun forward?)
-  ;;   "When supplied with a kill function `kill-fun', go to the point the kill function kills to."
-  ;;   (let* ((old-max (point-max))
-  ;;          (new-max (progn (funcall kill-fun) (point-max)))
-  ;;          (kill-end (progn
-  ;;                      (undo-tree-undo)
-  ;;                      (funcall (if forward? '+ '-) (point) (abs (- new-max old-max))))))
-  ;;     (goto-char kill-end)))
-
-  ;; (require 'paredit-extension)
-
-  ;; (defun jjpandari/goto-end-of-sexp ()
-  ;;   "Go to the end of current expression."
-  ;;   (interactive)
-  ;;   (jjpandari/goto-kill-end 'paredit-kill+ t))
-
-  ;; (defun jjpandari/goto-beginning-of-sexp ()
-  ;;   "Go to the end of current expression."
-  ;;   (interactive)
-  ;;   (jjpandari/goto-kill-end 'fontux/paredit-kill-backward nil))
-
-  ;; ;; http://emacs.stackexchange.com/a/20717/12854
-  ;; (with-eval-after-load 'evil
-  ;;   (defalias #'forward-evil-word #'forward-evil-symbol))
-  ;; (global-set-key (kbd "C-s") 'swiper)
-  ;; (global-set-key (kbd "C-S-s") 'spacemacs/swiper-region-or-symbol)
-  ;; (define-key evil-inner-text-objects-map (kbd "m") 'evilmi-inner-text-object)
-  ;; (define-key evil-outer-text-objects-map (kbd "m") 'evilmi-outer-text-object)
-  ;; (define-key evil-outer-text-objects-map (kbd "t") 'jjpandari/evil-a-tag-dwim)
-  ;; (define-key evil-inner-text-objects-map (kbd "a") 'jjpandari/evil-inner-attribute)
-  ;; (define-key evil-outer-text-objects-map (kbd "a") 'jjpandari/evil-a-attribute)
-  ;; (define-key evil-normal-state-map (kbd "+") 'spacemacs/evil-numbers-transient-state/evil-numbers/inc-at-pt)
-  ;; (define-key evil-normal-state-map (kbd "-") 'spacemacs/evil-numbers-transient-state/evil-numbers/dec-at-pt)
-  ;; (define-key evil-normal-state-map (kbd "C-a") 'evil-first-non-blank)
-  ;; (define-key evil-normal-state-map (kbd "C-e") 'evil-end-of-line)
-  ;; (define-key evil-visual-state-map (kbd "C-a") 'evil-first-non-blank)
-  ;; (define-key evil-visual-state-map (kbd "C-e") 'evil-end-of-line)
-  ;; (define-key evil-motion-state-map (kbd "C-e") 'move-end-of-line)
-  ;; (define-key evil-normal-state-map (kbd "C-j") 'evil-scroll-line-down)
-  ;; (define-key evil-motion-state-map (kbd "C-j") 'evil-scroll-line-down)
-  ;; (define-key evil-normal-state-map (kbd "C-k") 'evil-scroll-line-up)
-  ;; (define-key evil-motion-state-map (kbd "C-k") 'evil-scroll-line-up)
-  ;; (define-key evil-normal-state-map (kbd "'") 'evil-goto-mark)
-  ;; ;; (define-key evil-normal-state-map (kbd "SPC '") 'evil-use-register)
-  ;; ;; (define-key evil-visual-state-map (kbd "SPC '") 'evil-use-register)
-  ;; (define-key evil-insert-state-map (kbd "C-t") 'evil-execute-in-normal-state)
-  ;; (define-key evil-insert-state-map (kbd "C-b") 'delete-char)
-  ;; (define-key evil-insert-state-map (kbd "C-o") 'evil-open-below)
-  ;; (define-key evil-insert-state-map (kbd "C-S-o") 'evil-open-above)
-  ;; (define-key evil-insert-state-map (kbd "C-y") 'yank)
-  ;; (define-key evil-insert-state-map (kbd "C-d") 'backward-char)
-  ;; (define-key evil-insert-state-map (kbd "C-n") 'next-line)
-  ;; (define-key evil-insert-state-map (kbd "C-p") 'previous-line)
-  ;; (define-key evil-insert-state-map (kbd "C-a") 'beginning-of-line-text)
-  ;; (define-key evil-insert-state-map (kbd "C-e") 'move-end-of-line)
-  ;; (define-key evil-insert-state-map (kbd "C-k") 'kill-line)
-  ;; (define-key evil-insert-state-map (kbd "C-w") #'evil-delete-backward-word)
-  ;; (define-key evil-insert-state-map (kbd "C-v") #'yank)
-  ;; (define-key evil-insert-state-map (kbd "M-d") #'backward-word)
-  ;; (define-key evil-insert-state-map (kbd "M-b") #'kill-word)
-  ;; (define-key evil-insert-state-map (kbd "M-e") #'evil-scroll-down)
-  ;; (define-key evil-emacs-state-map (kbd "M-e") #'evil-scroll-down)
-  ;; (define-key evil-insert-state-map (kbd "M-a") #'evil-scroll-up)
-  ;; (define-key evil-emacs-state-map (kbd "M-a") #'evil-scroll-up)
-  ;; (define-key evil-insert-state-map (kbd "<C-backspace>") #'er/expand-region)
-  ;; (define-key evil-insert-state-map (kbd "H-v") #'yank-pop)
-  ;; (spacemacs/set-leader-keys
-  ;;   "(" #'backward-up-list
-  ;;   ")" #'up-list
-  ;;   "," #'evil-indent
-  ;;   "b r" #'rename-buffer
-  ;;   "b k" #'spacemacs/kill-this-buffer
-  ;;   "n v" #'narrow-to-region
-  ;;   ;; "g c" #'magit-commit
-  ;;   ;; "g C" #'magit-clone
-  ;;   ;; "g p" #'magit-push
-  ;;   "g d" #'magit-diff-buffer-file
-  ;;   "g D" #'magit-diff)
-  ;; (define-key evil-normal-state-map (kbd "SPC TAB") #'spacemacs/alternate-window)
-  ;; (define-key evil-normal-state-map (kbd "SPC RET") #'spacemacs/alternate-buffer)
-  ;; (defun jjpandari/adjust-window () (golden-ratio))
-  ;; (advice-add #'spacemacs/alternate-window :after #'jjpandari/adjust-window)
-  ;; (define-key evil-normal-state-map (kbd "C-q") 'spacemacs/evil-search-clear-highlight)
-  ;; (define-key evil-normal-state-map (kbd "L") 'jjpandari/goto-end-of-sexp)
-  ;; (define-key evil-operator-state-map (kbd "L") 'jjpandari/goto-end-of-sexp)
-  ;; (define-key evil-normal-state-map (kbd "H") 'jjpandari/goto-beginning-of-sexp)
-  ;; (define-key evil-operator-state-map (kbd "H") 'jjpandari/goto-beginning-of-sexp)
-  ;; (define-key prog-mode-map (kbd "H-c") 'aya-create)
-  ;; (define-key prog-mode-map (kbd "H-e") 'spacemacs/auto-yasnippet-expand)
-  ;; (define-key prog-mode-map (kbd "H-w") 'aya-persist-snippet)
-  ;; (define-key prog-mode-map (kbd "H-t") 'jjpandari/expand-to-ternary)
-  ;; (define-key prog-mode-map (kbd "H-T") 'jjpandari/expand-to-ternary-condensed)
-  ;; (evil-define-key 'normal org-mode-map (kbd "g o") #'org-todo)
-  ;; (define-key evil-normal-state-map (kbd "M") 'evilmi-jump-items)
-  ;; (define-key evil-visual-state-map (kbd "M") 'evilmi-jump-items)
-  ;; (define-key evil-operator-state-map (kbd "M") 'evilmi-jump-items)
-  ;; (define-key evil-normal-state-map (kbd "C-l") 'avy-goto-word-1)
-  ;; (define-key evil-visual-state-map (kbd "C-l") 'avy-goto-word-1)
-  ;; (define-key evil-operator-state-map (kbd "C-l") 'avy-goto-word-1)
-  ;; (spacemacs/set-leader-keys-for-major-mode 'snippet-mode
-  ;;   "," 'yas-load-snippet-buffer-and-close
-  ;;   "l" 'yas-load-snippet-buffer)
-  ;; (define-key evil-normal-state-map (kbd "C-h C-k") 'describe-keymap)
-  ;; (define-key evil-visual-state-map (kbd "C-h C-k") 'describe-keymap)
-  ;; (define-key evil-evilified-state-map (kbd "C-h C-k") 'describe-keymap)
-  ;; (define-key evil-normal-state-map (kbd "C-h C-f") 'describe-face)
-  ;; (define-key evil-visual-state-map (kbd "C-h C-f") 'describe-face)
-  ;; (define-key evil-evilified-state-map (kbd "C-h C-f") 'describe-face)
-  ;; (spacemacs/set-leader-keys-for-major-mode 'erc-mode
-  ;;   "q" 'erc-quit-server)
-
-  ;; (define-key evil-normal-state-map (kbd "SPC l") nil)
-  ;; (spacemacs/set-leader-keys
-  ;;   "l l" #'eyebrowse-switch-to-window-config
-  ;;   "l p" #'eyebrowse-prev-window-config
-  ;;   "l n" #'eyebrowse-next-window-config
-  ;;   "l TAB" #'eyebrowse-last-window-config
-  ;;   "l d" #'eyebrowse-close-window-config
-  ;;   "l k" #'eyebrowse-close-window-config
-  ;;   "l r" #'eyebrowse-rename-window-config
-  ;;   "l 0" #'eyebrowse-switch-to-window-config-0
-  ;;   "l 1" #'eyebrowse-switch-to-window-config-1
-  ;;   "l 2" #'eyebrowse-switch-to-window-config-2
-  ;;   "l 3" #'eyebrowse-switch-to-window-config-3
-  ;;   "l 4" #'eyebrowse-switch-to-window-config-4
-  ;;   "l 5" #'eyebrowse-switch-to-window-config-5
-  ;;   "l 6" #'eyebrowse-switch-to-window-config-6
-  ;;   "l 7" #'eyebrowse-switch-to-window-config-7
-  ;;   "l 8" #'eyebrowse-switch-to-window-config-8
-  ;;   "l 9" #'eyebrowse-switch-to-window-config-9)
-
-  ;; (define-key minibuffer-local-map (kbd "M-d") #'backward-word)
-  ;; (define-key minibuffer-local-map (kbd "M-b") #'kill-word)
-  ;; (define-key minibuffer-local-map (kbd "C-w") #'backward-kill-word)
-  ;; (define-key minibuffer-local-map (kbd "C-d") #'backward-char)
-  ;; (define-key minibuffer-local-map (kbd "C-b") #'delete-char)
-  ;; (define-key minibuffer-local-map (kbd "C-v") #'yank)
-  ;; (define-key read-expression-map (kbd "C-r") 'counsel-minibuffer-history)
-
-
-
-
-
-
-
-
-
-;; evil
-;; (evil-leader/set-key
-;;     "ff" 'find-file
-;;     "sb" 'save-buffer
-;;     "fr" 'counsel-recentf
-;;     "git" 'shell
-;;     "gl" 'avy-goto-line
-;;     "am" 'avy-move-line
-;;     "g;" 'goto-last-change
-;;     "cm" 'counsel-mark-ring
-;;     "yd" 'youdao-dictionary-search
-;;     "f0"  'avy-goto-word-0
-;;     "f1"  'avy-goto-word-1
-;;     "m"  'hydra-goto-line/set-mark-command
-;;     "bb" 'switch-to-buffer
-;;     "0"  'select-window-0
-;;     "1"  'select-window-1
-;;     "2"  'select-window-2
-;;     "3"  'select-window-3
-;;     "w/" 'split-window-right
-;;     "w-" 'split-window-below
-;;     "wM" 'delete-other-windows
-;;     )
-;(require 'init-evil)

@@ -30,6 +30,14 @@ This function should only modify configuration layer settings."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     ;; (lsp :variables
+     ;;      company-lsp-cache-candidates 'auto
+     ;;      lsp-ui-flycheck t
+     ;;      )
+     (python :variables
+             python-backend 'lsp
+             python-lsp-server 'mspyls
+             )
      (ivy :variables ivy-enable-advanced-buffer-information nil)
      ;better-defaults
      ;ranger
@@ -74,12 +82,13 @@ This function should only modify configuration layer settings."
                       spacemacs-default-company-backends '(
                                                            ;; company-etags
                                                            ;; company-gtags
+                                                           company-tabnine
                                                            company-files
                                                            company-capf
                                                            ;; company-tabnine
-                                                           company-anaconda
+                                                           ;company-anaconda
                                                            company-keywords
-                                                           ;; company-yasnippet
+                                                           ;company-yasnippet
                                                            company-dabbrev
                                                            )
                       auto-completion-idle-delay 0
@@ -99,8 +108,12 @@ This function should only modify configuration layer settings."
           osx-command-as 'super)
      ;restclient
      ;(gtags :disabled-for clojure emacs-lisp javascript latex python shell-scripts)
-     (shell :variables shell-default-shell 'ansi-term
-            shell-default-term-shell "/bin/zsh")
+     ;; (shell :variables shell-default-shell 'ansi-term
+     ;;        shell-default-term-shell "/bin/zsh")
+     (shell :variables
+            shell-default-term-shell "/bin/zsh" ;; find your zsh path using `$ whereis zsh`
+            shell-default-height 30
+            shell-default-position 'bottom)
      ;; docker
      latex
      ;deft
@@ -144,18 +157,27 @@ This function should only modify configuration layer settings."
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '(;sicp
                                       diredfl
+                                      emmet-mode
                                       ;iy-go-to-char
                                       ;ssh-agency
                                       ;format-all
                                       evil-textobj-syntax
                                       evil-lion
                                       evil-find-char-pinyin
+                                      bash-completion
+                                      pomodoro
+                                      flymake-aspell
                                       ;; company-box
                                       keyfreq
                                       counsel-css
                                       ;; emojify
                                       ;fzf
                                      ivy-rich
+                                     ibuffer-vc
+                                     company-prescient
+                                     org-re-reveal
+                                     ;; evil-escape
+                                     evil-exchange
                                      ivy-xref
                                       ivy-posframe
                                       ;lsp-python-ms
@@ -163,14 +185,18 @@ This function should only modify configuration layer settings."
                                       general
                                       keyfreq
                                       company-posframe
+                                     company-quickhelp 
                                       window-numbering
                                       ace-jump-zap
+                                      ;anaconda-mode
                                       evil-leader
                                       ;bm
                                       smex
                                       evil-nerd-commenter
                                       ;company-jedi
+                                      ;company-anaconda
                                       tabbar
+                                      toc-org
                                       ;sicp ssh-agency anki-editor
                                         powerline
                                         smartparens
@@ -182,7 +208,7 @@ This function should only modify configuration layer settings."
                                       ;spaceline-all-the-icons
                                         ;ace-window
                                       eval-in-repl
-                                      ;company-lsp
+                                      ;; company-lsp
                                       ;jedi
                                       ivy-posframe
                                       flycheck-posframe
@@ -190,13 +216,17 @@ This function should only modify configuration layer settings."
                                       function-args
                                       elpy
                                       ;jupyter
-                                      ;; counsel-etags
+                                      counsel-etags
                                       company-ctags
                                       mmm-mode
-       ;                               lsp-mode
-                                      ;lsp-ui
+                                      lsp-mode
+                                      lsp-python-ms
+                                      lsp-ui
+                                      slime
+                                      helm-lsp
+                                      lsp-treemacs
                                       ;; org-journal
-        ;                              company-lsp
+                                      company-lsp
                                       ;; org-alert
                                         ;el2org
                                       cdlatex
@@ -229,10 +259,10 @@ This function should only modify configuration layer settings."
                     ;smartparens
                     spaceline holy-mode skewer-mode rainbow-delimiters
                     highlight-indentation vi-tilde-fringe eyebrowse ws-butler
-                    org-bullets
+                    ;org-bullets
                     smooth-scrolling org-repo-todo org-download org-timer
                     livid-mode git-gutter git-gutter-fringe
-                    evil-escape
+                    ;; evil-escape
                     leuven-theme gh-md evil-lisp-state spray lorem-ipsum symon
                     ac-ispell ace-jump-mode auto-complete auto-dictionary
                     clang-format define-word google-translate disaster epic
@@ -353,9 +383,10 @@ It should only modify the values of Spacemacs settings."
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(monokai
-                         leuven
-                         underwater
-                         solarized-light
+                         ;; leuven
+                         ;; solarized-light
+                         ;underwater
+;                         solarized-light
                          solarized-dark)
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
@@ -608,11 +639,14 @@ dump."
   )
 
 (defun dotspacemacs/user-init ()
-  (setq-default configuration-layer-elpa-archives
-                '(("melpa-cn" . "http://elpa.emacs-china.org/melpa/")
-                  ("org-cn"   . "http://elpa.emacs-china.org/org/")
-                  ("gnu-cn"   . "http://elpa.emacs-china.org/gnu/")))
-
+  ;; (setq-default configuration-layer-elpa-archives
+  ;;               '(("melpa-cn" . "http://elpa.emacs-china.org/melpa/")
+  ;;                 ("org-cn"   . "http://elpa.emacs-china.org/org/")
+  ;;                 ("gnu-cn"   . "http://elpa.emacs-china.org/gnu/")))
+  (setq configuration-layer--elpa-archives
+        '(("melpa-cn" . "http://mirrors.cloud.tencent.com/elpa/melpa/")
+          ("org-cn"   . "http://mirrors.cloud.tencent.com/elpa/org/")
+          ("gnu-cn"   . "http://mirrors.cloud.tencent.com/elpa/gnu/")))
   
   (setq term-char-mode-point-at-process-mark nil)
 
@@ -635,45 +669,114 @@ dump."
 
 (defun dotspacemacs/user-config ()
 ;https://github.com/redguardtoo/emacs.d/blob/837c057ba17df5d157bdbd90e86103eaecc8eb9c/init.el
+  ;;----------------------------------------------------------------------------
+  ;; Which functionality to enable (use t or nil for true and false)
+  ;;----------------------------------------------------------------------------
+  (setq *is-a-mac* (eq system-type 'darwin))
+  (setq *win64* (eq system-type 'windows-nt))
+  (setq *cygwin* (eq system-type 'cygwin) )
+  (setq *linux* (or (eq system-type 'gnu/linux) (eq system-type 'linux)) )
+  (setq *unix* (or *linux* (eq system-type 'usg-unix-v) (eq system-type 'berkeley-unix)) )
+  (setq *emacs24* (>= emacs-major-version 24))
+  (setq *emacs25* (>= emacs-major-version 25))
+  (setq *emacs26* (>= emacs-major-version 26))
+  (setq *no-memory* (cond
+                     (*is-a-mac*
+                      (< (string-to-number (nth 1 (split-string (shell-command-to-string "sysctl hw.physmem")))) 4000000000))
+                     (*linux* nil)
+                     (t nil)))
+  (defconst my-emacs-d (file-name-as-directory "~/.spacemacs.d/")
+    "Directory of emacs.d")
+
+  (defconst my-site-lisp-dir (concat my-emacs-d "site-lisp")
+    "Directory of site-lisp")
+
+  (defconst my-lisp-dir (concat my-emacs-d "lisp")
+    "Directory of lisp")
+
+  ;; *Message* buffer should be writable in 24.4+
+  (defadvice switch-to-buffer (after switch-to-buffer-after-hack activate)
+    (if (string= "*Messages*" (buffer-name))
+        (read-only-mode -1)))
+  
   (defun require-init (pkg &optional maybe-disabled)
     "Load PKG if MAYBE-DISABLED is nil or it's nil but start up in normal slowly."
     (when (or (not maybe-disabled) (not (boundp 'startup-now)))
-      (load (file-truename (format "~/.emacs.d/lisp/%s" pkg)) t t)))
+      (load (file-truename (format "~/.spacemacs.d/lisp/%s" pkg)) t t)))
 
   (defun local-require (pkg)
     (unless (featurep pkg)
       (load (expand-file-name
              (cond
               ((eq pkg 'go-mode-load)
-               (format "~/.emacs.d/site-lisp/go-mode/%s" pkg))
+               (format "~/.spacemacs.d/site-lisp/go-mode/%s" pkg))
               (t
-               (format "~/.emacs.d/site-lisp/%s/%s" pkg pkg))))
+               (format "~/.spacemacs.d/site-lisp/%s/%s" pkg pkg))))
             t t)));; Load path
-  (add-to-list 'load-path (expand-file-name "lisp" "~/.emacs.d/"))
-  (require-init 'init-company)
+  ;; (add-to-list 'load-path (expand-file-name "lisp" "~/.emacs.d/"))
+
+  ;; @see https://www.reddit.com/r/emacs/comments/55ork0/is_emacs_251_noticeably_slower_than_245_on_windows/
+  ;; Emacs 25 does gc too frequently
+  ;; (setq garbage-collection-messages t) ; for debug
+  (setq best-gc-cons-threshold (* 64 1024 1024))
+  (setq gc-cons-percentage 0.5)
+  (run-with-idle-timer 5 t #'garbage-collect)
+
+  (defun my-vc-merge-p ()
+    "Use Emacs for git merge only?"
+    (boundp 'startup-now))
+  
+  (let* ((file-name-handler-alist nil))
   (require-init 'init-autoload)
+  (require-init 'init-utils)
+  ;; (require-init 'init-file-type)
+  ;; (require-init 'init-elpa)
+  (require-init 'init-spelling t)
+  (require-init 'init-company t)
   (require-init 'init-linum-mode)
   ;; (require-init 'init-lsp)
   (require-init 'init-hippie-expand)
   (require-init 'init-lispyville)
-  ;(require-init 'init-targets)
-  (require-init 'init-ibuffer)
-  ;(require-init 'init-keyfreq)
+  (require-init 'init-python t)
+  ;; (require-init 'init-targets)
+ (require-init 'init-ibuffer t)
+  (require-init 'init-keyfreq)
   (require-init 'init-theme)
   (require-init 'init-ivy)
-  ;(require-init 'init-gtags)
-  ;(require-init 'init-ctags)
+  (require-init 'init-gtags t)
+  (require-init 'init-git t)
+  (require-init 'init-chinese t)
+  (require-init 'init-markdown t)
+  (require-init 'init-python)
+  (require-init 'init-gtags t)
+  (require-init 'init-ctags)
+  (setq load-path (cdr load-path))
+  (my-add-subdirs-to-load-path (file-name-as-directory my-site-lisp-dir))
+  (require-init 'init-flymake t)
   (require-init 'init-evil)
-  (require-init 'init-dired)
-  ;(require-init 'init-whichkey)
+  (require-init 'init-cc-mode t)
+  (require-init 'init-clipboard)
+  (require-init 'init-dired t)
+  (require-init 'init-yasnippet)
+  (require-init 'init-whichkey)
   (require-init 'init-hydra)
   (require-init 'init-ess)
-  ;(require 'init-general)
-  ;(require 'init-org)
+  (require-init 'init-essential)
+  ;; handy tools though not must have
+  (require-init 'init-misc t)
+  (require-init 'init-emacs-w3m t)
+  (require-init 'init-shackle t)
+  (require-init 'init-writting t)
+  (require-init 'init-general)
+  (require-init 'init-ediff)
+  ;; (require-init 'init-org t)
+  (require-init 'init-workgroups2 t) ; use native API in lightweight mode
+  (require-init 'init-term-mode t)
+  ;; (require-init 'init-custom)
+  )
   ;(add-to-list 'load-path "~/.spacemacs.d/extensions")
   ;(require 'ranger)
   (desktop-save-mode 1)
-
   ;;  ;;lispyville
   ;; (with-eval-after-load 'lispyville
   ;;   (lispyville-set-key-theme
@@ -683,17 +786,74 @@ dump."
   ;;      (additional-movement normal visual motion))))
   ;; ;; configure shell bash
   ;(setq shell-file-name "/bin/zsh")
-  ;; Transparency
-  (spacemacs/enable-transparency)
+  ;; emacs 透明化 Transparency
+  ;(spacemacs/enable-transparency)
   ;; 改变evil-insert-mode光标形状
   (setq-default evil-insert-state-cursor '("green" (bar . 2)))
   (setcdr evil-insert-state-map nil)
   (define-key evil-insert-state-map [escape] 'evil-normal-state)
 
+  ;;company-lsp
+   ;; (with-eval-after-load 'lsp-mode
+   ;;   (push '(company-lsp :with company-yasnippet) company-backends))
+
+  ;; The package is "python" but the mode is "python-mode":
+  (use-package python
+    :mode ("\\.py\\'" . python-mode)
+    :interpreter ("python" . python-mode))
   ;;plain-org-wiki
   (add-to-list 'load-path "~/.emacs.d/private/plain-org-wiki")
   (require 'plain-org-wiki)
   (setq pow-directory "~/Documents/坚果云/我的坚果云/github/wiki/")
+
+  ;;valign
+  (add-to-list 'load-path "~/.emacs.d/private/valign")
+  (require 'valign)
+  (add-hook 'org-mode-hook 'valign-mode)
+
+(use-package pyim
+  :ensure nil
+  :demand t
+  :config
+  ;; 激活 basedict 拼音词库，五笔用户请继续阅读 README
+  (use-package pyim-basedict
+    :ensure nil
+    :config (pyim-basedict-enable))
+
+  (setq default-input-method "pyim")
+
+  ;; 我使用全拼
+  (setq pyim-default-scheme 'pyim-shuangpin)
+
+  ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-)
+  ;; 我自己使用的中英文动态切换规则是：
+  ;; 1. 光标只有在注释里面时，才可以输入中文。
+  ;; 2. 光标前是汉字字符时，才能输入中文。
+  ;; 3. 使用 M-j 快捷键，强制将光标前的拼音字符串转换为中文。
+  (setq-default pyim-english-input-switch-functions
+                '(pyim-probe-dynamic-english
+                  pyim-probe-isearch-mode
+                  pyim-probe-program-mode
+                  pyim-probe-org-structure-template))
+
+  (setq-default pyim-punctuation-half-width-functions
+                '(pyim-probe-punctuation-line-beginning
+                  pyim-probe-punctuation-after-punctuation))
+
+  ;; 开启拼音搜索功能
+  (pyim-isearch-mode 1)
+
+  ;; 使用 popup-el 来绘制选词框, 如果用 emacs26, 建议设置
+  ;; 为 'posframe, 速度很快并且菜单不会变形，不过需要用户
+  ;; 手动安装 posframe 包。
+  (setq pyim-page-tooltip 'popup)
+
+  ;; 选词框显示5个候选词
+  (setq pyim-page-length 5)
+
+  :bind
+  (("C-S-P" . pyim-convert-string-at-point) ;与 pyim-probe-dynamic-english 配合
+   ("C-;" . pyim-delete-word-from-personal-buffer)))
   
   ;;pdf-tools
 ;;; pdf-tools package and reinstall both as at the start.
@@ -704,6 +864,10 @@ dump."
   ;;    '(pdf-tools-handle-upgrades nil)) ; Use brew upgrade pdf-tools instead.
   ;;   (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo"))
   ;; (pdf-tools-install)
+(setq yas-snippet-dirs
+      '("~/.emacs.d/snippets";;personal snippets
+        ))
+(yas-global-mode 1)
                                         ;flycheck
   (global-flycheck-mode)
   ;;补充搜索括号特别有用
@@ -794,28 +958,17 @@ dump."
   ;;   ;;  ; :defer t)
   ;;   )
   
-  
-
-  ;; 以下是zilongshanren配置 
-  ;; ;;解决org表格里面中英文对齐的问题 
+  ;; 以下是zilongshanren配置
+  ;; ;;解决org表格里面中英文对齐的问题
   ;; (when (configuration-layer/layer-usedp 'chinese)
   ;;   (when (and (spacemacs/system-is-mac) window-system)
   ;;     (spacemacs//set-monospaced-font "Source Code Pro" "Hiragino Sans GB" 14 16)))
-
-
   ;; Setting Chinese Font
   (fset 'evil-visual-update-x-selection 'ignore)
   ;; force horizontal split window
   (setq split-width-threshold 120)
   ;; (linum-relative-on)
-  
-  ;; (with-eval-after-load 'company
-  ;;   (spacemacs|add-company-backends
-  ;;    :backends company-irony company-etags company-tabnine
-  ;;    :modes org-mode ess-r-mode python-mode))
-
   (add-hook 'doc-view-mode-hook 'auto-revert-mode)
-
   ;; temp fix for ivy-switch-buffer
   ;; (spacemacs/set-leader-keys "bb" 'helm-mini)
   (global-hungry-delete-mode t)
@@ -830,16 +983,16 @@ dump."
   (add-to-list 'auto-mode-alist
                '("Capstanfile\\'" . yaml-mode))
 
-  (defun js-indent-line ()
-    "Indent the current line as JavaScript."
-    (interactive)
-    (let* ((parse-status
-            (save-excursion (syntax-ppss (point-at-bol))))
-           (offset (- (point) (save-excursion (back-to-indentation) (point)))))
-      (if (nth 3 parse-status)
-          'noindent
-        (indent-line-to (js--proper-indentation parse-status))
-        (when (> offset 0) (forward-char offset)))))
+  ;; (defun js-indent-line ()
+  ;;   "Indent the current line as JavaScript."
+  ;;   (interactive)
+  ;;   (let* ((parse-status
+  ;;           (save-excursion (syntax-ppss (point-at-bol))))
+  ;;          (offset (- (point) (save-excursion (back-to-indentation) (point)))))
+  ;;     (if (nth 3 parse-status)
+  ;;         'noindent
+  ;;       (indent-line-to (js--proper-indentation parse-status))
+  ;;       (when (> offset 0) (forward-char offset)))))
 
   (global-set-key (kbd "<backtab>") 'un-indent-by-removing-4-spaces)
   (defun un-indent-by-removing-4-spaces ()
@@ -886,7 +1039,7 @@ dump."
   ;; (add-hook 'text-mode-hook 'spacemacs/toggle-spelling-checking-on)
   ;; (add-hook 'org-mode-hook 'emojify-mode)
   (add-hook 'org-mode-hook 'auto-fill-mode)
-;(add-hook 'python-mode-hook 'anaconda-mode)
+;; (add-hook 'python-mode-hook 'anaconda-mode)
   ;; https://emacs-china.org/t/ox-hugo-auto-fill-mode-markdown/9547/4
   (defadvice org-hugo-paragraph (before org-hugo-paragraph-advice
                                         (paragraph contents info) activate)
@@ -905,7 +1058,8 @@ unwanted space when exporting org-mode to hugo markdown."
     (transient-bind-q-to-quit))
 
   ;; fix for the lsp error
-  (defvar spacemacs-jump-handlers-fundamental-mode nil))
+  (defvar spacemacs-jump-handlers-fundamental-mode nil)
+  )
 (setq custom-file (expand-file-name "custom.el" dotspacemacs-directory))
 (load custom-file 'no-error 'no-message)
 (defun dotspacemacs/emacs-custom-settings ()
@@ -913,4 +1067,5 @@ unwanted space when exporting org-mode to hugo markdown."
 This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
-)
+  )
+(provide 'init)
