@@ -1,7 +1,9 @@
 * My personal Emacs configuration
 
   https://github.com/zilongshanren/spacemacs-private 
+
   https://github.com/redguardtoo/emacs.d 
+
   https://github.com/seagle0128/.emacs.d
 
 Thanks above all！
