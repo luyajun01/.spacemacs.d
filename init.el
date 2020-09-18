@@ -46,8 +46,8 @@ This function should only modify configuration layer settings."
      ;; lsp
      ;; dap
      colors
-     lpy
-     tabnine
+     ;; lpy
+     ;; tabnine
      (ess :variables
           ess-enable-smart-equals t
           ;; ess-assign-key "M--"
@@ -156,8 +156,13 @@ This function should only modify configuration layer settings."
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '(;sicp
+    major-mode-hydra
                                       diredfl
+                                      solaire-mode
+                                      doom-themes
+                                      doom-modeline
                                       emmet-mode
+                                      mixed-pitch
                                       ;iy-go-to-char
                                       ;ssh-agency
                                       ;format-all
@@ -173,6 +178,7 @@ This function should only modify configuration layer settings."
                                       ;; emojify
                                       ;fzf
                                      ivy-rich
+                                     all-the-icons-dired
                                      ibuffer-vc
                                      company-prescient
                                      org-re-reveal
@@ -197,6 +203,7 @@ This function should only modify configuration layer settings."
                                       ;company-anaconda
                                       tabbar
                                       toc-org
+minions                                      
                                       ;sicp ssh-agency anki-editor
                                         powerline
                                         smartparens
@@ -208,6 +215,7 @@ This function should only modify configuration layer settings."
                                       ;spaceline-all-the-icons
                                         ;ace-window
                                       eval-in-repl
+                                      flucui-themes
                                       ;; company-lsp
                                       ;jedi
                                       ivy-posframe
@@ -236,7 +244,7 @@ This function should only modify configuration layer settings."
                                         ;simple-httpd
                                       ;; org-wiki
                                       ;plain-org-wiki
-                                      ;; company-tabnine
+                                       company-tabnine
                                       ;; yasnippet-snippets
                                         ;rainbow-mode
                                         ;ivy-yasnippet
@@ -263,7 +271,7 @@ This function should only modify configuration layer settings."
                     smooth-scrolling org-repo-todo org-download org-timer
                     livid-mode git-gutter git-gutter-fringe
                     ;; evil-escape
-                    leuven-theme gh-md evil-lisp-state spray lorem-ipsum symon
+                    ;leuven-theme gh-md evil-lisp-state spray lorem-ipsum symon
                     ac-ispell ace-jump-mode auto-complete auto-dictionary
                     clang-format define-word google-translate disaster epic
                     fancy-battery org-present orgit orglue spacemacs-theme
@@ -382,12 +390,14 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(monokai
+   dotspacemacs-themes '(
+                         monokai
                          ;; leuven
                          ;; solarized-light
                          ;underwater
 ;                         solarized-light
-                         solarized-dark)
+                                        ;solarized-dark
+                         )
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
    ;; first three are spaceline themes. `doom' is the doom-emacs mode-line.
@@ -725,7 +735,6 @@ dump."
   (defun my-vc-merge-p ()
     "Use Emacs for git merge only?"
     (boundp 'startup-now))
-  
   (let* ((file-name-handler-alist nil))
   (require-init 'init-autoload)
   (require-init 'init-utils)
@@ -733,12 +742,13 @@ dump."
   ;; (require-init 'init-elpa)
   (require-init 'init-spelling t)
   (require-init 'init-company t)
+  (require-init 'init-company-new)
   (require-init 'init-linum-mode)
   ;; (require-init 'init-lsp)
   (require-init 'init-hippie-expand)
   (require-init 'init-lispyville)
   (require-init 'init-python t)
-  ;; (require-init 'init-targets)
+  (require-init 'init-targets)
  (require-init 'init-ibuffer t)
   (require-init 'init-keyfreq)
   (require-init 'init-theme)
@@ -756,12 +766,19 @@ dump."
   (require-init 'init-evil)
   (require-init 'init-cc-mode t)
   (require-init 'init-clipboard)
-  (require-init 'init-dired t)
+  ;; (require-init 'init-dired t)
+  (require-init 'init-dired-new)
   (require-init 'init-yasnippet)
   (require-init 'init-whichkey)
+  (require-init 'init-const-new)
+  (require-init 'init-windows-new)
+  (require-init 'init-treemacs-new)
   (require-init 'init-hydra)
+  (require-init 'init-hydra-new)
   (require-init 'init-ess)
+  (require-init 'init-lispyville)
   (require-init 'init-essential)
+  (require-init 'init-ui)
   ;; handy tools though not must have
   (require-init 'init-misc t)
   (require-init 'init-emacs-w3m t)
@@ -769,7 +786,7 @@ dump."
   (require-init 'init-writting t)
   (require-init 'init-general)
   (require-init 'init-ediff)
-  ;; (require-init 'init-org t)
+  (require-init 'init-org t)
   (require-init 'init-workgroups2 t) ; use native API in lightweight mode
   (require-init 'init-term-mode t)
   ;; (require-init 'init-custom)
@@ -777,22 +794,15 @@ dump."
   ;(add-to-list 'load-path "~/.spacemacs.d/extensions")
   ;(require 'ranger)
   (desktop-save-mode 1)
-  ;;  ;;lispyville
-  ;; (with-eval-after-load 'lispyville
-  ;;   (lispyville-set-key-theme
-  ;;    '(operators
-  ;;      c-w
-  ;;      (escape insert)
-  ;;      (additional-movement normal visual motion))))
-  ;; ;; configure shell bash
-  ;(setq shell-file-name "/bin/zsh")
   ;; emacs 透明化 Transparency
   ;(spacemacs/enable-transparency)
   ;; 改变evil-insert-mode光标形状
   (setq-default evil-insert-state-cursor '("green" (bar . 2)))
   (setcdr evil-insert-state-map nil)
   (define-key evil-insert-state-map [escape] 'evil-normal-state)
-
+  ;;; lpy
+  (add-to-list 'load-path "~/.spacemacs.d/private/lpy")
+  (require 'lpy)
   ;;company-lsp
    ;; (with-eval-after-load 'lsp-mode
    ;;   (push '(company-lsp :with company-yasnippet) company-backends))
@@ -802,12 +812,12 @@ dump."
     :mode ("\\.py\\'" . python-mode)
     :interpreter ("python" . python-mode))
   ;;plain-org-wiki
-  (add-to-list 'load-path "~/.emacs.d/private/plain-org-wiki")
-  (require 'plain-org-wiki)
-  (setq pow-directory "~/Documents/坚果云/我的坚果云/github/wiki/")
+  ;; (add-to-list 'load-path "~/.spacemacs.d/private/plain-org-wiki")
+  ;; (require 'plain-org-wiki)
+  ;; (setq pow-directory "~/Documents/坚果云/我的坚果云/github/wiki/")
 
   ;;valign
-  (add-to-list 'load-path "~/.emacs.d/private/valign")
+  (add-to-list 'load-path "~/.spacemacs.d/private/valign")
   (require 'valign)
   (add-hook 'org-mode-hook 'valign-mode)
 
@@ -884,49 +894,52 @@ dump."
   (evilnc-default-hotkeys)
   (define-key evil-normal-state-map (kbd ",/") 'evilnc-comment-or-uncomment-lines)
   (define-key evil-visual-state-map (kbd ",/") 'evilnc-comment-or-uncomment-lines)
-    ;; ivy
-  ;; (use-package ivy
-  ;;   :ensure t
-  ;;   :defer t
-  ;;   :diminish ivy-mode
-  ;;   :config
-  ;;   (progn
-  ;;     (ivy-mode)
-  ;;     (with-eval-after-load 'recentf
-  ;;       (setq ivy-use-virtual-buffers t))
-  ;;     (setq ivy-height 12
-  ;;           ivy-do-completion-in-region nil
-  ;;           ivy-wrap t
-  ;;           ivy-extra-directories nil
-  ;;           ivy-fixed-height-minibuffer t
-  ;;           ;; Don't use ^ as initial input
-  ;;           ivy-initial-inputs-alist nil
-  ;;           ;; highlight til EOL
-  ;;           ivy-format-function #'ivy-format-function-line
-  ;;           ;; disable magic slash on non-match
-  ;;           ;; ~ to /home/user
-  ;;           ;; ivy-magic-tilde nil
-  ;;           ivy-magic-slash-non-match-action nil)
-  ;;     ;; (setq ivy-re-builders-alist
-  ;;     ;;       '((t . ivy--regex-fuzzy)))
-  ;;     ;; (setq confirm-nonexistent-file-or-buffer t)
-  ;;     (setq ivy-re-builders-alist
-  ;;           '((t   . ivy--regex-ignore-order)))
-  ;;     (evil-make-overriding-map ivy-occur-mode-map 'normal)
-  ;;     ))
-  ;; dired-mode
-  ;;返回上层目录，我绑定了快捷键i, 特别好按，非常流畅
-  (add-hook 'dired-mode-hook
-            (lambda ()
-              (define-key dired-mode-map (kbd "i")
-                (lambda () (interactive) (find-alternate-file "..")))))
+;;color-rg
+  (add-to-list 'load-path "~/.spacemacs.d/private/color-rg") ; add color-rg to your load-path
+  (require 'color-rg)
+  ;; ;;   ;; ivy
+  ;; ;; ;; (use-package ivy
+  ;; ;; ;;   :ensure t
+  ;; ;; ;;   :defer t
+  ;; ;; ;;   :diminish ivy-mode
+  ;; ;; ;;   :config
+  ;; ;; ;;   (progn
+  ;; ;; ;;     (ivy-mode)
+  ;; ;; ;;     (with-eval-after-load 'recentf
+  ;; ;; ;;       (setq ivy-use-virtual-buffers t))
+  ;; ;; ;;     (setq ivy-height 12
+  ;; ;; ;;           ivy-do-completion-in-region nil
+  ;; ;; ;;           ivy-wrap t
+  ;; ;; ;;           ivy-extra-directories nil
+  ;; ;; ;;           ivy-fixed-height-minibuffer t
+  ;; ;; ;;           ;; Don't use ^ as initial input
+  ;; ;; ;;           ivy-initial-inputs-alist nil
+  ;; ;; ;;           ;; highlight til EOL
+  ;; ;; ;;           ivy-format-function #'ivy-format-function-line
+  ;; ;; ;;           ;; disable magic slash on non-match
+  ;; ;; ;;           ;; ~ to /home/user
+  ;; ;; ;;           ;; ivy-magic-tilde nil
+  ;; ;; ;;           ivy-magic-slash-non-match-action nil)
+  ;; ;; ;;     ;; (setq ivy-re-builders-alist
+  ;; ;; ;;     ;;       '((t . ivy--regex-fuzzy)))
+  ;; ;; ;;     ;; (setq confirm-nonexistent-file-or-buffer t)
+  ;; ;; ;;     (setq ivy-re-builders-alist
+  ;; ;; ;;           '((t   . ivy--regex-ignore-order)))
+  ;; ;; ;;     (evil-make-overriding-map ivy-occur-mode-map 'normal)
+  ;; ;; ;;     ))
+  ;; ;; ;; dired-mode
+  ;; ;; ;;返回上层目录，我绑定了快捷键i, 特别好按，非常流畅
+  ;; ;; (add-hook 'dired-mode-hook
+  ;; ;;           (lambda ()
+  ;; ;;             (define-key dired-mode-map (kbd "i")
+  ;; ;;               (lambda () (interactive) (find-alternate-file "..")))))
 
-    ;;Chinese and English fonts alignment
-  (use-package cnfonts
-    :config
-    (cnfonts-enable)
-    (setq cnfonts-use-face-font-rescale t)
-    )
+  ;;   ;;Chinese and English fonts alignment
+  ;; (use-package cnfonts
+  ;;   :config
+  ;;   (cnfonts-enable)
+  ;;   (setq cnfonts-use-face-font-rescale t)
+  ;;   )
 ;;; R related modes
   (use-package polymode
     :mode
