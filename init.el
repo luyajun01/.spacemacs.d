@@ -55,11 +55,7 @@ This function should only modify configuration layer settings."
      imenu-list
      ;ipython-notebook
      ;prodigy
-     ;; github
      search-engine
-     ;graphviz
-     ;(haskell :variables haskell-enable-hindent t
-     ;         haskell-completion-backend 'intero)
      (syntax-checking :variables syntax-checking-enable-by-default nil
                       syntax-checking-enable-tooltips nil)
      (spell-checking :variables spell-checking-enable-by-default nil)
@@ -144,7 +140,7 @@ This function should only modify configuration layer settings."
             c-c++-default-mode-for-headers 'c++-mode
             c-c++-backend 'lsp-ccls
             c-c++-lsp-executable (file-truename "/usr/local/bin/ccls"))
-     zilongshanren
+     ;; zilongshanren
      (chinese :variables chinese-default-input-method 'pinyin
               chinese-enable-youdao-dict t)
      )
@@ -156,7 +152,68 @@ This function should only modify configuration layer settings."
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '(;sicp
+                                      evil-snipe
+                                      mocha
+                                      forge
+                                      js2-mode
+                                      scss-mode
+                                      fish-mode
+                                      protobuf-mode
+                                      swift-mode
+                                      lsp-sourcekit
+                                      browse-at-remote
+                                      org-roam
+                                      org-roam-server
+                                      counsel-osx-app
+                                      dired-quick-sort
+                                      rainbow-delimiters
+                                      volatile-highlights
+                                      all-the-icons-ibuffer
     major-mode-hydra
+    ivy-prescient
+    evil-escape
+    gnu-elpa-keyring-update
+    auto-package-update
+    hide-mode-line
+    default-text-scale
+    goto-line-preview
+    avy-zap
+    dired-git-info
+    dired-rsync
+    symbol-overlay
+    highlight-indent-guides
+    diff-hl
+    volatile-highlights
+    ibuffer-projectile
+    easy-kill-extras
+    shackle
+    ox-gfm
+    ob-go
+    ob-rust
+    ob-ipython
+    ob-mermaid
+    beginend
+    comment-dwim-2
+    drag-stuff
+    multiple-cursors
+    smart-region
+    mwim
+    pager
+    goto-last-point
+    goto-char-preview
+    sudo-edit
+    fancy-narrow
+    amx
+    ivy-yasnippet
+    counsel-world-clock
+    counsel-tramp
+    all-the-icons-ivy-rich
+    yasnippet-snippets
+    calfw
+    calfw-org
+    calfw-ical
+    dashboard
+    company-box
                                       diredfl
                                       solaire-mode
                                       doom-themes
@@ -191,7 +248,7 @@ This function should only modify configuration layer settings."
                                       general
                                       keyfreq
                                       company-posframe
-                                     company-quickhelp 
+                                     company-quickhelp
                                       window-numbering
                                       ace-jump-zap
                                       ;anaconda-mode
@@ -203,7 +260,7 @@ This function should only modify configuration layer settings."
                                       ;company-anaconda
                                       tabbar
                                       toc-org
-minions                                      
+minions
                                       ;sicp ssh-agency anki-editor
                                         powerline
                                         smartparens
@@ -235,6 +292,52 @@ minions
                                       lsp-treemacs
                                       ;; org-journal
                                       company-lsp
+                                      elfeed
+                                      olivetti
+                                      bongo
+                                      ztree
+                                      diffview
+                                      memory-usage
+                                      howdoyou
+                                      esup
+                                      focus
+                                      tldr
+                                      ccls
+                                      lsp-julia
+                                      lsp-java
+                                      quickrun
+                                      cask-mode
+                                      csv-mode
+                                      lua-mode
+                                      mermaid-mode
+                                      rmsbolt
+                                      scala-mode
+                                      bmx-mode
+                                      helpful
+                                      overseer
+                                      modern-cpp-font-lock
+                                      daemons
+                                      editorconfig
+                                      list-environment
+                                      css-eldoc
+                                      coffee-mode
+                                      web-mode
+                                      php-mode
+                                      restclient
+                                      plantuml-mode
+                                      org-rich-yank
+                                      org-fancy-priorities
+                                      esh-autosuggest
+                                      treemacs-projectile
+                                      treemacs-magit
+                                      treemacs-persp
+                                      grip-mode
+                                      nov
+                                      lsp-ivy
+                                     lsp-pyright
+                                     dap-mode
+                                     powershell
+                                     vimrc-mode
                                       ;; org-alert
                                         ;el2org
                                       cdlatex
@@ -244,28 +347,39 @@ minions
                                         ;simple-httpd
                                       ;; org-wiki
                                       ;plain-org-wiki
-                                       company-tabnine
+                                      magit-todos
+                                      copyit
+                                      atomic-chrome
+                                      pomidor
+                                      persistent-scratch
+                                      org-tree-slide
+                                      org-preview-html
+                                      company-tabnine
                                       ;; yasnippet-snippets
                                         ;rainbow-mode
                                         ;ivy-yasnippet
                                       cnfonts
                                       electric-operator
+                                      persp-mode-projectile-bridge
+                                      highlight-defined
                                         ;leuven-theme
                                         ;helm-bm
+                                      poly-org
                                       polymode
                                       poly-R
                                       poly-noweb
                                       poly-markdown
-                                      poly-org
                                       )
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages
    '(org-projectile org-brain magit-gh-pulls magit-gitflow  evil-mc realgud tern company-tern
                     evil-args evil-ediff evil-exchange evil-unimpaired
-                    evil-indent-plus volatile-highlights
+                    evil-indent-plus
+                    ;volatile-highlights
                     ;smartparens
-                    spaceline holy-mode skewer-mode rainbow-delimiters
+                    spaceline holy-mode skewer-mode
+                    ;rainbow-delimiters
                     highlight-indentation vi-tilde-fringe eyebrowse ws-butler
                     ;org-bullets
                     smooth-scrolling org-repo-todo org-download org-timer
@@ -657,7 +771,7 @@ dump."
         '(("melpa-cn" . "http://mirrors.cloud.tencent.com/elpa/melpa/")
           ("org-cn"   . "http://mirrors.cloud.tencent.com/elpa/org/")
           ("gnu-cn"   . "http://mirrors.cloud.tencent.com/elpa/gnu/")))
-  
+
   (setq term-char-mode-point-at-process-mark nil)
 
   ;; https://github.com/syl20bnr/spacemacs/issues/2705
@@ -678,131 +792,126 @@ dump."
   )
 
 (defun dotspacemacs/user-config ()
-;https://github.com/redguardtoo/emacs.d/blob/837c057ba17df5d157bdbd90e86103eaecc8eb9c/init.el
-  ;;----------------------------------------------------------------------------
-  ;; Which functionality to enable (use t or nil for true and false)
-  ;;----------------------------------------------------------------------------
-  (setq *is-a-mac* (eq system-type 'darwin))
-  (setq *win64* (eq system-type 'windows-nt))
-  (setq *cygwin* (eq system-type 'cygwin) )
-  (setq *linux* (or (eq system-type 'gnu/linux) (eq system-type 'linux)) )
-  (setq *unix* (or *linux* (eq system-type 'usg-unix-v) (eq system-type 'berkeley-unix)) )
-  (setq *emacs24* (>= emacs-major-version 24))
-  (setq *emacs25* (>= emacs-major-version 25))
-  (setq *emacs26* (>= emacs-major-version 26))
-  (setq *no-memory* (cond
-                     (*is-a-mac*
-                      (< (string-to-number (nth 1 (split-string (shell-command-to-string "sysctl hw.physmem")))) 4000000000))
-                     (*linux* nil)
-                     (t nil)))
-  (defconst my-emacs-d (file-name-as-directory "~/.spacemacs.d/")
-    "Directory of emacs.d")
 
-  (defconst my-site-lisp-dir (concat my-emacs-d "site-lisp")
-    "Directory of site-lisp")
+(when (version< emacs-version "25.1")
+  (error "This requires Emacs 25.1 and above!"))
 
-  (defconst my-lisp-dir (concat my-emacs-d "lisp")
-    "Directory of lisp")
+;; Speed up startup
+(defvar centaur-gc-cons-threshold (if (display-graphic-p) 16000000 1600000)
+  "The default value to use for `gc-cons-threshold'. If you experience freezing,
+decrease this. If you experience stuttering, increase this.")
 
-  ;; *Message* buffer should be writable in 24.4+
-  (defadvice switch-to-buffer (after switch-to-buffer-after-hack activate)
-    (if (string= "*Messages*" (buffer-name))
-        (read-only-mode -1)))
-  
-  (defun require-init (pkg &optional maybe-disabled)
-    "Load PKG if MAYBE-DISABLED is nil or it's nil but start up in normal slowly."
-    (when (or (not maybe-disabled) (not (boundp 'startup-now)))
-      (load (file-truename (format "~/.spacemacs.d/lisp/%s" pkg)) t t)))
+(defvar centaur-gc-cons-upper-limit (if (display-graphic-p) 400000000 100000000)
+  "The temporary value for `gc-cons-threshold' to defer it.")
 
-  (defun local-require (pkg)
-    (unless (featurep pkg)
-      (load (expand-file-name
-             (cond
-              ((eq pkg 'go-mode-load)
-               (format "~/.spacemacs.d/site-lisp/go-mode/%s" pkg))
-              (t
-               (format "~/.spacemacs.d/site-lisp/%s/%s" pkg pkg))))
-            t t)));; Load path
-  ;; (add-to-list 'load-path (expand-file-name "lisp" "~/.emacs.d/"))
+(defvar centaur-gc-timer (run-with-idle-timer 10 t #'garbage-collect)
+  "Run garbarge collection when idle 10s.")
 
-  ;; @see https://www.reddit.com/r/emacs/comments/55ork0/is_emacs_251_noticeably_slower_than_245_on_windows/
-  ;; Emacs 25 does gc too frequently
-  ;; (setq garbage-collection-messages t) ; for debug
-  (setq best-gc-cons-threshold (* 64 1024 1024))
-  (setq gc-cons-percentage 0.5)
-  (run-with-idle-timer 5 t #'garbage-collect)
+(defvar default-file-name-handler-alist file-name-handler-alist)
 
-  (defun my-vc-merge-p ()
-    "Use Emacs for git merge only?"
-    (boundp 'startup-now))
-  (let* ((file-name-handler-alist nil))
-  (require-init 'init-autoload)
-  (require-init 'init-utils)
-  ;; (require-init 'init-file-type)
-  ;; (require-init 'init-elpa)
-  (require-init 'init-spelling t)
-  (require-init 'init-company t)
-  (require-init 'init-company-new)
-  (require-init 'init-linum-mode)
-  ;; (require-init 'init-lsp)
-  (require-init 'init-hippie-expand)
-  (require-init 'init-lispyville)
-  (require-init 'init-python t)
-  (require-init 'init-targets)
- (require-init 'init-ibuffer t)
-  (require-init 'init-keyfreq)
-  (require-init 'init-theme)
-  (require-init 'init-ivy)
-  (require-init 'init-gtags t)
-  (require-init 'init-git t)
-  (require-init 'init-chinese t)
-  (require-init 'init-markdown t)
-  (require-init 'init-python)
-  (require-init 'init-gtags t)
-  (require-init 'init-ctags)
-  (setq load-path (cdr load-path))
-  (my-add-subdirs-to-load-path (file-name-as-directory my-site-lisp-dir))
-  (require-init 'init-flymake t)
-  (require-init 'init-evil)
-  (require-init 'init-cc-mode t)
-  (require-init 'init-clipboard)
-  ;; (require-init 'init-dired t)
-  (require-init 'init-dired-new)
-  (require-init 'init-yasnippet)
-  (require-init 'init-whichkey)
-  (require-init 'init-const-new)
-  (require-init 'init-windows-new)
-  (require-init 'init-treemacs-new)
-  (require-init 'init-hydra)
-  (require-init 'init-hydra-new)
-  (require-init 'init-ess)
-  (require-init 'init-lispyville)
-  (require-init 'init-essential)
-  (require-init 'init-ui)
-  ;; handy tools though not must have
-  (require-init 'init-misc t)
-  (require-init 'init-emacs-w3m t)
-  (require-init 'init-shackle t)
-  (require-init 'init-writting t)
-  (require-init 'init-general)
-  (require-init 'init-ediff)
-  (require-init 'init-org t)
-  (require-init 'init-workgroups2 t) ; use native API in lightweight mode
-  (require-init 'init-term-mode t)
-  ;; (require-init 'init-custom)
-  )
-  ;(add-to-list 'load-path "~/.spacemacs.d/extensions")
-  ;(require 'ranger)
-  (desktop-save-mode 1)
+(setq file-name-handler-alist nil)
+(setq gc-cons-threshold centaur-gc-cons-upper-limit
+      gc-cons-percentage 0.5)
+(add-hook 'emacs-startup-hook
+          (lambda ()
+            "Restore defalut values after startup."
+            (setq file-name-handler-alist default-file-name-handler-alist)
+            (setq gc-cons-threshold centaur-gc-cons-threshold
+                  gc-cons-percentage 0.1)
+
+            ;; GC automatically while unfocusing the frame
+            ;; `focus-out-hook' is obsolete since 27.1
+            (if (boundp 'after-focus-change-function)
+                (add-function :after after-focus-change-function
+                  (lambda ()
+                    (unless (frame-focus-state)
+                      (garbage-collect))))
+              (add-hook 'focus-out-hook 'garbage-collect))
+
+            ;; Avoid GCs while using `ivy'/`counsel'/`swiper' and `helm', etc.
+            ;; @see http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
+            (defun my-minibuffer-setup-hook ()
+              (setq gc-cons-threshold centaur-gc-cons-upper-limit))
+
+            (defun my-minibuffer-exit-hook ()
+              (setq gc-cons-threshold centaur-gc-cons-threshold))
+
+            (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
+            (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)))
+
+;; Load path
+;; Optimize: Force "lisp"" and "site-lisp" at the head to reduce the startup time.
+(defun update-load-path (&rest _)
+  "Update `load-path'."
+  (dolist (dir '("site-lisp" "lisp"))
+    (push (expand-file-name dir "~/.spacemacs.d/") load-path)))
+
+(defun add-subdirs-to-load-path (&rest _)
+  "Add subdirectories to `load-path'."
+  (let ((default-directory (expand-file-name "site-lisp" "~/.spacemacs.d/")))
+    (normal-top-level-add-subdirs-to-load-path)))
+
+(advice-add #'package-initialize :after #'update-load-path)
+(advice-add #'package-initialize :after #'add-subdirs-to-load-path)
+
+(update-load-path)
+;; Packages
+;; Without this comment Emacs25 adds (package-initialize) here
+(require 'init-package)
+;; Preferences
+(require 'init-basic)
+(require 'init-hydra)
+(require 'init-ui)
+(require 'init-edit)
+(require 'init-ivy)
+(require 'init-private)
+(require 'init-company)
+(require 'init-yasnippet)
+(require 'init-calendar)
+(require 'init-dashboard)
+(require 'init-dired)
+(require 'init-highlight)
+(require 'init-ibuffer)
+(require 'init-kill-ring)
+(require 'init-persp)
+(require 'init-window)
+(require 'init-treemacs)
+
+(require 'init-eshell)
+(require 'init-shell)
+
+(require 'init-markdown)
+(require 'init-org)
+(require 'init-reader)
+
+;; (require 'init-docker)
+(require 'init-utils)
+
+;; Programming
+(require 'init-vcs)
+(require 'init-flycheck)
+(require 'init-projectile)
+(require 'init-lsp)
+
+(require 'init-prog)
+(require 'init-elisp)
+(require 'init-c)
+;; (require 'init-go)
+;; (require 'init-rust)
+(require 'init-python)
+;; (require 'init-ruby)
+;; (require 'init-dart)
+;; (require 'init-elixir)
+(require 'init-web)
   ;; emacs 透明化 Transparency
   ;(spacemacs/enable-transparency)
   ;; 改变evil-insert-mode光标形状
   (setq-default evil-insert-state-cursor '("green" (bar . 2)))
   (setcdr evil-insert-state-map nil)
   (define-key evil-insert-state-map [escape] 'evil-normal-state)
-  ;;; lpy
-  (add-to-list 'load-path "~/.spacemacs.d/private/lpy")
-  (require 'lpy)
+  ;; ;;; lpy
+  ;; (add-to-list 'load-path "~/.spacemacs.d/private/lpy")
+  ;; (require 'lpy)
   ;;company-lsp
    ;; (with-eval-after-load 'lsp-mode
    ;;   (push '(company-lsp :with company-yasnippet) company-backends))
@@ -817,10 +926,9 @@ dump."
   ;; (setq pow-directory "~/Documents/坚果云/我的坚果云/github/wiki/")
 
   ;;valign
-  (add-to-list 'load-path "~/.spacemacs.d/private/valign")
-  (require 'valign)
-  (add-hook 'org-mode-hook 'valign-mode)
-
+  ;; (add-to-list 'load-path "~/.spacemacs.d/private/valign")
+  ;; (require 'valign)
+  ;; (add-hook 'org-mode-hook 'valign-mode)
 (use-package pyim
   :ensure nil
   :demand t
@@ -864,7 +972,7 @@ dump."
   :bind
   (("C-S-P" . pyim-convert-string-at-point) ;与 pyim-probe-dynamic-english 配合
    ("C-;" . pyim-delete-word-from-personal-buffer)))
-  
+
   ;;pdf-tools
 ;;; pdf-tools package and reinstall both as at the start.
   ;; (use-package pdf-tools
@@ -894,9 +1002,9 @@ dump."
   (evilnc-default-hotkeys)
   (define-key evil-normal-state-map (kbd ",/") 'evilnc-comment-or-uncomment-lines)
   (define-key evil-visual-state-map (kbd ",/") 'evilnc-comment-or-uncomment-lines)
-;;color-rg
-  (add-to-list 'load-path "~/.spacemacs.d/private/color-rg") ; add color-rg to your load-path
-  (require 'color-rg)
+;; ;;color-rg
+;;   (add-to-list 'load-path "~/.spacemacs.d/private/color-rg") ; add color-rg to your load-path
+;;   (require 'color-rg)
   ;; ;;   ;; ivy
   ;; ;; ;; (use-package ivy
   ;; ;; ;;   :ensure t
@@ -970,7 +1078,7 @@ dump."
   ;;   ;;  ;   (use-package poly-noweb+r
   ;;   ;;  ; :defer t)
   ;;   )
-  
+
   ;; 以下是zilongshanren配置
   ;; ;;解决org表格里面中英文对齐的问题
   ;; (when (configuration-layer/layer-usedp 'chinese)
