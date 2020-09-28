@@ -364,7 +364,7 @@ minions
                                       org-tree-slide
                                      org-preview-html
                                       company-tabnine
-                                      ;; yasnippet-snippets
+                                     ;; yasnippet-snippets
                                         ;rainbow-mode
                                         ;ivy-yasnippet
                                       cnfonts
