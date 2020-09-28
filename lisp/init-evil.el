@@ -422,7 +422,7 @@ If the character before and after CH is space or tab, CH is NOT slash"
                         (xref-pulse-momentarily)))))
 ;; }}
 
-(local-require 'general)
+(require 'general)
 (general-evil-setup t)
 
 ;; {{ use `,` as leader key
@@ -624,14 +624,15 @@ If the character before and after CH is space or tab, CH is NOT slash"
   :states '(normal visual))
 
 (my-space-leader-def
-  "ee" 'my-swap-sexps
+ "a" 'hydra-avy/body
+ "ee" 'my-swap-sexps
   "nn" 'my-goto-next-hunk
   "pp" 'my-goto-previous-hunk
   "pc" 'my-dired-redo-from-commands-history
   "pw" 'pwd
-  "ho" 'hydra-org/body
-  "mm" 'counsel-evil-goto-global-marker
-  "mf" 'mark-defun
+  ;; "mm" 'counsel-evil-goto-global-marker
+  "m" 'hydra-magit/body
+  ;; "mf" 'mark-defun
   "xc" 'save-buffers-kill-terminal ; not used frequently
   "cc" 'my-dired-redo-last-command
   ;; "ss" 'wg-create-workgroup ; save windows layout
@@ -646,11 +647,6 @@ If the character before and after CH is space or tab, CH is NOT slash"
   "g" 'hydra-git/body
   "ps" 'profiler-start
   "pr" 'profiler-report
-  "w"  'avy-goto-word-1
-  "ms" 'magit-status
-  "ho" 'hydra-org/body
-  "cm" 'counsel-mark-ring
-  "a" 'avy-goto-line
   ;; "ud" 'my-gud-gdb
   ;; "uk" 'gud-kill-yes
   ;; "ur" 'gud-remove

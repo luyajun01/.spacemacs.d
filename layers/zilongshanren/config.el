@@ -13,10 +13,9 @@
      deft-dir "f:/org-notes"
      blog-admin-dir "f:/zilongshanren.com")
   (setq
-   org-agenda-dir "~/org-notes"
-   deft-dir "~/org-notes"
+   org-agenda-dir "~/Documents/坚果云/我的坚果云/github/life/agenda.org"
+   deft-dir "~/Documents/坚果云/我的坚果云/github/life/"
    blog-admin-dir "~/zilongshanren.com"))
-
 
 ;;load sensitive data
 ;; or (like spacemacs init.el)put the above variable into it ,then the own value separated from public config

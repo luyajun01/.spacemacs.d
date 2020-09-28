@@ -23,8 +23,8 @@
     ;; org-tree-slide
     ;; ox-reveal
     ;; worf
-    ;; org-download
-    ;plain-org-wiki
+    org-download
+    plain-org-wiki
     )
   )
 
@@ -369,20 +369,7 @@ See `org-capture-templates' for more information."
 
       ;;An entry without a cookie is treated just like priority ' B '.
       ;;So when create new task, they are default 重要且紧急
-      (setq org-agenda-custom-commands
-            '(
-              ("w" . "任务安排")
-              ("wa" "重要且紧急的任务" tags-todo "+PRIORITY=\"A\"")
-              ("wb" "重要且不紧急的任务" tags-todo "-Weekly-Monthly-Daily+PRIORITY=\"B\"")
-              ("wc" "不重要且紧急的任务" tags-todo "+PRIORITY=\"C\"")
-              ("b" "Blog" tags-todo "BLOG")
-              ("p" . "项目安排")
-              ("pw" tags-todo "PROJECT+WORK+CATEGORY=\"work\"")
-              ("pl" tags-todo "PROJECT+DREAM+CATEGORY=\"zilongshanren\"")
-              ("W" "Weekly Review"
-               ((stuck "") ;; review stuck projects as designated by org-stuck-projects
-                (tags-todo "PROJECT") ;; review all projects (assuming you use todo keywords to designate projects)
-                ))))
+            
 
       (defvar zilongshanren-website-html-preamble
         "<div class='nav'>
@@ -538,10 +525,10 @@ holding contextual information."
     :init
     (org-download-enable)))
 
-;(defun zilongshanren-org/init-plain-org-wiki ()
-;  (use-package plain-org-wiki
-;    :init
-;    (setq plain-org-wiki-directory "~/Documents/坚果云/我的坚果云/github/wiki/")))
+(defun zilongshanren-org/init-plain-org-wiki ()
+  (use-package plain-org-wiki
+    :init
+    (setq plain-org-wiki-directory "~/Documents/坚果云/我的坚果云/github/wiki/")))
 
 (defun zilongshanren-org/init-ob-typescript ()
   (use-package ob-typescript

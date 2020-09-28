@@ -13,7 +13,7 @@
       '(
         helm-github-stars
         helm
-        helm-ag
+        ;; helm-ag
         projectile
         prodigy
         find-file-in-project
@@ -47,7 +47,7 @@
         ;; browse-at-remote
         chinese-conv
         ;; chinese-wbim
-        pyim
+        ;pyim
         lispyville
         popup
         ))
@@ -165,314 +165,314 @@
   (spacemacs/set-leader-keys "ar" 'my-ranger))
 
 ;; copy from spacemacs helm layer
-(defun zilongshanren-misc/init-helm-ag ()
-  (use-package helm-ag
-    :defer t
-    :init
-    (progn
-      (defun spacemacs//helm-do-ag-region-or-symbol (func &optional dir)
-        "Search with `ag' with a default input."
-        (require 'helm-ag)
-        (cl-letf* (((symbol-value 'helm-ag-insert-at-point) 'symbol)
-                   ;; make thing-at-point choosing the active region first
-                   ((symbol-function 'this-fn) (symbol-function 'thing-at-point))
-                   ((symbol-function 'thing-at-point)
-                    (lambda (thing)
-                      (let ((res (if (region-active-p)
-                                     (buffer-substring-no-properties
-                                      (region-beginning) (region-end))
-                                   (this-fn thing))))
-                        (when res (rxt-quote-pcre res))))))
-          (funcall func dir)))
+;; (defun zilongshanren-misc/init-helm-ag ()
+;;   (use-package helm-ag
+;;     :defer t
+;;     :init
+;;     (progn
+;;       (defun spacemacs//helm-do-ag-region-or-symbol (func &optional dir)
+;;         "Search with `ag' with a default input."
+;;         (require 'helm-ag)
+;;         (cl-letf* (((symbol-value 'helm-ag-insert-at-point) 'symbol)
+;;                    ;; make thing-at-point choosing the active region first
+;;                    ((symbol-function 'this-fn) (symbol-function 'thing-at-point))
+;;                    ((symbol-function 'thing-at-point)
+;;                     (lambda (thing)
+;;                       (let ((res (if (region-active-p)
+;;                                      (buffer-substring-no-properties
+;;                                       (region-beginning) (region-end))
+;;                                    (this-fn thing))))
+;;                         (when res (rxt-quote-pcre res))))))
+;;           (funcall func dir)))
 
-      (defun spacemacs//helm-do-search-find-tool (base tools default-inputp)
-        "Create a cond form given a TOOLS string list and evaluate it."
-        (eval
-         `(cond
-           ,@(mapcar
-              (lambda (x)
-                `((executable-find ,x)
-                  ',(let ((func
-                           (intern
-                            (format (if default-inputp
-                                        "spacemacs/%s-%s-region-or-symbol"
-                                      "spacemacs/%s-%s")
-                                    base x))))
-                      (if (fboundp func)
-                          func
-                        (intern (format "%s-%s"  base x))))))
-              tools)
-           (t 'helm-do-grep))))
+;;       (defun spacemacs//helm-do-search-find-tool (base tools default-inputp)
+;;         "Create a cond form given a TOOLS string list and evaluate it."
+;;         (eval
+;;          `(cond
+;;            ,@(mapcar
+;;               (lambda (x)
+;;                 `((executable-find ,x)
+;;                   ',(let ((func
+;;                            (intern
+;;                             (format (if default-inputp
+;;                                         "spacemacs/%s-%s-region-or-symbol"
+;;                                       "spacemacs/%s-%s")
+;;                                     base x))))
+;;                       (if (fboundp func)
+;;                           func
+;;                         (intern (format "%s-%s"  base x))))))
+;;               tools)
+;;            (t 'helm-do-grep))))
 
-      ;; Search in current file ----------------------------------------------
+;;       ;; Search in current file ----------------------------------------------
 
-      (defun spacemacs/helm-file-do-ag (&optional _)
-        "Wrapper to execute `helm-ag-this-file.'"
-        (interactive)
-        (helm-ag-this-file))
+;;       (defun spacemacs/helm-file-do-ag (&optional _)
+;;         "Wrapper to execute `helm-ag-this-file.'"
+;;         (interactive)
+;;         (helm-ag-this-file))
 
-      (defun spacemacs/helm-file-do-ag-region-or-symbol ()
-        "Search in current file with `ag' using a default input."
-        (interactive)
-        (spacemacs//helm-do-ag-region-or-symbol 'spacemacs/helm-file-do-ag))
+;;       (defun spacemacs/helm-file-do-ag-region-or-symbol ()
+;;         "Search in current file with `ag' using a default input."
+;;         (interactive)
+;;         (spacemacs//helm-do-ag-region-or-symbol 'spacemacs/helm-file-do-ag))
 
-      (defun spacemacs/helm-file-smart-do-search (&optional default-inputp)
-        "Search in current file using `dotspacemacs-search-tools'.
-Search for a search tool in the order provided by `dotspacemacs-search-tools'
-If DEFAULT-INPUTP is non nil then the current region or symbol at point
-are used as default input."
-        (interactive)
-        (call-interactively
-         (spacemacs//helm-do-search-find-tool "helm-file-do"
-                                              dotspacemacs-search-tools
-                                              default-inputp)))
+;;       (defun spacemacs/helm-file-smart-do-search (&optional default-inputp)
+;;         "Search in current file using `dotspacemacs-search-tools'.
+;; Search for a search tool in the order provided by `dotspacemacs-search-tools'
+;; If DEFAULT-INPUTP is non nil then the current region or symbol at point
+;; are used as default input."
+;;         (interactive)
+;;         (call-interactively
+;;          (spacemacs//helm-do-search-find-tool "helm-file-do"
+;;                                               dotspacemacs-search-tools
+;;                                               default-inputp)))
 
-      (defun spacemacs/helm-file-smart-do-search-region-or-symbol ()
-        "Search in current file using `dotspacemacs-search-tools' with
- default input.
-Search for a search tool in the order provided by `dotspacemacs-search-tools'."
-        (interactive)
-        (spacemacs/helm-file-smart-do-search t))
+;;       (defun spacemacs/helm-file-smart-do-search-region-or-symbol ()
+;;         "Search in current file using `dotspacemacs-search-tools' with
+;;  default input.
+;; Search for a search tool in the order provided by `dotspacemacs-search-tools'."
+;;         (interactive)
+;;         (spacemacs/helm-file-smart-do-search t))
 
-      ;; Search in files -----------------------------------------------------
+;;       ;; Search in files -----------------------------------------------------
 
-      (defun spacemacs/helm-files-do-ag (&optional dir)
-        "Search in files with `ag' using a default input."
-        (interactive)
-        (helm-do-ag dir))
+;;       (defun spacemacs/helm-files-do-ag (&optional dir)
+;;         "Search in files with `ag' using a default input."
+;;         (interactive)
+;;         (helm-do-ag dir))
 
-      (defun spacemacs/helm-files-do-ag-region-or-symbol ()
-        "Search in files with `ag' using a default input."
-        (interactive)
-        (spacemacs//helm-do-ag-region-or-symbol 'spacemacs/helm-files-do-ag))
+;;       (defun spacemacs/helm-files-do-ag-region-or-symbol ()
+;;         "Search in files with `ag' using a default input."
+;;         (interactive)
+;;         (spacemacs//helm-do-ag-region-or-symbol 'spacemacs/helm-files-do-ag))
 
-      (defun spacemacs/helm-files-do-ack (&optional dir)
-        "Search in files with `ack'."
-        (interactive)
-        (let ((helm-ag-base-command "ack --nocolor --nogroup"))
-          (helm-do-ag dir)))
+;;       (defun spacemacs/helm-files-do-ack (&optional dir)
+;;         "Search in files with `ack'."
+;;         (interactive)
+;;         (let ((helm-ag-base-command "ack --nocolor --nogroup"))
+;;           (helm-do-ag dir)))
 
-      (defun spacemacs/helm-files-do-ack-region-or-symbol ()
-        "Search in files with `ack' using a default input."
-        (interactive)
-        (spacemacs//helm-do-ag-region-or-symbol 'spacemacs/helm-files-do-ack))
+;;       (defun spacemacs/helm-files-do-ack-region-or-symbol ()
+;;         "Search in files with `ack' using a default input."
+;;         (interactive)
+;;         (spacemacs//helm-do-ag-region-or-symbol 'spacemacs/helm-files-do-ack))
 
-      (defun spacemacs/helm-files-do-pt (&optional dir)
-        "Search in files with `pt'."
-        (interactive)
-        (let ((helm-ag-base-command "pt -e --nocolor --nogroup"))
-          (helm-do-ag dir)))
+;;       (defun spacemacs/helm-files-do-pt (&optional dir)
+;;         "Search in files with `pt'."
+;;         (interactive)
+;;         (let ((helm-ag-base-command "pt -e --nocolor --nogroup"))
+;;           (helm-do-ag dir)))
 
-      (defun spacemacs/helm-files-do-pt-region-or-symbol ()
-        "Search in files with `pt' using a default input."
-        (interactive)
-        (spacemacs//helm-do-ag-region-or-symbol 'spacemacs/helm-files-do-pt))
+;;       (defun spacemacs/helm-files-do-pt-region-or-symbol ()
+;;         "Search in files with `pt' using a default input."
+;;         (interactive)
+;;         (spacemacs//helm-do-ag-region-or-symbol 'spacemacs/helm-files-do-pt))
 
-      (defun spacemacs/helm-files-smart-do-search (&optional default-inputp)
-        "Search in opened buffers using `dotspacemacs-search-tools'.
-Search for a search tool in the order provided by `dotspacemacs-search-tools'
-If DEFAULT-INPUTP is non nil then the current region or symbol at point
-are used as default input."
-        (interactive)
-        (call-interactively
-         (spacemacs//helm-do-search-find-tool "helm-files-do"
-                                              dotspacemacs-search-tools
-                                              default-inputp)))
+;;       (defun spacemacs/helm-files-smart-do-search (&optional default-inputp)
+;;         "Search in opened buffers using `dotspacemacs-search-tools'.
+;; Search for a search tool in the order provided by `dotspacemacs-search-tools'
+;; If DEFAULT-INPUTP is non nil then the current region or symbol at point
+;; are used as default input."
+;;         (interactive)
+;;         (call-interactively
+;;          (spacemacs//helm-do-search-find-tool "helm-files-do"
+;;                                               dotspacemacs-search-tools
+;;                                               default-inputp)))
 
-      (defun spacemacs/helm-files-smart-do-search-region-or-symbol ()
-        "Search in opened buffers using `dotspacemacs-search-tools'.
-with default input.
-Search for a search tool in the order provided by `dotspacemacs-search-tools'."
-        (interactive)
-        (spacemacs/helm-files-smart-do-search t))
+;;       (defun spacemacs/helm-files-smart-do-search-region-or-symbol ()
+;;         "Search in opened buffers using `dotspacemacs-search-tools'.
+;; with default input.
+;; Search for a search tool in the order provided by `dotspacemacs-search-tools'."
+;;         (interactive)
+;;         (spacemacs/helm-files-smart-do-search t))
 
-      ;; Search in buffers ---------------------------------------------------
+;;       ;; Search in buffers ---------------------------------------------------
 
-      (defun spacemacs/helm-buffers-do-ag (&optional _)
-        "Wrapper to execute `helm-ag-buffers.'"
-        (interactive)
-        (helm-do-ag-buffers))
+;;       (defun spacemacs/helm-buffers-do-ag (&optional _)
+;;         "Wrapper to execute `helm-ag-buffers.'"
+;;         (interactive)
+;;         (helm-do-ag-buffers))
 
-      (defun spacemacs/helm-buffers-do-ag-region-or-symbol ()
-        "Search in opened buffers with `ag' with a default input."
-        (interactive)
-        (spacemacs//helm-do-ag-region-or-symbol 'spacemacs/helm-buffers-do-ag))
+;;       (defun spacemacs/helm-buffers-do-ag-region-or-symbol ()
+;;         "Search in opened buffers with `ag' with a default input."
+;;         (interactive)
+;;         (spacemacs//helm-do-ag-region-or-symbol 'spacemacs/helm-buffers-do-ag))
 
-      (defun spacemacs/helm-buffers-do-ack (&optional _)
-        "Search in opened buffers with `ack'."
-        (interactive)
-        (let ((helm-ag-base-command "ack --nocolor --nogroup"))
-          (helm-do-ag-buffers)))
+;;       (defun spacemacs/helm-buffers-do-ack (&optional _)
+;;         "Search in opened buffers with `ack'."
+;;         (interactive)
+;;         (let ((helm-ag-base-command "ack --nocolor --nogroup"))
+;;           (helm-do-ag-buffers)))
 
-      (defun spacemacs/helm-buffers-do-ack-region-or-symbol ()
-        "Search in opened buffers with `ack' with a default input."
-        (interactive)
-        (spacemacs//helm-do-ag-region-or-symbol 'spacemacs/helm-buffers-do-ack))
+;;       (defun spacemacs/helm-buffers-do-ack-region-or-symbol ()
+;;         "Search in opened buffers with `ack' with a default input."
+;;         (interactive)
+;;         (spacemacs//helm-do-ag-region-or-symbol 'spacemacs/helm-buffers-do-ack))
 
-      (defun spacemacs/helm-buffers-do-pt (&optional _)
-        "Search in opened buffers with `pt'."
-        (interactive)
-        (let ((helm-ag-base-command "pt -e --nocolor --nogroup"))
-          (helm-do-ag-buffers)))
+;;       (defun spacemacs/helm-buffers-do-pt (&optional _)
+;;         "Search in opened buffers with `pt'."
+;;         (interactive)
+;;         (let ((helm-ag-base-command "pt -e --nocolor --nogroup"))
+;;           (helm-do-ag-buffers)))
 
-      (defun spacemacs/helm-buffers-do-pt-region-or-symbol ()
-        "Search in opened buffers with `pt' using a default input."
-        (interactive)
-        (spacemacs//helm-do-ag-region-or-symbol 'spacemacs/helm-buffers-do-pt))
+;;       (defun spacemacs/helm-buffers-do-pt-region-or-symbol ()
+;;         "Search in opened buffers with `pt' using a default input."
+;;         (interactive)
+;;         (spacemacs//helm-do-ag-region-or-symbol 'spacemacs/helm-buffers-do-pt))
 
-      (defun spacemacs/helm-buffers-smart-do-search (&optional default-inputp)
-        "Search in opened buffers using `dotspacemacs-search-tools'.
-Search for a search tool in the order provided by `dotspacemacs-search-tools'
-If DEFAULT-INPUTP is non nil then the current region or symbol at point
-are used as default input."
-        (interactive)
-        (call-interactively
-         (spacemacs//helm-do-search-find-tool "helm-buffers-do"
-                                              dotspacemacs-search-tools
-                                              default-inputp)))
+;;       (defun spacemacs/helm-buffers-smart-do-search (&optional default-inputp)
+;;         "Search in opened buffers using `dotspacemacs-search-tools'.
+;; Search for a search tool in the order provided by `dotspacemacs-search-tools'
+;; If DEFAULT-INPUTP is non nil then the current region or symbol at point
+;; are used as default input."
+;;         (interactive)
+;;         (call-interactively
+;;          (spacemacs//helm-do-search-find-tool "helm-buffers-do"
+;;                                               dotspacemacs-search-tools
+;;                                               default-inputp)))
 
-      (defun spacemacs/helm-buffers-smart-do-search-region-or-symbol ()
-        "Search in opened buffers using `dotspacemacs-search-tools' with
-default input.
-Search for a search tool in the order provided by `dotspacemacs-search-tools'."
-        (interactive)
-        (spacemacs/helm-buffers-smart-do-search t))
+;;       (defun spacemacs/helm-buffers-smart-do-search-region-or-symbol ()
+;;         "Search in opened buffers using `dotspacemacs-search-tools' with
+;; default input.
+;; Search for a search tool in the order provided by `dotspacemacs-search-tools'."
+;;         (interactive)
+;;         (spacemacs/helm-buffers-smart-do-search t))
 
-      ;; Search in project ---------------------------------------------------
+;;       ;; Search in project ---------------------------------------------------
 
-      (defun spacemacs/helm-project-do-ag ()
-        "Search in current project with `ag'."
-        (interactive)
-        (let ((dir (projectile-project-root)))
-          (if dir
-              (helm-do-ag dir)
-            (message "error: Not in a project."))))
+;;       (defun spacemacs/helm-project-do-ag ()
+;;         "Search in current project with `ag'."
+;;         (interactive)
+;;         (let ((dir (projectile-project-root)))
+;;           (if dir
+;;               (helm-do-ag dir)
+;;             (message "error: Not in a project."))))
 
-      (defun spacemacs/helm-project-do-ag-region-or-symbol ()
-        "Search in current project with `ag' using a default input."
-        (interactive)
-        (let ((dir (projectile-project-root)))
-          (if dir
-              (spacemacs//helm-do-ag-region-or-symbol 'helm-do-ag dir)
-            (message "error: Not in a project."))))
+;;       (defun spacemacs/helm-project-do-ag-region-or-symbol ()
+;;         "Search in current project with `ag' using a default input."
+;;         (interactive)
+;;         (let ((dir (projectile-project-root)))
+;;           (if dir
+;;               (spacemacs//helm-do-ag-region-or-symbol 'helm-do-ag dir)
+;;             (message "error: Not in a project."))))
 
-      (defun spacemacs/helm-project-do-ack ()
-        "Search in current project with `ack'."
-        (interactive)
-        (let ((dir (projectile-project-root)))
-          (if dir
-              (spacemacs/helm-files-do-ack dir)
-            (message "error: Not in a project."))))
+;;       (defun spacemacs/helm-project-do-ack ()
+;;         "Search in current project with `ack'."
+;;         (interactive)
+;;         (let ((dir (projectile-project-root)))
+;;           (if dir
+;;               (spacemacs/helm-files-do-ack dir)
+;;             (message "error: Not in a project."))))
 
-      (defun spacemacs/helm-project-do-ack-region-or-symbol ()
-        "Search in current project with `ack' using a default input."
-        (interactive)
-        (let ((dir (projectile-project-root)))
-          (if dir
-              (spacemacs//helm-do-ag-region-or-symbol
-               'spacemacs/helm-files-do-ack dir)
-            (message "error: Not in a project."))))
+;;       (defun spacemacs/helm-project-do-ack-region-or-symbol ()
+;;         "Search in current project with `ack' using a default input."
+;;         (interactive)
+;;         (let ((dir (projectile-project-root)))
+;;           (if dir
+;;               (spacemacs//helm-do-ag-region-or-symbol
+;;                'spacemacs/helm-files-do-ack dir)
+;;             (message "error: Not in a project."))))
 
-      (defun spacemacs/helm-project-do-pt ()
-        "Search in current project with `pt'."
-        (interactive)
-        (let ((dir (projectile-project-root)))
-          (if dir
-              (spacemacs/helm-files-do-pt dir)
-            (message "error: Not in a project."))))
+;;       (defun spacemacs/helm-project-do-pt ()
+;;         "Search in current project with `pt'."
+;;         (interactive)
+;;         (let ((dir (projectile-project-root)))
+;;           (if dir
+;;               (spacemacs/helm-files-do-pt dir)
+;;             (message "error: Not in a project."))))
 
-      (defun spacemacs/helm-project-do-pt-region-or-symbol ()
-        "Search in current project with `pt' using a default input."
-        (interactive)
-        (let ((dir (projectile-project-root)))
-          (if dir
-              (spacemacs//helm-do-ag-region-or-symbol
-               'spacemacs/helm-files-do-pt dir)
-            (message "error: Not in a project."))))
+;;       (defun spacemacs/helm-project-do-pt-region-or-symbol ()
+;;         "Search in current project with `pt' using a default input."
+;;         (interactive)
+;;         (let ((dir (projectile-project-root)))
+;;           (if dir
+;;               (spacemacs//helm-do-ag-region-or-symbol
+;;                'spacemacs/helm-files-do-pt dir)
+;;             (message "error: Not in a project."))))
 
-      (defun spacemacs/helm-project-smart-do-search (&optional default-inputp)
-        "Search in current project using `dotspacemacs-search-tools'.
-Search for a search tool in the order provided by `dotspacemacs-search-tools'
-If DEFAULT-INPUTP is non nil then the current region or symbol at point
-are used as default input."
-        (interactive)
-        (let ((projectile-require-project-root nil))
-          (call-interactively
-           (spacemacs//helm-do-search-find-tool "helm-project-do"
-                                                dotspacemacs-search-tools
-                                                default-inputp))))
+;;       (defun spacemacs/helm-project-smart-do-search (&optional default-inputp)
+;;         "Search in current project using `dotspacemacs-search-tools'.
+;; Search for a search tool in the order provided by `dotspacemacs-search-tools'
+;; If DEFAULT-INPUTP is non nil then the current region or symbol at point
+;; are used as default input."
+;;         (interactive)
+;;         (let ((projectile-require-project-root nil))
+;;           (call-interactively
+;;            (spacemacs//helm-do-search-find-tool "helm-project-do"
+;;                                                 dotspacemacs-search-tools
+;;                                                 default-inputp))))
 
-      (defun spacemacs/helm-project-smart-do-search-region-or-symbol ()
-        "Search in current project using `dotspacemacs-search-tools' with
- default input.
-Search for a search tool in the order provided by `dotspacemacs-search-tools'."
-        (interactive)
-        (spacemacs/helm-project-smart-do-search t))
+;;       (defun spacemacs/helm-project-smart-do-search-region-or-symbol ()
+;;         "Search in current project using `dotspacemacs-search-tools' with
+;;  default input.
+;; Search for a search tool in the order provided by `dotspacemacs-search-tools'."
+;;         (interactive)
+;;         (spacemacs/helm-project-smart-do-search t))
 
-      ;; This overrides the default C-s action in helm-projectile-switch-project
-      ;; to search using ag/pt/whatever instead of just grep
-      (with-eval-after-load 'helm-projectile
-        (defun spacemacs/helm-project-smart-do-search-in-dir (dir)
-          (interactive)
-          (let ((default-directory dir))
-            (spacemacs/helm-project-smart-do-search)))
-        (define-key helm-projectile-projects-map
-          (kbd "C-s")
-          (lambda ()
-            (interactive)
-            (helm-exit-and-execute-action
-             'spacemacs/helm-project-smart-do-search-in-dir))))
+;;       ;; This overrides the default C-s action in helm-projectile-switch-project
+;;       ;; to search using ag/pt/whatever instead of just grep
+;;       (with-eval-after-load 'helm-projectile
+;;         (defun spacemacs/helm-project-smart-do-search-in-dir (dir)
+;;           (interactive)
+;;           (let ((default-directory dir))
+;;             (spacemacs/helm-project-smart-do-search)))
+;;         (define-key helm-projectile-projects-map
+;;           (kbd "C-s")
+;;           (lambda ()
+;;             (interactive)
+;;             (helm-exit-and-execute-action
+;;              'spacemacs/helm-project-smart-do-search-in-dir))))
 
-      ;; evilify the helm-grep buffer
-      (evilified-state-evilify helm-grep-mode helm-grep-mode-map
-        (kbd "RET") 'helm-grep-mode-jump-other-window
-        (kbd "q") 'quit-window)
+;;       ;; evilify the helm-grep buffer
+;;       (evilified-state-evilify helm-grep-mode helm-grep-mode-map
+;;         (kbd "RET") 'helm-grep-mode-jump-other-window
+;;         (kbd "q") 'quit-window)
 
-      (spacemacs/set-leader-keys
-        ;; helm-ag marks
-        "s`"  'helm-ag-pop-stack
-        ;; opened buffers scope
-        "sb"  'spacemacs/helm-buffers-smart-do-search
-        "sB"  'spacemacs/helm-buffers-smart-do-search-region-or-symbol
-        "sab" 'helm-do-ag-buffers
-        "saB" 'spacemacs/helm-buffers-do-ag-region-or-symbol
-        "skb" 'spacemacs/helm-buffers-do-ack
-        "skB" 'spacemacs/helm-buffers-do-ack-region-or-symbol
-        "stb" 'spacemacs/helm-buffers-do-pt
-        "stB" 'spacemacs/helm-buffers-do-pt-region-or-symbol
-        ;; current file scope
-        "ss"  'spacemacs/helm-file-smart-do-search
-        "sS"  'spacemacs/helm-file-smart-do-search-region-or-symbol
-        "saa" 'helm-ag-this-file
-        "saA" 'spacemacs/helm-file-do-ag-region-or-symbol
-        ;; files scope
-        "sf"  'spacemacs/helm-files-smart-do-search
-        "sF"  'spacemacs/helm-files-smart-do-search-region-or-symbol
-        "saf" 'helm-do-ag
-        "saF" 'spacemacs/helm-files-do-ag-region-or-symbol
-        "skf" 'spacemacs/helm-files-do-ack
-        "skF" 'spacemacs/helm-files-do-ack-region-or-symbol
-        "stf" 'spacemacs/helm-files-do-pt
-        "stF" 'spacemacs/helm-files-do-pt-region-or-symbol
-        ;; current project scope
-        "/"   'spacemacs/helm-project-smart-do-search
-        "*"   'spacemacs/helm-project-smart-do-search-region-or-symbol
-        "sp"  'spacemacs/helm-project-smart-do-search
-        "sP"  'spacemacs/helm-project-smart-do-search-region-or-symbol
-        "sap" 'spacemacs/helm-project-do-ag
-        "saP" 'spacemacs/helm-project-do-ag-region-or-symbol
-        "skp" 'spacemacs/helm-project-do-ack
-        "skP" 'spacemacs/helm-project-do-ack-region-or-symbol
-        "stp" 'spacemacs/helm-project-do-pt
-        "stP" 'spacemacs/helm-project-do-pt-region-or-symbol))
-    :config
-    (progn
-      (advice-add 'helm-ag--save-results :after 'spacemacs//gne-init-helm-ag)
-      (evil-define-key 'normal helm-ag-map "SPC" spacemacs-default-map)
-      (evilified-state-evilify helm-ag-mode helm-ag-mode-map
-        (kbd "RET") 'helm-ag-mode-jump-other-window
-        (kbd "gr") 'helm-ag--update-save-results
-        (kbd "q") 'quit-window))))
+;;       (spacemacs/set-leader-keys
+;;         ;; helm-ag marks
+;;         "s`"  'helm-ag-pop-stack
+;;         ;; opened buffers scope
+;;         "sb"  'spacemacs/helm-buffers-smart-do-search
+;;         "sB"  'spacemacs/helm-buffers-smart-do-search-region-or-symbol
+;;         "sab" 'helm-do-ag-buffers
+;;         "saB" 'spacemacs/helm-buffers-do-ag-region-or-symbol
+;;         "skb" 'spacemacs/helm-buffers-do-ack
+;;         "skB" 'spacemacs/helm-buffers-do-ack-region-or-symbol
+;;         "stb" 'spacemacs/helm-buffers-do-pt
+;;         "stB" 'spacemacs/helm-buffers-do-pt-region-or-symbol
+;;         ;; current file scope
+;;         "ss"  'spacemacs/helm-file-smart-do-search
+;;         "sS"  'spacemacs/helm-file-smart-do-search-region-or-symbol
+;;         "saa" 'helm-ag-this-file
+;;         "saA" 'spacemacs/helm-file-do-ag-region-or-symbol
+;;         ;; files scope
+;;         "sf"  'spacemacs/helm-files-smart-do-search
+;;         "sF"  'spacemacs/helm-files-smart-do-search-region-or-symbol
+;;         "saf" 'helm-do-ag
+;;         "saF" 'spacemacs/helm-files-do-ag-region-or-symbol
+;;         "skf" 'spacemacs/helm-files-do-ack
+;;         "skF" 'spacemacs/helm-files-do-ack-region-or-symbol
+;;         "stf" 'spacemacs/helm-files-do-pt
+;;         "stF" 'spacemacs/helm-files-do-pt-region-or-symbol
+;;         ;; current project scope
+;;         "/"   'spacemacs/helm-project-smart-do-search
+;;         "*"   'spacemacs/helm-project-smart-do-search-region-or-symbol
+;;         "sp"  'spacemacs/helm-project-smart-do-search
+;;         "sP"  'spacemacs/helm-project-smart-do-search-region-or-symbol
+;;         "sap" 'spacemacs/helm-project-do-ag
+;;         "saP" 'spacemacs/helm-project-do-ag-region-or-symbol
+;;         "skp" 'spacemacs/helm-project-do-ack
+;;         "skP" 'spacemacs/helm-project-do-ack-region-or-symbol
+;;         "stp" 'spacemacs/helm-project-do-pt
+;;         "stP" 'spacemacs/helm-project-do-pt-region-or-symbol))
+;;     :config
+;;     (progn
+;;       (advice-add 'helm-ag--save-results :after 'spacemacs//gne-init-helm-ag)
+;;       (evil-define-key 'normal helm-ag-map "SPC" spacemacs-default-map)
+;;       (evilified-state-evilify helm-ag-mode helm-ag-mode-map
+;;         (kbd "RET") 'helm-ag-mode-jump-other-window
+;;         (kbd "gr") 'helm-ag--update-save-results
+;;         (kbd "q") 'quit-window))))
 
 (defun zilongshanren-misc/post-init-hydra ()
   (progn
@@ -962,95 +962,97 @@ Search for a search tool in the order provided by `dotspacemacs-search-tools'."
       (find-file "~/Github/HlMJ_js/assets/scripts/Login/LoginScene.js"))))
 
  ;; deprecated
-(defun zilongshanren-misc/post-init-pyim ()
-  (progn
-    ;; use librime as wubi input
-    ;; 参考这个设置 pyim 使用 liberime 库 https://emacs-china.org/t/mac-emacs-rime/ 需要emacs 26的dynamic module功能 
-    ;; 设置极点五笔可以参考https://github.com/zilongshanren/rime-wubi86-jidian  
-    (eval-and-compile
-      (if (fboundp 'window-inside-edges)
-          ;; Emacs devel.
-          (defalias 'th-window-edges
-            'window-inside-edges)
-        ;; Emacs 21
-        (defalias 'th-window-edges
-          'window-edges)
-        ))
+;; (defun zilongshanren-misc/post-init-pyim ()
+;;   (progn
+;;     ;; use librime as wubi input
+;;     ;; 参考这个设置 pyim 使用 liberime 库 https://emacs-china.org/t/mac-emacs-rime/ 需要emacs 26的dynamic module功能 
+;;     ;; 设置极点五笔可以参考https://github.com/zilongshanren/rime-wubi86-jidian  
+;;     (eval-and-compile
+;;       (if (fboundp 'window-inside-edges)
+;;           ;; Emacs devel.
+;;           (defalias 'th-window-edges
+;;             'window-inside-edges)
+;;         ;; Emacs 21
+;;         (defalias 'th-window-edges
+;;           'window-edges)
+;;         ))
 
-    (defun th-point-position ()
-      "Return the location of POINT as positioned on the selected frame.
-  Return a cons cell (X . Y)"
-      (let* ((w (selected-window))
-             (f (selected-frame))
-             (edges (th-window-edges w))
-             (col (current-column))
-             (row (count-lines (window-start w) (point)))
-             (x (+ (car edges) col))
-             (y (+ (car (cdr edges)) row)))
-        (cons x y)))
+;;     (defun th-point-position ()
+;;       "Return the location of POINT as positioned on the selected frame.
+;;   Return a cons cell (X . Y)"
+;;       (let* ((w (selected-window))
+;;              (f (selected-frame))
+;;              (edges (th-window-edges w))
+;;              (col (current-column))
+;;              (row (count-lines (window-start w) (point)))
+;;              (x (+ (car edges) col))
+;;              (y (+ (car (cdr edges)) row)))
+;;         (cons x y)))
 
 
-    (defun display-current-input-method-title (arg1 &optional arg2 arg3)
-      "display current input method name"
-      (when current-input-method-title
-        (set-mouse-position (selected-frame) (car (th-point-position)) (cdr (th-point-position)))
-        (x-show-tip current-input-method-title (selected-frame) nil 1  20 -30)))
+;;     (defun display-current-input-method-title (arg1 &optional arg2 arg3)
+;;       "display current input method name"
+;;       (when current-input-method-title
+;;         (set-mouse-position (selected-frame) (car (th-point-position)) (cdr (th-point-position)))
+;;         (x-show-tip current-input-method-title (selected-frame) nil 1  20 -30)))
 
-    (advice-add 'evil-insert :after 'display-current-input-method-title)
+;;     (advice-add 'evil-insert :after 'display-current-input-method-title)
 
-    (when (functionp 'module-load)
-      (progn
-        (setq load-path (cons (file-truename "~/.spacemacs.d/") load-path))
-        (require 'liberime)
-        (require 'posframe)
-        (setq default-input-method "pyim")
-        (setq pyim-page-tooltip 'posframe)
-        (setq pyim-page-length 9)
-        ;; (setq-default pyim-english-input-switch-functions
-        ;;               '(pyim-probe-program-mode
-        ;;                 ;; pyim-probe-auto-english
-        ;;                 pyim-probe-org-structure-template))
-        (setq-default pyim-english-input-switch-functions
-                      '(pyim-probe-dynamic-english
-                        pyim-probe-isearch-mode
-                        pyim-probe-program-mode
-                        pyim-probe-org-structure-template))
-        ;; (setq pyim-page-tooltip 'minibuffer) ;展示方式为minibuffer mode
-        ;; 开启拼音搜索功能
-        (pyim-isearch-mode 1)
-        (setq-default pyim-punctuation-half-width-functions
-                      '(pyim-probe-punctuation-line-beginning
-                        pyim-probe-punctuation-after-punctuation))
-        ;; 不用频率切换输入法了。这个东西太好使了
-        (bind-key* "C-S-p" 'pyim-convert-code-at-point)
-        (liberime-start "/Library/Input Methods/Squirrel.app/Contents/SharedSupport" (file-truename "~/Library/Rime"))
-        ;; 使用这个来查看当前输入法有哪些，不错
-        ;; (liberime-get-schema-list)
-
-        ;; (liberime-select-schema "wubi_pinyin")
-        ;;(liberime-select-schema "double_pinyin_flypy")
-        (liberime-select-schema "xhup_fluency")
-        (setq pyim-default-scheme 'rime)))))
-(defun zilongshanren-misc/post-init-chinese-wbim ()
-  (progn
+;;     (when (functionp 'module-load)
+;;       (progn
+;;         (setq load-path (cons (file-truename "~/.spacemacs.d/") load-path))
+;;         (require 'liberime)
+;;         (require 'posframe)
+;;         ;; 激活 basedict 拼音词库，五笔用户请继续阅读 README
+;;         (use-package pyim-basedict
+;;           :ensure nil
+;;           :config (pyim-basedict-enable))
+;;         (setq default-input-method "pyim")
+;;         (setq pyim-page-tooltip 'posframe)
+;;         (setq pyim-page-length 9)
+;;         ;; (setq-default pyim-english-input-switch-functions
+;;         ;;               '(pyim-probe-program-mode
+;;         ;;                 ;; pyim-probe-auto-english
+;;         ;;                 pyim-probe-org-structure-template))
+;;         (setq-default pyim-english-input-switch-functions
+;;                       '(pyim-probe-dynamic-english
+;;                         pyim-probe-isearch-mode
+;;                         pyim-probe-program-mode
+;;                         pyim-probe-org-structure-template))
+;;         ;; (setq pyim-page-tooltip 'minibuffer) ;展示方式为minibuffer mode
+;;         ;; 开启拼音搜索功能
+;;         (pyim-isearch-mode 1)
+;;         (setq-default pyim-punctuation-half-width-functions
+;;                       '(pyim-probe-punctuation-line-beginning
+;;                         pyim-probe-punctuation-after-punctuation))
+;;         ;; 不用频率切换输入法了。这个东西太好使了
+;;         (bind-key* "C-S-p" 'pyim-convert-code-at-point)
+;;         ;(liberime-start "/Library/Input Methods/Squirrel.app/Contents/SharedSupport" (file-truename "~/Library/Rime"))
+;;         ;; 使用这个来查看当前输入法有哪些，不错
+;;         ;; (liberime-get-schema-list)
+;;         ;;(liberime-select-schema "double_pinyin_flypy_fluency")
+;;         ;(liberime-select-schema "xhup_fluency")
+;;         (setq pyim-default-scheme 'rime-quanpin)))))
+;; (defun zilongshanren-misc/post-init-chinese-wbim ()
+;;   (progn
     
-    ;; (bind-key* ";" 'chinese-wbim-insert-ascii)
-    ;; (setq chinese-wbim-punc-translate-p nil)
+;;     ;; (bind-key* ";" 'chinese-wbim-insert-ascii)
+;;     ;; (setq chinese-wbim-punc-translate-p nil)
 
-    (setq chinese-wbim-tooltip-timeout 5)
-    (spacemacs/declare-prefix "ot" "Toggle")
-    (spacemacs/set-leader-keys
-      "otp" 'chinese-wbim-punc-translate-toggle)
-    (setq chinese-wbim-wb-use-gbk t)
+;;     (setq chinese-wbim-tooltip-timeout 5)
+;;     (spacemacs/declare-prefix "ot" "Toggle")
+;;     (spacemacs/set-leader-keys
+;;       "otp" 'chinese-wbim-punc-translate-toggle)
+;;     (setq chinese-wbim-wb-use-gbk t)
 
-    (setq chinese-wbim-use-tooltip t)
+;;     (setq chinese-wbim-use-tooltip t)
     
-    (add-hook 'chinese-wbim-wb-load-hook
-              (lambda ()
-                (let ((map (chinese-wbim-mode-map)))
-                  (define-key map "-" 'chinese-wbim-previous-page)
-                  (define-key map "=" 'chinese-wbim-next-page))))
-    ))
+;;     (add-hook 'chinese-wbim-wb-load-hook
+;;               (lambda ()
+;;                 (let ((map (chinese-wbim-mode-map)))
+;;                   (define-key map "-" 'chinese-wbim-previous-page)
+;;                   (define-key map "=" 'chinese-wbim-next-page))))
+;;     ))
 
 
 (defun zilongshanren-misc/post-init-evil-escape ()

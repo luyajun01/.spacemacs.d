@@ -1,6 +1,6 @@
 ;; init-markdown.el --- Initialize markdown configurations.	-*- lexical-binding: t -*-
 
-;; Copyright (C) 2018 Vincent Zhang
+;; Copyright (C) 2009-2020 Vincent Zhang
 
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; URL: https://github.com/seagle0128/.emacs.d
@@ -31,73 +31,93 @@
 ;;; Code:
 
 (use-package markdown-mode
-  :defines flycheck-markdown-markdownlint-cli-config
   :mode (("README\\.md\\'" . gfm-mode))
-  :config
+  :init
+  (setq markdown-enable-wiki-links t
+        markdown-italic-underscore t
+        markdown-asymmetric-header t
+        markdown-make-gfm-checkboxes-buttons t
+        markdown-gfm-uppercase-checkbox t
+        markdown-fontify-code-blocks-natively t
+
+        markdown-content-type "application/xhtml+xml"
+        markdown-css-paths '("https://cdn.jsdelivr.net/npm/github-markdown-css/github-markdown.min.css"
+                             "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/styles/github.min.css")
+        markdown-xhtml-header-content "
+<meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>
+<style>
+body {
+  box-sizing: border-box;
+  max-width: 740px;
+  width: 100%;
+  margin: 40px auto;
+  padding: 0 10px;
+}
+</style>
+
+<link rel='stylesheet' href='https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/styles/default.min.css'>
+<script src='https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/highlight.min.js'></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  document.body.classList.add('markdown-body');
+  document.querySelectorAll('pre code').forEach((code) => {
+    if (code.className != 'mermaid') {
+      hljs.highlightBlock(code);
+    }
+  });
+});
+</script>
+
+<script src='https://unpkg.com/mermaid@8.4.8/dist/mermaid.min.js'></script>
+<script>
+mermaid.initialize({
+  theme: 'default',  // default, forest, dark, neutral
+  startOnLoad: true
+});
+</script>
+"
+        markdown-gfm-additional-languages "Mermaid")
+
+  ;; `multimarkdown' is necessary for `highlight.js' and `mermaid.js'
   (when (executable-find "multimarkdown")
     (setq markdown-command "multimarkdown"))
 
-  (with-eval-after-load 'flycheck
-    (eval-and-compile
-      (defun set-markdownlint-config ()
-        "Set the `mardkownlint' config file for the current buffer."
-        (when (and (executable-find "markdownlint") buffer-file-name)
-          (let ((md-lint ".markdownlint.json"))
-            (let ((md-lint-dir (locate-dominating-file buffer-file-name md-lint)))
-              (if md-lint-dir
-                  (setq-local flycheck-markdown-markdownlint-cli-config (concat md-lint-dir md-lint)))))))
-      (add-hook 'markdown-mode-hook #'set-markdownlint-config)))
+  ;; Use `which-key' instead
+  (with-no-warnings
+    (advice-add #'markdown--command-map-prompt :override #'ignore)
+    (advice-add #'markdown--style-map-prompt   :override #'ignore))
+  :config
+  (add-to-list 'markdown-code-lang-modes '("mermaid" . mermaid-mode))
 
-  ;; Preview
-  (setq markdown-css-paths '("http://thomasf.github.io/solarized-css/solarized-light.min.css"))
+  ;; Preview with built-in webkit
+  (with-no-warnings
+    (defun my-markdown-export-and-preview (fn)
+      "Preview with `xwidget' if applicable, otherwise with the default browser."
+      (if (featurep 'xwidget-internal)
+          (progn
+            (xwidget-webkit-browse-url (concat "file://" (markdown-export)))
+            (let ((buf (xwidget-buffer (xwidget-webkit-current-session))))
+              (when (buffer-live-p buf)
+                (and (eq buf (current-buffer)) (quit-window))
+                (pop-to-buffer buf))))
+        (funcall fn)))
+    (advice-add #'markdown-export-and-preview :around #'my-markdown-export-and-preview))
 
-  (use-package markdown-preview-mode
+  ;; Preview via `grip'
+  ;; Install: pip install grip
+  (use-package grip-mode
     :bind (:map markdown-mode-command-map
-                ("P" . markdown-preview-mode))
-    :config
-    (setq markdown-preview-stylesheets
-          (list "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.9.0/github-markdown.min.css"
-                "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" "
-  <style>
-   .markdown-body {
-     box-sizing: border-box;
-     min-width: 200px;
-     max-width: 980px;
-     margin: 0 auto;
-     padding: 45px;
-   }
+           ("g" . grip-mode))
+    :init
+    (setq grip-update-after-change nil)
+    (when-let ((credential (auth-source-user-and-password "api.github.com")))
+      (setq grip-github-user (car credential)
+            grip-github-password (cadr credential))))
 
-   @media (max-width: 767px) {
-     .markdown-body {
-       padding: 15px;
-     }
-   }
-  </style>
-"))
-    (setq markdown-preview-javascript
-          (list "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" "
-  <script>
-   $(document).on('mdContentChange', function() {
-     $('pre code').each(function(i, block) {
-       hljs.highlightBlock(block);
-     });
-   });
-  </script>
-")))
-
-  ;; Render and preview via `grip'
-  (when (executable-find "grip")
-    (eval-and-compile
-      (defun markdown-to-html ()
-        (interactive)
-        (let ((port "6419"))
-          (start-process "grip" "*gfm-to-html*" "grip" (buffer-file-name) port)
-          (browse-url (format "http://localhost:%s/%s.%s"
-                              port
-                              (file-name-base)
-                              (file-name-extension
-                               (buffer-file-name)))))))
-    (bind-key "V" #'markdown-to-html markdown-mode-command-map)))
+  ;; Table of contents
+  (use-package markdown-toc
+    :bind (:map markdown-mode-command-map
+           ("r" . markdown-toc-generate-or-refresh-toc))))
 
 (provide 'init-markdown)
 

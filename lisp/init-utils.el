@@ -1,6 +1,6 @@
 ;; init-utils.el --- Initialize ultilities.	-*- lexical-binding: t -*-
 
-;; Copyright (C) 2018 Vincent Zhang
+;; Copyright (C) 2006-2020 Vincent Zhang
 
 ;; Author: Vincent Zhang <seagle0128@gmail.com>
 ;; URL: https://github.com/seagle0128/.emacs.d
@@ -30,112 +30,272 @@
 
 ;;; Code:
 
-(eval-when-compile
-  (require 'init-const)
-  (require 'init-custom))
+(require 'init-const)
 
 ;; Display available keybindings in popup
 (use-package which-key
-  :diminish which-key-mode
-  :bind (:map help-map ("C-h" . which-key-C-h-dispatch))
-  :hook (after-init . which-key-mode))
-
-;; Youdao Dictionay
-(use-package youdao-dictionary
-  :bind (("C-c y" . youdao-dictionary-search-at-point)
-         ("C-c Y" . youdao-dictionary-search-at-point-tooltip))
+  :diminish
+  :bind ("C-h M-m" . which-key-show-major-mode)
+  :hook (after-init . which-key-mode)
+  :init (setq which-key-max-description-length 30
+              which-key-show-remaining-keys t)
   :config
-  ;; Cache documents
-  (setq url-automatic-caching t)
+  (which-key-add-key-based-replacements "C-c !" "flycheck")
+  (which-key-add-key-based-replacements "C-c &" "yasnippet")
+  (which-key-add-key-based-replacements "C-c c" "counsel")
+  (which-key-add-key-based-replacements "C-c n" "org-roam")
+  (which-key-add-key-based-replacements "C-c t" "hl-todo")
+  (which-key-add-key-based-replacements "C-c v" "ivy-view")
+  (which-key-add-key-based-replacements "C-c C-z" "browse")
 
-  ;; Enable Chinese word segmentation support (支持中文分词)
-  (setq youdao-dictionary-use-chinese-word-segmentation t))
+  (which-key-add-key-based-replacements "C-x RET" "coding-system")
+  (which-key-add-key-based-replacements "C-x 8" "unicode")
+  (which-key-add-key-based-replacements "C-x @" "modifior")
+  (which-key-add-key-based-replacements "C-x X" "edebug")
+  (which-key-add-key-based-replacements "C-x a" "abbrev")
+  (which-key-add-key-based-replacements "C-x n" "narrow")
+  (which-key-add-key-based-replacements "C-x t" "tab")
+  (which-key-add-key-based-replacements "C-x C-a" "edebug")
 
-;; Search tools: `wgrep', `ag' and `rg'
+
+  (which-key-add-major-mode-key-based-replacements 'emacs-lisp-mode
+    "C-c ," "overseer")
+  (which-key-add-major-mode-key-based-replacements 'python-mode
+    "C-c C-t" "python-skeleton")
+
+  (which-key-add-major-mode-key-based-replacements 'markdown-mode
+    "C-c C-a" "markdown-link")
+  (which-key-add-major-mode-key-based-replacements 'markdown-mode
+    "C-c C-c" "markdown-command")
+  (which-key-add-major-mode-key-based-replacements 'markdown-mode
+    "C-c C-s" "markdown-style")
+  (which-key-add-major-mode-key-based-replacements 'markdown-mode
+    "C-c C-t" "markdown-header")
+  (which-key-add-major-mode-key-based-replacements 'markdown-mode
+    "C-c C-x" "markdown-toggle")
+
+  (which-key-add-major-mode-key-based-replacements 'gfm-mode
+    "C-c C-a" "markdown-link")
+  (which-key-add-major-mode-key-based-replacements 'gfm-mode
+    "C-c C-c" "markdown-command")
+  (which-key-add-major-mode-key-based-replacements 'gfm-mode
+    "C-c C-s" "markdown-style")
+  (which-key-add-major-mode-key-based-replacements 'gfm-mode
+    "C-c C-t" "markdown-header")
+  (which-key-add-major-mode-key-based-replacements 'gfm-mode
+    "C-c C-x" "markdown-toggle"))
+
+;; Persistent the scratch buffer
+(use-package persistent-scratch
+  :diminish
+  :bind (:map persistent-scratch-mode-map
+         ([remap kill-buffer] . (lambda (&rest _)
+                                  (interactive)
+                                  (user-error "Scrach buffer cannot be killed")))
+         ([remap revert-buffer] . persistent-scratch-restore)
+         ([remap revert-this-buffer] . persistent-scratch-restore))
+  :hook ((after-init . persistent-scratch-autosave-mode)
+         (lisp-interaction-mode . persistent-scratch-mode)))
+
+;; Search tools
+;; Writable `grep' buffer
 (use-package wgrep
   :init
-  (setq wgrep-auto-save-buffer t)
-  (setq wgrep-change-readonly-file t))
+  (setq wgrep-auto-save-buffer t
+        wgrep-change-readonly-file t))
 
-(use-package ag
-  :defines projectile-command-map
-  :init
-  (with-eval-after-load 'projectile
-    (bind-key "s S" #'ag-project projectile-command-map))
-  :config
-  (setq ag-highlight-search t)
-  (setq ag-reuse-buffers t)
-  (use-package wgrep-ag))
-
+;; Fast search tool `ripgrep'
 (use-package rg
+  :defines projectile-command-map
   :hook (after-init . rg-enable-default-bindings)
+  :bind (:map rg-global-map
+         ("c" . rg-dwim-current-dir)
+         ("f" . rg-dwim-current-file)
+         ("m" . rg-menu)
+         :map rg-mode-map
+         ("m" . rg-menu))
+  :init (setq rg-group-result t
+              rg-show-columns t)
   :config
-  (setq rg-group-result t)
-  (setq rg-show-columns t)
-
   (cl-pushnew '("tmpl" . "*.tmpl") rg-custom-type-aliases)
 
-  (use-package wgrep-ag
-    :hook (rg-mode . wgrep-ag-setup))
-
   (with-eval-after-load 'projectile
-    (defalias 'projectile-ripgrep 'rg-project)
+    (defalias 'projectile-ripgrep #'rg-project)
     (bind-key "s R" #'rg-project projectile-command-map))
 
-  (when (fboundp 'ag)
-    (bind-key "a" #'ag rg-global-map))
-
   (with-eval-after-load 'counsel
-    (bind-keys :map rg-global-map
-               ("c r" . counsel-rg)
-               ("c s" . counsel-ag)
-               ("c p" . counsel-pt)
-               ("c f" . counsel-fzf))))
+    (bind-keys
+     :map rg-global-map
+     ("R" . counsel-rg)
+     ("F" . counsel-fzf))))
 
-;; Edit text for browsers with GhostText or AtomicChrome extension
-(use-package atomic-chrome
-  :after markdown-mode
-  :hook (after-init . atomic-chrome-start-server)
+;; Dictionary
+(when sys/macp
+  (use-package osx-dictionary
+    :bind (("C-c D" . osx-dictionary-search-pointer))))
+
+;; Youdao Dictionary
+(use-package youdao-dictionary
+  :commands youdao-dictionary-play-voice-of-current-word
+  :bind (("C-c y" . my-youdao-dictionary-search-at-point)
+         ("C-c Y" . youdao-dictionary-search-at-point)
+         :map youdao-dictionary-mode-map
+         ("h" . youdao-dictionary-hydra/body)
+         ("?" . youdao-dictionary-hydra/body))
+  :init
+  (setq url-automatic-caching t
+        youdao-dictionary-use-chinese-word-segmentation t) ; 中文分词
+
+  (defun my-youdao-dictionary-search-at-point ()
+    "Search word at point and display result with `posframe', `pos-tip', or buffer."
+    (interactive)
+    (if (display-graphic-p)
+        (if emacs/>=26p
+            (youdao-dictionary-search-at-point-posframe)
+          (youdao-dictionary-search-at-point-tooltip))
+      (youdao-dictionary-search-at-point)))
   :config
-  (setq atomic-chrome-default-major-mode 'markdown-mode)
-  (setq atomic-chrome-url-major-mode-alist
-        '(("github\\.com" . gfm-mode))))
+  (with-eval-after-load 'hydra
+    (defhydra youdao-dictionary-hydra (:color blue)
+      ("p" youdao-dictionary-play-voice-of-current-word "play voice of current word")
+      ("y" youdao-dictionary-play-voice-at-point "play voice at point")
+      ("q" quit-window "quit")
+      ("C-g" nil nil)
+      ("h" nil nil)
+      ("?" nil nil))))
 
-;; Open files as another user
-(unless sys/win32p
-  (use-package sudo-edit))
-
-;; Tramp
-(use-package docker-tramp)
-
-;; Discover key bindings and their meaning for the current Emacs major mode
-(use-package discover-my-major
-  :bind (("C-h M-m" . discover-my-major)
-         ("C-h M-M" . discover-my-mode)))
-
-;; A Simmple and cool pomodoro timer
+;; A Simple and cool pomodoro timer
 (use-package pomidor
-  :bind ("<f12>" . pomidor)
-  :init (setq alert-default-style (if sys/macp 'osx-notifier 'libnotify))
-  :config
+  :bind ("s-<f12>" . pomidor)
+  :init
+  (setq alert-default-style 'mode-line)
+
+  (with-eval-after-load 'all-the-icons
+    (setq alert-severity-faces
+          '((urgent   . all-the-icons-red)
+            (high     . all-the-icons-orange)
+            (moderate . all-the-icons-yellow)
+            (normal   . all-the-icons-green)
+            (low      . all-the-icons-blue)
+            (trivial  . all-the-icons-purple))
+          alert-severity-colors
+          `((urgent   . ,(face-foreground 'all-the-icons-red))
+            (high     . ,(face-foreground 'all-the-icons-orange))
+            (moderate . ,(face-foreground 'all-the-icons-yellow))
+            (normal   . ,(face-foreground 'all-the-icons-green))
+            (low      . ,(face-foreground 'all-the-icons-blue))
+            (trivial  . ,(face-foreground 'all-the-icons-purple)))))
+
   (when sys/macp
     (setq pomidor-play-sound-file
           (lambda (file)
-            (start-process "my-pomidor-play-sound"
-                           nil
-                           "afplay"
-                           file)))))
+            (when (executable-find "afplay")
+              (start-process "pomidor-play-sound" nil "afplay" file))))))
+
+;; Nice writing
+(use-package olivetti
+  :diminish
+  :bind ("<f7>" . olivetti-mode)
+  :init (setq olivetti-body-width 0.618))
+
+;; Edit text for browsers with GhostText or AtomicChrome extension
+(use-package atomic-chrome
+  :hook ((emacs-startup . atomic-chrome-start-server)
+         (atomic-chrome-edit-mode . (lambda ()
+                                      "Enter edit mode and delete other windows."
+                                      (and (fboundp 'olivetti-mode)
+                                           (olivetti-mode 1))
+                                      (delete-other-windows))))
+  :init (setq atomic-chrome-buffer-open-style 'frame)
+  :config
+  (if (fboundp 'gfm-mode)
+      (setq atomic-chrome-url-major-mode-alist
+            '(("github\\.com" . gfm-mode)))))
+
+;; Music player
+(use-package bongo
+  :bind ("C-<f9>" . bongo)
+  :config
+  (with-eval-after-load 'dired
+    (with-no-warnings
+      (defun bongo-add-dired-files ()
+        "Add marked files to the Bongo library."
+        (interactive)
+        (bongo-buffer)
+        (let (file (files nil))
+          (dired-map-over-marks
+           (setq file (dired-get-filename)
+                 files (append files (list file)))
+           nil t)
+          (with-bongo-library-buffer
+           (mapc 'bongo-insert-file files)))
+        (bongo-switch-buffers))
+      (bind-key "b" #'bongo-add-dired-files dired-mode-map))))
+
+;; IRC
+(use-package erc
+  :ensure nil
+  :defines erc-autojoin-channels-alist
+  :init (setq erc-rename-buffers t
+              erc-interpret-mirc-color t
+              erc-lurker-hide-list '("JOIN" "PART" "QUIT")
+              erc-autojoin-channels-alist '(("freenode.net" "#emacs"))))
+
+;; A stackoverflow and its sisters' sites reader
+(when emacs/>=26p
+  (use-package howdoyou
+    :bind (:map howdoyou-mode-map
+           ("q" . kill-buffer-and-window))
+    :hook (howdoyou-mode . read-only-mode)))
+
+;; text mode directory tree
+(use-package ztree
+  :custom-face
+  (ztreep-header-face ((t (:inherit diff-header))))
+  (ztreep-arrow-face ((t (:inherit font-lock-comment-face))))
+  (ztreep-leaf-face ((t (:inherit diff-index))))
+  (ztreep-node-face ((t (:inherit font-lock-variable-name-face))))
+  (ztreep-expand-sign-face ((t (:inherit font-lock-function-name-face))))
+  (ztreep-diff-header-face ((t (:inherit (diff-header bold)))))
+  (ztreep-diff-header-small-face ((t (:inherit diff-file-header))))
+  (ztreep-diff-model-normal-face ((t (:inherit font-lock-doc-face))))
+  (ztreep-diff-model-ignored-face ((t (:inherit font-lock-doc-face :strike-through t))))
+  (ztreep-diff-model-diff-face ((t (:inherit diff-removed))))
+  (ztreep-diff-model-add-face ((t (:inherit diff-nonexistent))))
+  :pretty-hydra
+  ((:title (pretty-hydra-title "Ztree" 'octicon "diff" :height 1.2 :v-adjust 0)
+    :color pink :quit-key "q")
+   ("Diff"
+    (("C" ztree-diff-copy "copy" :exit t)
+     ("h" ztree-diff-toggle-show-equal-files "show/hide equals" :exit t)
+     ("H" ztree-diff-toggle-show-filtered-files "show/hide ignores" :exit t)
+     ("D" ztree-diff-delete-file "delete" :exit t)
+     ("v" ztree-diff-view-file "view" :exit t)
+     ("d" ztree-diff-simple-diff-files "simple diff" :exit t)
+     ("r" ztree-diff-partial-rescan "partial rescan" :exit t)
+     ("R" ztree-diff-full-rescan "full rescan" :exit t))
+    "View"
+    (("RET" ztree-perform-action "expand/collapse or view" :exit t)
+     ("SPC" ztree-perform-soft-action "expand/collapse or view in other" :exit t)
+     ("TAB" ztree-jump-side "jump side" :exit t)
+     ("g" ztree-refresh-buffer "refresh" :exit t)
+     ("x" ztree-toggle-expand-subtree "expand/collapse" :exit t)
+     ("<backspace>" ztree-move-up-in-tree "go to parent" :exit t))))
+  :bind (:map ztreediff-mode-map
+         ("C-<f5>" . ztree-hydra/body))
+  :init (setq ztree-draw-unicode-lines t
+              ztree-show-number-of-children t))
 
 ;; Misc
 (use-package copyit)                    ; copy path, url, etc.
 (use-package diffview)                  ; side-by-side diff view
 (use-package esup)                      ; Emacs startup profiler
-(use-package htmlize)                   ; covert to html
+(use-package focus)                     ; Focus on the current region
 (use-package list-environment)
 (use-package memory-usage)
-(use-package open-junk-file)
-(use-package try)
-(use-package ztree)                     ; text mode directory tree. Similar with beyond compare
+(unless sys/win32p
+  (use-package daemons)                 ; system services/daemons
+  (use-package tldr))
 
 (provide 'init-utils)
 

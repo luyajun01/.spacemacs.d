@@ -32,9 +32,9 @@
         js-doc
         lua-mode
         (cc-mode :location built-in)
-        ;; flycheck-clojure
-        ;; etags-select
-        ;(python :location built-in)
+        flycheck-clojure
+        ;etags-select
+        (python :location built-in)
         (emacs-lisp :location built-in)
         ;; clojure-mode
         company
@@ -205,10 +205,11 @@
 (defun zilongshanren-programming/post-init-emacs-lisp ()
     (remove-hook 'emacs-lisp-mode-hook 'auto-compile-mode))
 
-;(defun zilongshanren-programming/post-init-python ()
-;  (add-hook 'python-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
+(defun zilongshanren-programming/post-init-python ()
+  (add-hook 'python-mode-hook #'(lambda () (modify-syntax-entry ?_ "w")))
   ;; if you use pyton3, then you could comment the following line
-;  (setq python-shell-interpreter "python"))
+  ;(setq python-shell-interpreter "python")
+  )
 
 (defun zilongshanren-programming/post-init-js-doc ()
   (setq js-doc-mail-address "guanghui8827@gmail.com"
