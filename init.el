@@ -95,7 +95,7 @@ This function should only modify configuration layer settings."
                       auto-completion-enable-sort-by-usage t
                       auto-completion-enable-help-tooltip t
                       auto-completion-use-company-box t
-                      auto-completion-private-snippets-directory "~/dot-spacemacs/snippets/"
+                      ;; auto-completion-private-snippets-directory "~/dot-spacemacs/snippets/"
                       auto-completion-enable-snippets-in-popup t
                       ;; :disabled-for org markdown
                       )
@@ -129,10 +129,10 @@ This function should only modify configuration layer settings."
      ;lua
      ;html
      ;(javascript :variables javascript-backend 'lsp)
-     ;(typescript :variables
-     ;            typescript-fmt-on-save nil
-     ;            typescript-fmt-tool 'typescript-formatter
-     ;            typescript-backend 'lsp)
+     (typescript :variables
+                 typescript-fmt-on-save nil
+                 typescript-fmt-tool 'typescript-formatter
+                 typescript-backend 'lsp)
      emacs-lisp
      ;(clojure :variables clojure-enable-fancify-symbols t)
      ;racket
@@ -152,6 +152,15 @@ This function should only modify configuration layer settings."
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '(;sicp
+                                      quelpa
+                                      quelpa-use-package
+                                      rg
+                                      json-mode
+                                      skewer-mode
+                                      csharp-mode
+                                      pdf-view-restore
+                                      haml-mode
+prettier-js
                                       evil-snipe
                                       mocha
                                       forge
@@ -187,7 +196,6 @@ This function should only modify configuration layer settings."
     ibuffer-projectile
     easy-kill-extras
     shackle
-    ox-gfm
     ob-go
     ob-rust
     ob-ipython
@@ -338,6 +346,7 @@ minions
                                      dap-mode
                                      powershell
                                      vimrc-mode
+                                     evil-exchange
                                       ;; org-alert
                                         ;el2org
                                       cdlatex
@@ -353,7 +362,7 @@ minions
                                       pomidor
                                       persistent-scratch
                                       org-tree-slide
-                                      org-preview-html
+                                     org-preview-html
                                       company-tabnine
                                       ;; yasnippet-snippets
                                         ;rainbow-mode
@@ -378,7 +387,8 @@ minions
                     evil-indent-plus
                     ;volatile-highlights
                     ;smartparens
-                    spaceline holy-mode skewer-mode
+                    spaceline holy-mode
+                    ;skewer-mode
                     ;rainbow-delimiters
                     highlight-indentation vi-tilde-fringe eyebrowse ws-butler
                     ;org-bullets
@@ -792,8 +802,10 @@ dump."
   )
 
 (defun dotspacemacs/user-config ()
+  ;; 中文字体
+  (cnfonts-enable)
 
-(when (version< emacs-version "25.1")
+  (when (version< emacs-version "25.1")
   (error "This requires Emacs 25.1 and above!"))
 
 ;; Speed up startup
@@ -873,14 +885,14 @@ decrease this. If you experience stuttering, increase this.")
 (require 'init-highlight)
 (require 'init-ibuffer)
 (require 'init-kill-ring)
-(require 'init-persp)
+;; (require 'init-persp)
 (require 'init-window)
 (require 'init-treemacs)
 
-(require 'init-eshell)
-(require 'init-shell)
+;; (require 'init-eshell)
+;; (require 'init-shell)
 
-(require 'init-markdown)
+;; (require 'init-markdown)
 (require 'init-org)
 (require 'init-reader)
 
@@ -888,13 +900,13 @@ decrease this. If you experience stuttering, increase this.")
 (require 'init-utils)
 
 ;; Programming
-(require 'init-vcs)
+;; (require 'init-vcs)
 (require 'init-flycheck)
 (require 'init-projectile)
 (require 'init-lsp)
-
+(require 'init-evil)
 (require 'init-prog)
-(require 'init-elisp)
+;; (require 'init-elisp)
 (require 'init-c)
 ;; (require 'init-go)
 ;; (require 'init-rust)
@@ -902,7 +914,7 @@ decrease this. If you experience stuttering, increase this.")
 ;; (require 'init-ruby)
 ;; (require 'init-dart)
 ;; (require 'init-elixir)
-(require 'init-web)
+;; (require 'init-web)
   ;; emacs 透明化 Transparency
   ;(spacemacs/enable-transparency)
   ;; 改变evil-insert-mode光标形状
@@ -982,11 +994,6 @@ decrease this. If you experience stuttering, increase this.")
   ;;    '(pdf-tools-handle-upgrades nil)) ; Use brew upgrade pdf-tools instead.
   ;;   (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo"))
   ;; (pdf-tools-install)
-(setq yas-snippet-dirs
-      '("~/.emacs.d/snippets";;personal snippets
-        ))
-(yas-global-mode 1)
-                                        ;flycheck
   (global-flycheck-mode)
   ;;补充搜索括号特别有用
   (require 'evil-matchit)
@@ -1043,12 +1050,7 @@ decrease this. If you experience stuttering, increase this.")
   ;; ;;               (lambda () (interactive) (find-alternate-file "..")))))
 
   ;;   ;;Chinese and English fonts alignment
-  ;; (use-package cnfonts
-  ;;   :config
-  ;;   (cnfonts-enable)
-  ;;   (setq cnfonts-use-face-font-rescale t)
-  ;;   )
-;;; R related modes
+    ;;; R related modes
   (use-package polymode
     :mode
     (("\\.Rmd" . poly-markdown+r-mode))
@@ -1078,109 +1080,7 @@ decrease this. If you experience stuttering, increase this.")
   ;;   ;;  ;   (use-package poly-noweb+r
   ;;   ;;  ; :defer t)
   ;;   )
-
-  ;; 以下是zilongshanren配置
-  ;; ;;解决org表格里面中英文对齐的问题
-  ;; (when (configuration-layer/layer-usedp 'chinese)
-  ;;   (when (and (spacemacs/system-is-mac) window-system)
-  ;;     (spacemacs//set-monospaced-font "Source Code Pro" "Hiragino Sans GB" 14 16)))
-  ;; Setting Chinese Font
-  (fset 'evil-visual-update-x-selection 'ignore)
-  ;; force horizontal split window
-  (setq split-width-threshold 120)
-  ;; (linum-relative-on)
-  (add-hook 'doc-view-mode-hook 'auto-revert-mode)
-  ;; temp fix for ivy-switch-buffer
-  ;; (spacemacs/set-leader-keys "bb" 'helm-mini)
-  (global-hungry-delete-mode t)
-  (spacemacs|diminish helm-gtags-mode)
-  (spacemacs|diminish ggtags-mode)
-  (spacemacs|diminish which-key-mode)
-  (spacemacs|diminish spacemacs-whitespace-cleanup-mode)
-  (spacemacs|diminish counsel-mode)
-
-  (evilified-state-evilify-map special-mode-map :mode special-mode)
-
-  (add-to-list 'auto-mode-alist
-               '("Capstanfile\\'" . yaml-mode))
-
-  ;; (defun js-indent-line ()
-  ;;   "Indent the current line as JavaScript."
-  ;;   (interactive)
-  ;;   (let* ((parse-status
-  ;;           (save-excursion (syntax-ppss (point-at-bol))))
-  ;;          (offset (- (point) (save-excursion (back-to-indentation) (point)))))
-  ;;     (if (nth 3 parse-status)
-  ;;         'noindent
-  ;;       (indent-line-to (js--proper-indentation parse-status))
-  ;;       (when (> offset 0) (forward-char offset)))))
-
-  (global-set-key (kbd "<backtab>") 'un-indent-by-removing-4-spaces)
-  (defun un-indent-by-removing-4-spaces ()
-    "remove 4 spaces from beginning of of line"
-    (interactive)
-    (save-excursion
-      (save-match-data
-        (beginning-of-line)
-        ;; get rid of tabs at beginning of line
-        (when (looking-at "^\\s-+")
-          (untabify (match-beginning 0) (match-end 0)))
-        (when (looking-at (concat "^" (make-string tab-width ?\ )))
-          (replace-match "")))))
-
-  (defun zilongshanren/toggle-major-mode ()
-    (interactive)
-    (if (eq major-mode 'fundamental-mode)
-        (set-auto-mode)
-      (fundamental-mode)))
-  ;; (spacemacs/set-leader-keys "otm" 'zilongshanren/toggle-major-mode)
-  (setq inhibit-compacting-font-caches t)
-  (global-display-line-numbers-mode -1)
-
-  (defun moon-override-yank-pop (&optional arg)
-    "Delete the region before inserting poped string."
-    (when (and evil-mode (eq 'visual evil-state))
-      (kill-region (region-beginning) (region-end))))
-
-  (advice-add 'counsel-yank-pop :before #'moon-override-yank-pop)
-  (setq ivy-more-chars-alist '((counsel-ag . 2)
-                               (counsel-grep .2)
-                               (t . 3)))
-
-  ;; boost find file and load saved persp layout  performance
-  ;; which will break some function on windows platform
-  ;; eg. known issues: magit related buffer color, reopen will fix it
-  (defun counsel-locate-cmd-es (input)
-    "Return a shell command based on INPUT."
-    (counsel-require-program "es.exe")
-    (encode-coding-string (format "es.exe -i -r -p %s"
-                                  (counsel-unquote-regex-parens
-                                   (ivy--regex input t)))
-                          'gbk))
-  ;; (add-hook 'text-mode-hook 'spacemacs/toggle-spelling-checking-on)
-  ;; (add-hook 'org-mode-hook 'emojify-mode)
-  (add-hook 'org-mode-hook 'auto-fill-mode)
-;; (add-hook 'python-mode-hook 'anaconda-mode)
-  ;; https://emacs-china.org/t/ox-hugo-auto-fill-mode-markdown/9547/4
-  (defadvice org-hugo-paragraph (before org-hugo-paragraph-advice
-                                        (paragraph contents info) activate)
-    "Join consecutive Chinese lines into a single long line without
-unwanted space when exporting org-mode to hugo markdown."
-    (let* ((origin-contents (ad-get-arg 1))
-           (fix-regexp "[[:multibyte:]]")
-           (fixed-contents
-            (replace-regexp-in-string
-             (concat
-              "\\(" fix-regexp "\\) *\n *\\(" fix-regexp "\\)") "\\1\\2" origin-contents)))
-      (ad-set-arg 1 fixed-contents)))
-
-  ;; fix for the magit popup doesn't have a q keybindings
-  (with-eval-after-load 'transient
-    (transient-bind-q-to-quit))
-
-  ;; fix for the lsp error
-  (defvar spacemacs-jump-handlers-fundamental-mode nil)
-  )
+    )
 (setq custom-file (expand-file-name "custom.el" dotspacemacs-directory))
 (load custom-file 'no-error 'no-message)
 (defun dotspacemacs/emacs-custom-settings ()
