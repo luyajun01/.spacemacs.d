@@ -26,7 +26,7 @@ This function should only modify configuration layer settings."
    ;; If non-nil layers with lazy install support are lazy installed.
    ;; List of additional paths where to look for configuration layers.
    ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
-   dotspacemacs-configuration-layer-path '()
+   dotspacemacs-configuration-layer-path '("~/dot-spacemacs")
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
@@ -34,9 +34,10 @@ This function should only modify configuration layer settings."
      ;;      company-lsp-cache-candidates 'auto
      ;;      lsp-ui-flycheck t
      ;;      )
+command-log
      (python :variables
-             python-backend 'lsp
-             python-lsp-server 'mspyls
+             python-backend 'anaconda
+             ;; python-lsp-server 'pyright
              )
      (ivy :variables ivy-enable-advanced-buffer-information nil)
      ;better-defaults
@@ -46,15 +47,17 @@ This function should only modify configuration layer settings."
      ;; lsp
      ;; dap
      colors
-     ;; lpy
-     ;; tabnine
+     lpy
+    ;; tabnine
      (ess :variables
           ess-enable-smart-equals t
           ;; ess-assign-key "M--"
           )
      imenu-list
+pdf-tools
      ;ipython-notebook
      ;prodigy
+     ;; spacemacs-language
      search-engine
      (syntax-checking :variables syntax-checking-enable-by-default nil
                       syntax-checking-enable-tooltips nil)
@@ -78,11 +81,12 @@ This function should only modify configuration layer settings."
                       spacemacs-default-company-backends '(
                                                            ;; company-etags
                                                            ;; company-gtags
-                                                           company-tabnine
+                                                           ;; company-tabnine
+                                                           company-auctex
                                                            company-files
                                                            company-capf
                                                            ;; company-tabnine
-                                                           ;company-anaconda
+                                                           company-anaconda
                                                            company-keywords
                                                            ;company-yasnippet
                                                            company-dabbrev
@@ -91,11 +95,11 @@ This function should only modify configuration layer settings."
                       auto-completion-return-key-behavior 'complete
                       auto-completion-tab-key-behavior 'cycle
                       auto-completion-complete-with-key-sequence nil
-                      auto-completion-complete-with-key-sequence-delay 0.1
+                      auto-completion-complete-with-key-sequence-delay 0.3
                       auto-completion-enable-sort-by-usage t
                       auto-completion-enable-help-tooltip t
                       auto-completion-use-company-box t
-                      ;; auto-completion-private-snippets-directory "~/dot-spacemacs/snippets/"
+                      auto-completion-private-snippets-directory "~/dot-spacemacs/snippets/"
                       auto-completion-enable-snippets-in-popup t
                       ;; :disabled-for org markdown
                       )
@@ -111,7 +115,11 @@ This function should only modify configuration layer settings."
             shell-default-height 30
             shell-default-position 'bottom)
      ;; docker
-     latex
+     (latex :variables
+            latex-build-command "XeLaTeX"
+            latex-enable-folding t
+            latex-enable-magic t
+            )
      ;deft
      markdown
      (org :variables org-want-todo-bindings t
@@ -129,6 +137,18 @@ This function should only modify configuration layer settings."
      ;lua
      ;html
      ;(javascript :variables javascript-backend 'lsp)
+     (bibtex :variables
+             bibtex-completion-pdf-field "file"
+             ;;如果你想用 ivy 进行文献的插入管理，请使用 org-ref-default-bibliography
+             org-ref-default-bibliography 'org-ref-ivy-cite
+             bibtex-completion-bibliography "~/Dropbox/bibliography/references.bib"
+             bibtex-completion-library-path "~/Dropbox/bibliography"
+             org-ref-notes-directory "~/Dropbox/bibliography"
+             org-ref-bibliography-notes "~/Dropbox/bibliography/notes.org"
+             bibtex-completion-notes "~/Dropbox/bibliography/notes.org"
+             org-ref-pdf-directory "~/Dropbox/bibliography/notes.org"
+             org-ref-default-bibliography "~/Dropbox/bibliography/references.bib"
+             )
      (typescript :variables
                  typescript-fmt-on-save nil
                  typescript-fmt-tool 'typescript-formatter
@@ -136,11 +156,11 @@ This function should only modify configuration layer settings."
      emacs-lisp
      ;(clojure :variables clojure-enable-fancify-symbols t)
      ;racket
-     (c-c++ :variables
-            c-c++-default-mode-for-headers 'c++-mode
-            c-c++-backend 'lsp-ccls
-            c-c++-lsp-executable (file-truename "/usr/local/bin/ccls"))
-     ;; zilongshanren
+     ;; (c-c++ :variables
+     ;;        c-c++-default-mode-for-headers 'c++-mode
+     ;;        c-c++-backend 'lsp-ccls
+     ;;        c-c++-lsp-executable (file-truename "/usr/local/bin/ccls"))
+     zilongshanren
      (chinese :variables chinese-default-input-method 'pinyin
               chinese-enable-youdao-dict t)
      )
@@ -151,8 +171,22 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(;sicp
+   dotspacemacs-additional-packages '(  ;sicp
+                                      ebib
+                                      org-ref
+                                      auctex
+                                      company-math
+                                      cdlatex
+org-edit-latex
+                                      so-long
+                                      bing-dict
+                                      color-moccur
+                                      evil-lispy
+                                      sdcv
+                                      google-translate
                                       quelpa
+                                      interleave
+                                      lispy
                                       quelpa-use-package
                                       rg
                                       json-mode
@@ -160,7 +194,7 @@ This function should only modify configuration layer settings."
                                       csharp-mode
                                       pdf-view-restore
                                       haml-mode
-prettier-js
+                                      prettier-js
                                       evil-snipe
                                       mocha
                                       forge
@@ -178,59 +212,59 @@ prettier-js
                                       rainbow-delimiters
                                       volatile-highlights
                                       all-the-icons-ibuffer
-    major-mode-hydra
-    ivy-prescient
-    evil-escape
-    gnu-elpa-keyring-update
-    auto-package-update
-    hide-mode-line
-    default-text-scale
-    goto-line-preview
-    avy-zap
-    dired-git-info
-    dired-rsync
-    symbol-overlay
-    highlight-indent-guides
-    diff-hl
-    volatile-highlights
-    ibuffer-projectile
-    easy-kill-extras
-    shackle
-    ob-go
-    ob-rust
-    ob-ipython
-    ob-mermaid
-    beginend
-    comment-dwim-2
-    drag-stuff
-    multiple-cursors
-    smart-region
-    mwim
-    pager
-    goto-last-point
-    goto-char-preview
-    sudo-edit
-    fancy-narrow
-    amx
-    ivy-yasnippet
-    counsel-world-clock
-    counsel-tramp
-    all-the-icons-ivy-rich
-    yasnippet-snippets
-    calfw
-    calfw-org
-    calfw-ical
-    dashboard
-    company-box
+                                      major-mode-hydra
+                                      ivy-prescient
+                                      evil-escape
+                                      gnu-elpa-keyring-update
+                                      auto-package-update
+                                      hide-mode-line
+                                      default-text-scale
+                                      goto-line-preview
+                                      avy-zap
+                                      dired-git-info
+                                      dired-rsync
+                                      symbol-overlay
+                                      highlight-indent-guides
+                                      diff-hl
+                                      volatile-highlights
+                                      ibuffer-projectile
+                                      easy-kill-extras
+                                      shackle
+                                      ob-go
+                                      ob-rust
+                                      ob-ipython
+                                      ob-mermaid
+                                      beginend
+                                      comment-dwim-2
+                                      drag-stuff
+                                      multiple-cursors
+                                      smart-region
+                                      mwim
+                                      pager
+                                      goto-last-point
+                                      goto-char-preview
+                                      sudo-edit
+                                      fancy-narrow
+                                      amx
+                                      ivy-yasnippet
+                                      counsel-world-clock
+                                      counsel-tramp
+                                      all-the-icons-ivy-rich
+                                      yasnippet-snippets
+                                      calfw
+                                      calfw-org
+                                      calfw-ical
+                                      dashboard
+                                      company-box
                                       diredfl
                                       solaire-mode
                                       doom-themes
                                       doom-modeline
                                       emmet-mode
                                       mixed-pitch
-                                      ;iy-go-to-char
-                                      ;ssh-agency
-                                      ;format-all
+                                        ;iy-go-to-char
+                                        ;ssh-agency
+                                        ;format-all
                                       evil-textobj-syntax
                                       evil-lion
                                       evil-find-char-pinyin
@@ -241,54 +275,54 @@ prettier-js
                                       keyfreq
                                       counsel-css
                                       ;; emojify
-                                      ;fzf
-                                     ivy-rich
-                                     all-the-icons-dired
-                                     ibuffer-vc
-                                     company-prescient
-                                     org-re-reveal
-                                     ;; evil-escape
-                                     evil-exchange
-                                     ivy-xref
+                                        ;fzf
+                                      ivy-rich
+                                      all-the-icons-dired
+                                      ibuffer-vc
+                                      company-prescient
+                                      org-re-reveal
+                                      ;; evil-escape
+                                      evil-exchange
+                                      ivy-xref
                                       ivy-posframe
-                                      ;lsp-python-ms
+                                        ;lsp-python-ms
                                       evil-org
                                       general
                                       keyfreq
                                       company-posframe
-                                     company-quickhelp
+                                      company-quickhelp
                                       window-numbering
                                       ace-jump-zap
-                                      ;anaconda-mode
+                                        ;anaconda-mode
                                       evil-leader
-                                      ;bm
+                                        ;bm
                                       smex
                                       evil-nerd-commenter
-                                      ;company-jedi
-                                      ;company-anaconda
+                                        ;company-jedi
+                                        ;company-anaconda
                                       tabbar
                                       toc-org
-minions
-                                      ;sicp ssh-agency anki-editor
-                                        powerline
-                                        smartparens
-                                      ;ranger
+                                      minions
+                                        ;sicp ssh-agency anki-editor
+                                      powerline
+                                      smartparens
+                                        ;ranger
                                       ;; pophint
                                       all-the-icons
-                                      ;xah-replace-pairs
+                                        ;xah-replace-pairs
                                       hydra
-                                      ;spaceline-all-the-icons
+                                        ;spaceline-all-the-icons
                                         ;ace-window
                                       eval-in-repl
                                       flucui-themes
                                       ;; company-lsp
-                                      ;jedi
+                                        ;jedi
                                       ivy-posframe
                                       flycheck-posframe
                                       company-posframe
                                       function-args
                                       elpy
-                                      ;jupyter
+                                      jupyter
                                       counsel-etags
                                       company-ctags
                                       mmm-mode
@@ -342,11 +376,11 @@ minions
                                       grip-mode
                                       nov
                                       lsp-ivy
-                                     lsp-pyright
-                                     dap-mode
-                                     powershell
-                                     vimrc-mode
-                                     evil-exchange
+                                      lsp-pyright
+                                      dap-mode
+                                      powershell
+                                      vimrc-mode
+                                      evil-exchange
                                       ;; org-alert
                                         ;el2org
                                       cdlatex
@@ -354,17 +388,16 @@ minions
                                         ;flymd
                                         ;websocket
                                         ;simple-httpd
-                                      ;; org-wiki
-                                      ;plain-org-wiki
+                                        ;plain-org-wiki
                                       magit-todos
                                       copyit
                                       atomic-chrome
                                       pomidor
                                       persistent-scratch
                                       org-tree-slide
-                                     org-preview-html
-                                      company-tabnine
-                                     ;; yasnippet-snippets
+                                      org-preview-html
+                                      ;; company-tabnine
+                                      ;; yasnippet-snippets
                                         ;rainbow-mode
                                         ;ivy-yasnippet
                                       cnfonts
@@ -802,8 +835,27 @@ dump."
   )
 
 (defun dotspacemacs/user-config ()
+  (add-hook 'doc-view-mode-hook 'auto-revert-mode)
+  (require 'smex) ; Not needed if you use package.el
+  (smex-initialize)
+  (global-set-key (kbd "M-x") 'smex)
+  (global-set-key (kbd "M-X") 'smex-major-mode-commands)
+  ;;https://emacs-china.org/t/lazy-load-el-emacs/9208
+  (let (;; 加载的时候临时增大`gc-cons-threshold'以加速启动速度。
+        (gc-cons-threshold most-positive-fixnum)
+        ;; 清空避免加载远程文件的时候分析文件。
+        (file-name-handler-alist nil))
+
+    ;; Emacs配置文件内容写到下面.
   ;; 中文字体
   (cnfonts-enable)
+  (elpy-enable)
+
+
+  ;;lazy-load
+  (add-to-list 'load-path (expand-file-name "~/.spacemacs.d/private/lazy-load"))
+  (require 'lazy-load)
+
 
   (when (version< emacs-version "25.1")
   (error "This requires Emacs 25.1 and above!"))
@@ -869,17 +921,23 @@ decrease this. If you experience stuttering, increase this.")
 (update-load-path)
 ;; Packages
 ;; Without this comment Emacs25 adds (package-initialize) here
+
+(require 'init-private)
+(require 'init-thing-edit)
 (require 'init-package)
 ;; Preferences
 (require 'init-basic)
 (require 'init-hydra)
 (require 'init-ui)
-(require 'init-edit)
+;; (require 'init-org)
+;; (require 'init-edit)
 (require 'init-ivy)
-(require 'init-private)
+(require 'init-pdftools)
 (require 'init-company)
 (require 'init-yasnippet)
-(require 'init-calendar)
+(require 'init-scimax-org-babel)
+(require 'init-python)
+;; (require 'init-calendar)
 (require 'init-dashboard)
 (require 'init-dired)
 (require 'init-highlight)
@@ -888,13 +946,12 @@ decrease this. If you experience stuttering, increase this.")
 ;; (require 'init-persp)
 (require 'init-window)
 (require 'init-treemacs)
-
+(require 'init-ess)
 ;; (require 'init-eshell)
 ;; (require 'init-shell)
 
 ;; (require 'init-markdown)
-(require 'init-org)
-(require 'init-reader)
+;; (require 'init-reader)
 
 ;; (require 'init-docker)
 (require 'init-utils)
@@ -903,14 +960,15 @@ decrease this. If you experience stuttering, increase this.")
 ;; (require 'init-vcs)
 (require 'init-flycheck)
 (require 'init-projectile)
-(require 'init-lsp)
 (require 'init-evil)
+(require 'init-key)
 (require 'init-prog)
+;; (require 'init-lsp)
+;; (require 'init-company-tabnine)
 ;; (require 'init-elisp)
-(require 'init-c)
+;; (require 'init-c)
 ;; (require 'init-go)
 ;; (require 'init-rust)
-(require 'init-python)
 ;; (require 'init-ruby)
 ;; (require 'init-dart)
 ;; (require 'init-elixir)
@@ -1081,6 +1139,7 @@ decrease this. If you experience stuttering, increase this.")
   ;;   ;;  ; :defer t)
   ;;   )
     )
+)
 (setq custom-file (expand-file-name "custom.el" dotspacemacs-directory))
 (load custom-file 'no-error 'no-message)
 (defun dotspacemacs/emacs-custom-settings ()
@@ -1089,4 +1148,5 @@ This is an auto-generated function, do not modify its content directly, use
 Emacs customize menu instead.
 This function is called at the very end of Spacemacs initialization."
   )
+
 (provide 'init)

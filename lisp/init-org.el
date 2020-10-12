@@ -32,7 +32,6 @@
 
 (require 'init-const)
 (require 'init-custom)
-(require 'init-private)
 
 (use-package org
   :ensure nil
@@ -59,7 +58,7 @@ prepended to the element after the #+HEADER: tag."
       (when mod (insert mod) (forward-line))
       (when text (insert text))))
   :pretty-hydra
-  ((:title (pretty-hydra-title "Org Template" 'fileicon "org")
+  ((:title (pretty-hydra-title "Org Template" 'fileicon "org" :face 'all-the-icons-green :height 1.1 :v-adjust 0.0)
     :color blue :quit-key "q")
    ("Basic"
     (("a" (hot-expand "<a") "ascii")
@@ -117,8 +116,12 @@ prepended to the element after the #+HEADER: tag."
   ;; To speed up startup, don't put to init section
   (setq org-agenda-files `(,centaur-org-directory)
         org-todo-keywords
-        '((sequence "TODO(t)" "DOING(i)" "HANGUP(h)" "|" "DONE(d)" "CANCEL(c)")
-          (sequence "⚑(T)" "🏴(I)" "❓(H)" "|" "✔(D)" "✘(C)"))
+        '(
+          (sequence "TODO(t)" "STARTED(s)" "|" "DONE(d!/!)")
+          ;; (sequence "TODO(t)" "DOING(i)" "HANGUP(h)" "|" "DONE(d)" "CANCEL(c)")
+          ;(sequence "⚑(T)" "🏴(I)" "❓(H)" "|" "✔(D)" "✘(C)")
+          (sequence "WAITING(w@/!)" "SOMEDAY(S)" "|" "CANCELLED(c@/!)" "MEETING(m)" "PHONE(p)")
+          )
         org-todo-keyword-faces '(("HANGUP" . warning)
                                  ("❓" . warning))
         org-priority-faces '((?A . error)
@@ -191,9 +194,6 @@ prepended to the element after the #+HEADER: tag."
 
   (use-package ob-go
     :init (cl-pushnew '(go . t) load-language-list))
-
-  (use-package ob-rust
-    :init (cl-pushnew '(rust . t) load-language-list))
 
   (use-package ob-ipython
     :if (executable-find "jupyter")     ; DO NOT remove
@@ -288,6 +288,39 @@ prepended to the element after the #+HEADER: tag."
                     (and (eq buf (current-buffer)) (quit-window))
                     (pop-to-buffer buf))))
             (browse-url url)))))))
+
+;; (defun run-python-first (&rest args)
+;;   "Start a inferior python if there isn't one."
+;;   (or (comint-check-proc "*Python*") (run-python)))
+
+;; (advice-add 'org-babel-execute:ipython :after
+;;             (lambda (body params)
+;;               "Send body to `inferior-python'."
+;;               (run-python-first)
+;;               (python-shell-send-string body)))
+;; (add-hook 'org-mode-hook
+;;           (lambda ()
+;;             (setq-local completion-at-point-functions
+;;                         '(pcomplete-completions-at-point python-completion-at-point))))
+;; ;;这个函数很重要！
+;; (add-hook 'ipython-mode-hook
+;;           (lambda ()
+;;             (setq-local completion-at-point-functions
+;;                         '(pcomplete-completions-at-point python-completion-at-point))))
+;; ;; (add-hook 'python-mode-hook
+;; ;;           (lambda ()
+;; ;;             (setq-local completion-at-point-functions
+;; ;;                         '(pcomplete-completions-at-point python-completion-at-point))))
+
+;(define-key evil-insert-state-map (kbd "C-c C-d") 'completion-at-point)
+
+;; (defun ob-ipython-eldoc-function ()
+;;   (when (org-babel-where-is-src-block-head)
+;;     (python-eldoc-function)))
+
+;; (add-hook 'org-mode-hook
+;;           (lambda ()
+;;             (setq-default eldoc-documentation-function 'ob-ipython-eldoc-function)))
 
 (provide 'init-org)
 

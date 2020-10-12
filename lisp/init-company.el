@@ -65,13 +65,13 @@
                            (company-dabbrev-code company-keywords company-files)
                            company-dabbrev))
 
-  (defun my-company-yasnippet ()
-    "Hide the current completeions and show snippets."
-    (interactive)
-    (company-cancel)
-    (call-interactively 'company-yasnippet))
-  :config
-  ;; `yasnippet' integration
+   (defun my-company-yasnippet ()
+     "Hide the current completeions and show snippets."
+     (interactive)
+     (company-cancel)
+     (call-interactively 'company-yasnippet))
+   :config
+   ;; `yasnippet' integration
   (with-no-warnings
     (with-eval-after-load 'yasnippet
       (defun company-backend-with-yas (backend)
@@ -109,12 +109,12 @@
             (funcall fun command arg))))
       (advice-add #'company-yasnippet :around #'my-company-yasnippet-disable-inline)))
 
-  ;; Better sorting and filtering
+;;   ;; Better sorting and filtering
   (use-package company-prescient
     :init (company-prescient-mode 1))
 
-  ;; Icons and quickhelp
-  (when emacs/>=26p
+   ;; Icons and quickhelp
+   (when emacs/>=26p
     (use-package company-box
       :diminish
       :defines company-box-icons-all-the-icons
@@ -177,7 +177,8 @@
       :bind (:map company-active-map
              ([remap company-show-doc-buffer] . company-quickhelp-manual-begin))
       :hook (global-company-mode . company-quickhelp-mode)
-      :init (setq company-quickhelp-delay 0.5))))
+      :init (setq company-quickhelp-delay 0.5)))
+  )
 
 (provide 'init-company)
 

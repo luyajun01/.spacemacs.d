@@ -624,14 +624,17 @@ If the character before and after CH is space or tab, CH is NOT slash"
   :states '(normal visual))
 
 (my-space-leader-def
- "a" 'hydra-avy/body
+ "ab" 'hydra-avy/body
+ "aa" 'avy-goto-line
+ "aw" 'avy-goto-word-1
+ "as" 'avy-goto-char-in-line
  "ee" 'my-swap-sexps
   "nn" 'my-goto-next-hunk
   "pp" 'my-goto-previous-hunk
   "pc" 'my-dired-redo-from-commands-history
   "pw" 'pwd
   ;; "mm" 'counsel-evil-goto-global-marker
-  "m" 'hydra-magit/body
+  "mb" 'hydra-magit/body
   ;; "mf" 'mark-defun
   "xc" 'save-buffers-kill-terminal ; not used frequently
   "cc" 'my-dired-redo-last-command
@@ -644,9 +647,10 @@ If the character before and after CH is space or tab, CH is NOT slash"
   "rt" 'random-healthy-color-theme
   "yy" 'hydra-launcher/body
   "tt" 'my-toggle-indentation
-  "g" 'hydra-git/body
-  "ps" 'profiler-start
-  "pr" 'profiler-report
+  "hg" 'hydra-git/body
+  "he" 'hydra-thing-edit/body
+    ;; "ps" 'profiler-start
+   ;; "pr" 'profiler-report
   ;; "ud" 'my-gud-gdb
   ;; "uk" 'gud-kill-yes
   ;; "ur" 'gud-remove
@@ -660,49 +664,6 @@ If the character before and after CH is space or tab, CH is NOT slash"
   ;; "uc" 'gud-cont
   ;; "uf" 'gud-finish
   )
-
-;; per-major-mode setup
-
-(general-create-definer my-javascript-leader-def
-  :prefix "SPC"
-  :non-normal-prefix "M-SPC"
-  :states '(normal motion insert emacs)
-  :keymaps 'js2-mode-map)
-
-(my-javascript-leader-def
- "de" 'js2-display-error-list
- "nn" 'js2-next-error
- "te" 'js2-mode-toggle-element
- "tf" 'js2-mode-toggle-hide-functions
- "jeo" 'js2r-expand-object
- "jco" 'js2r-contract-object
- "jeu" 'js2r-expand-function
- "jcu" 'js2r-contract-function
- "jea" 'js2r-expand-array
- "jca" 'js2r-contract-array
- "jwi" 'js2r-wrap-buffer-in-iife
- "jig" 'js2r-inject-global-in-iife
- "jev" 'js2r-extract-var
- "jiv" 'js2r-inline-var
- "jrv" 'js2r-rename-var
- "jvt" 'js2r-var-to-this
- "jag" 'js2r-add-to-globals-annotation
- "jsv" 'js2r-split-var-declaration
- "jss" 'js2r-split-string
- "jef" 'js2r-extract-function
- "jem" 'js2r-extract-method
- "jip" 'js2r-introduce-parameter
- "jlp" 'js2r-localize-parameter
- "jtf" 'js2r-toggle-function-expression-and-declaration
- "jao" 'js2r-arguments-to-object
- "juw" 'js2r-unwrap
- "jwl" 'js2r-wrap-in-for-loop
- "j3i" 'js2r-ternary-to-if
- "jlt" 'js2r-log-this
- "jsl" 'js2r-forward-slurp
- "jba" 'js2r-forward-barf
- "jk" 'js2r-kill)
-;; }}
 
 ;; Press `dd' to delete lines in `wgrep-mode' in evil directly
 (defadvice evil-delete (around evil-delete-hack activate)
@@ -730,6 +691,12 @@ If the character before and after CH is space or tab, CH is NOT slash"
  ";" 'ace-pinyin-jump-char-2
  "w" 'avy-goto-word-or-subword-1
  "a" 'avy-goto-char-timer
+ "l" 'avy-goto-char-in-line
+ "s" 'hydra-smartparens/body
+ "id" 'isolate-quick-delete
+ "ic" 'isolate-quick-change
+ "ia" 'isolate-quick-add
+ "rp" 'run-python
  "db" 'sdcv-search-input ; details
  "dt" 'sdcv-search-input+ ; summary
  "dd" 'my-lookup-dict-org
