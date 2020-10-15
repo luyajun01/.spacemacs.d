@@ -1,0 +1,6 @@
+[submodule "org-brain"]
+	path = private/org-brain
+	url = https://github.com/Kungsgeten/org-brain.git
+[submodule "private/ov-highlight"]
+	path = private/ov-highlight
+	url = https://github.com/jkitchin/ov-highlight.git
