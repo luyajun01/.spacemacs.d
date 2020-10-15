@@ -86,16 +86,16 @@
     "C-c C-x" "markdown-toggle"))
 
 ;; Persistent the scratch buffer
-(use-package persistent-scratch
-  :diminish
-  :bind (:map persistent-scratch-mode-map
-         ([remap kill-buffer] . (lambda (&rest _)
-                                  (interactive)
-                                  (user-error "Scrach buffer cannot be killed")))
-         ([remap revert-buffer] . persistent-scratch-restore)
-         ([remap revert-this-buffer] . persistent-scratch-restore))
-  :hook ((after-init . persistent-scratch-autosave-mode)
-         (lisp-interaction-mode . persistent-scratch-mode)))
+;; (use-package persistent-scratch
+;;   :diminish
+;;   :bind (:map persistent-scratch-mode-map
+;;          ([remap kill-buffer] . (lambda (&rest _)
+;;                                   (interactive)
+;;                                   (user-error "Scrach buffer cannot be killed")))
+;;          ([remap revert-buffer] . persistent-scratch-restore)
+;;          ([remap revert-this-buffer] . persistent-scratch-restore))
+;;   :hook ((after-init . persistent-scratch-autosave-mode)
+;;          (lisp-interaction-mode . persistent-scratch-mode)))
 
 ;; Search tools
 ;; Writable `grep' buffer
@@ -165,32 +165,32 @@
       ("?" nil nil))))
 
 ;; A Simple and cool pomodoro timer
-(use-package pomidor
-  :bind ("s-<f12>" . pomidor)
-  :init
-  (setq alert-default-style 'mode-line)
+;; (use-package pomidor
+;;   :bind ("s-<f12>" . pomidor)
+;;   :init
+;;   (setq alert-default-style 'mode-line)
 
-  (with-eval-after-load 'all-the-icons
-    (setq alert-severity-faces
-          '((urgent   . all-the-icons-red)
-            (high     . all-the-icons-orange)
-            (moderate . all-the-icons-yellow)
-            (normal   . all-the-icons-green)
-            (low      . all-the-icons-blue)
-            (trivial  . all-the-icons-purple))
-          alert-severity-colors
-          `((urgent   . ,(face-foreground 'all-the-icons-red))
-            (high     . ,(face-foreground 'all-the-icons-orange))
-            (moderate . ,(face-foreground 'all-the-icons-yellow))
-            (normal   . ,(face-foreground 'all-the-icons-green))
-            (low      . ,(face-foreground 'all-the-icons-blue))
-            (trivial  . ,(face-foreground 'all-the-icons-purple)))))
+;;   (with-eval-after-load 'all-the-icons
+;;     (setq alert-severity-faces
+;;           '((urgent   . all-the-icons-red)
+;;             (high     . all-the-icons-orange)
+;;             (moderate . all-the-icons-yellow)
+;;             (normal   . all-the-icons-green)
+;;             (low      . all-the-icons-blue)
+;;             (trivial  . all-the-icons-purple))
+;;           alert-severity-colors
+;;           `((urgent   . ,(face-foreground 'all-the-icons-red))
+;;             (high     . ,(face-foreground 'all-the-icons-orange))
+;;             (moderate . ,(face-foreground 'all-the-icons-yellow))
+;;             (normal   . ,(face-foreground 'all-the-icons-green))
+;;             (low      . ,(face-foreground 'all-the-icons-blue))
+;;             (trivial  . ,(face-foreground 'all-the-icons-purple)))))
 
-  (when sys/macp
-    (setq pomidor-play-sound-file
-          (lambda (file)
-            (when (executable-find "afplay")
-              (start-process "pomidor-play-sound" nil "afplay" file))))))
+;;   (when sys/macp
+;;     (setq pomidor-play-sound-file
+;;           (lambda (file)
+;;             (when (executable-find "afplay")
+;;               (start-process "pomidor-play-sound" nil "afplay" file))))))
 
 ;; Nice writing
 (use-package olivetti
@@ -199,38 +199,38 @@
   :init (setq olivetti-body-width 0.618))
 
 ;; Edit text for browsers with GhostText or AtomicChrome extension
-(use-package atomic-chrome
-  :hook ((emacs-startup . atomic-chrome-start-server)
-         (atomic-chrome-edit-mode . (lambda ()
-                                      "Enter edit mode and delete other windows."
-                                      (and (fboundp 'olivetti-mode)
-                                           (olivetti-mode 1))
-                                      (delete-other-windows))))
-  :init (setq atomic-chrome-buffer-open-style 'frame)
-  :config
-  (if (fboundp 'gfm-mode)
-      (setq atomic-chrome-url-major-mode-alist
-            '(("github\\.com" . gfm-mode)))))
+;; (use-package atomic-chrome
+;;   :hook ((emacs-startup . atomic-chrome-start-server)
+;;          (atomic-chrome-edit-mode . (lambda ()
+;;                                       "Enter edit mode and delete other windows."
+;;                                       (and (fboundp 'olivetti-mode)
+;;                                            (olivetti-mode 1))
+;;                                       (delete-other-windows))))
+;;   :init (setq atomic-chrome-buffer-open-style 'frame)
+;;   :config
+;;   (if (fboundp 'gfm-mode)
+;;       (setq atomic-chrome-url-major-mode-alist
+;;             '(("github\\.com" . gfm-mode)))))
 
 ;; Music player
-(use-package bongo
-  :bind ("C-<f9>" . bongo)
-  :config
-  (with-eval-after-load 'dired
-    (with-no-warnings
-      (defun bongo-add-dired-files ()
-        "Add marked files to the Bongo library."
-        (interactive)
-        (bongo-buffer)
-        (let (file (files nil))
-          (dired-map-over-marks
-           (setq file (dired-get-filename)
-                 files (append files (list file)))
-           nil t)
-          (with-bongo-library-buffer
-           (mapc 'bongo-insert-file files)))
-        (bongo-switch-buffers))
-      (bind-key "b" #'bongo-add-dired-files dired-mode-map))))
+;; (use-package bongo
+;;   :bind ("C-<f9>" . bongo)
+;;   :config
+;;   (with-eval-after-load 'dired
+;;     (with-no-warnings
+;;       (defun bongo-add-dired-files ()
+;;         "Add marked files to the Bongo library."
+;;         (interactive)
+;;         (bongo-buffer)
+;;         (let (file (files nil))
+;;           (dired-map-over-marks
+;;            (setq file (dired-get-filename)
+;;                  files (append files (list file)))
+;;            nil t)
+;;           (with-bongo-library-buffer
+;;            (mapc 'bongo-insert-file files)))
+;;         (bongo-switch-buffers))
+;;       (bind-key "b" #'bongo-add-dired-files dired-mode-map))))
 
 ;; IRC
 (use-package erc
@@ -243,59 +243,61 @@
 
 ;; A stackoverflow and its sisters' sites reader
 (when emacs/>=26p
-  (use-package howdoyou
-    :bind (:map howdoyou-mode-map
-           ("q" . kill-buffer-and-window))
-    :hook (howdoyou-mode . read-only-mode)))
+  ;; (use-package howdoyou
+  ;;   :bind (:map howdoyou-mode-map
+  ;;          ("q" . kill-buffer-and-window))
+  ;;   :hook (howdoyou-mode . read-only-mode))
+  )
 
 ;; text mode directory tree
-(use-package ztree
-  :custom-face
-  (ztreep-header-face ((t (:inherit diff-header))))
-  (ztreep-arrow-face ((t (:inherit font-lock-comment-face))))
-  (ztreep-leaf-face ((t (:inherit diff-index))))
-  (ztreep-node-face ((t (:inherit font-lock-variable-name-face))))
-  (ztreep-expand-sign-face ((t (:inherit font-lock-function-name-face))))
-  (ztreep-diff-header-face ((t (:inherit (diff-header bold)))))
-  (ztreep-diff-header-small-face ((t (:inherit diff-file-header))))
-  (ztreep-diff-model-normal-face ((t (:inherit font-lock-doc-face))))
-  (ztreep-diff-model-ignored-face ((t (:inherit font-lock-doc-face :strike-through t))))
-  (ztreep-diff-model-diff-face ((t (:inherit diff-removed))))
-  (ztreep-diff-model-add-face ((t (:inherit diff-nonexistent))))
-  :pretty-hydra
-  ((:title (pretty-hydra-title "Ztree" 'octicon "diff" :height 1.2 :v-adjust 0)
-    :color pink :quit-key "q")
-   ("Diff"
-    (("C" ztree-diff-copy "copy" :exit t)
-     ("h" ztree-diff-toggle-show-equal-files "show/hide equals" :exit t)
-     ("H" ztree-diff-toggle-show-filtered-files "show/hide ignores" :exit t)
-     ("D" ztree-diff-delete-file "delete" :exit t)
-     ("v" ztree-diff-view-file "view" :exit t)
-     ("d" ztree-diff-simple-diff-files "simple diff" :exit t)
-     ("r" ztree-diff-partial-rescan "partial rescan" :exit t)
-     ("R" ztree-diff-full-rescan "full rescan" :exit t))
-    "View"
-    (("RET" ztree-perform-action "expand/collapse or view" :exit t)
-     ("SPC" ztree-perform-soft-action "expand/collapse or view in other" :exit t)
-     ("TAB" ztree-jump-side "jump side" :exit t)
-     ("g" ztree-refresh-buffer "refresh" :exit t)
-     ("x" ztree-toggle-expand-subtree "expand/collapse" :exit t)
-     ("<backspace>" ztree-move-up-in-tree "go to parent" :exit t))))
-  :bind (:map ztreediff-mode-map
-         ("C-<f5>" . ztree-hydra/body))
-  :init (setq ztree-draw-unicode-lines t
-              ztree-show-number-of-children t))
+;; (use-package ztree
+;;   :custom-face
+;;   (ztreep-header-face ((t (:inherit diff-header))))
+;;   (ztreep-arrow-face ((t (:inherit font-lock-comment-face))))
+;;   (ztreep-leaf-face ((t (:inherit diff-index))))
+;;   (ztreep-node-face ((t (:inherit font-lock-variable-name-face))))
+;;   (ztreep-expand-sign-face ((t (:inherit font-lock-function-name-face))))
+;;   (ztreep-diff-header-face ((t (:inherit (diff-header bold)))))
+;;   (ztreep-diff-header-small-face ((t (:inherit diff-file-header))))
+;;   (ztreep-diff-model-normal-face ((t (:inherit font-lock-doc-face))))
+;;   (ztreep-diff-model-ignored-face ((t (:inherit font-lock-doc-face :strike-through t))))
+;;   (ztreep-diff-model-diff-face ((t (:inherit diff-removed))))
+;;   (ztreep-diff-model-add-face ((t (:inherit diff-nonexistent))))
+;;   :pretty-hydra
+;;   ((:title (pretty-hydra-title "Ztree" 'octicon "diff" :height 1.2 :v-adjust 0)
+;;     :color pink :quit-key "q")
+;;    ("Diff"
+;;     (("C" ztree-diff-copy "copy" :exit t)
+;;      ("h" ztree-diff-toggle-show-equal-files "show/hide equals" :exit t)
+;;      ("H" ztree-diff-toggle-show-filtered-files "show/hide ignores" :exit t)
+;;      ("D" ztree-diff-delete-file "delete" :exit t)
+;;      ("v" ztree-diff-view-file "view" :exit t)
+;;      ("d" ztree-diff-simple-diff-files "simple diff" :exit t)
+;;      ("r" ztree-diff-partial-rescan "partial rescan" :exit t)
+;;      ("R" ztree-diff-full-rescan "full rescan" :exit t))
+;;     "View"
+;;     (("RET" ztree-perform-action "expand/collapse or view" :exit t)
+;;      ("SPC" ztree-perform-soft-action "expand/collapse or view in other" :exit t)
+;;      ("TAB" ztree-jump-side "jump side" :exit t)
+;;      ("g" ztree-refresh-buffer "refresh" :exit t)
+;;      ("x" ztree-toggle-expand-subtree "expand/collapse" :exit t)
+;;      ("<backspace>" ztree-move-up-in-tree "go to parent" :exit t))))
+;;   :bind (:map ztreediff-mode-map
+;;          ("C-<f5>" . ztree-hydra/body))
+;;   :init (setq ztree-draw-unicode-lines t
+;;               ztree-show-number-of-children t))
 
 ;; Misc
-(use-package copyit)                    ; copy path, url, etc.
-(use-package diffview)                  ; side-by-side diff view
-(use-package esup)                      ; Emacs startup profiler
-(use-package focus)                     ; Focus on the current region
+;; (use-package copyit)                    ; copy path, url, etc.
+;; (use-package diffview)                  ; side-by-side diff view
+;; (use-package esup)                      ; Emacs startup profiler
+;; (use-package focus)                     ; Focus on the current region
 (use-package list-environment)
-(use-package memory-usage)
+;; (use-package memory-usage)
 (unless sys/win32p
-  (use-package daemons)                 ; system services/daemons
-  (use-package tldr))
+  ;; (use-package daemons)                 ; system services/daemons
+  ;; (use-package tldr)
+  )
 
 (provide 'init-utils)
 

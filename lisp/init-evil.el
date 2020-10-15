@@ -624,23 +624,26 @@ If the character before and after CH is space or tab, CH is NOT slash"
   :states '(normal visual))
 
 (my-space-leader-def
- "ab" 'hydra-avy/body
- "aa" 'avy-goto-line
- "aw" 'avy-goto-word-1
- "as" 'avy-goto-char-in-line
- "ee" 'my-swap-sexps
+  "ab" 'hydra-avy/body
+  "aa" 'avy-goto-line
+  "aw" 'avy-goto-word-1
+  "as" 'avy-goto-char-in-line
+  "ee" 'my-swap-sexps
   "nn" 'my-goto-next-hunk
   "pp" 'my-goto-previous-hunk
   "pc" 'my-dired-redo-from-commands-history
   "pw" 'pwd
+  "su" 'scimax-ob-move-src-block-up
+  "sd" 'scimax-ob-move-src-block-down
   ;; "mm" 'counsel-evil-goto-global-marker
-  "mb" 'hydra-magit/body
+  "hg" 'hydra-magit/body
+  "hm" 'hydra-multiple-cursors/body
   ;; "mf" 'mark-defun
-  "xc" 'save-buffers-kill-terminal ; not used frequently
+  "xc" 'save-buffers-kill-terminal      ; not used frequently
   "cc" 'my-dired-redo-last-command
   ;; "ss" 'wg-create-workgroup ; save windows layout
-  "se" 'evil-iedit-state/iedit-mode ; start iedit in emacs
-  "sc" 'shell-command
+  ;; "se" 'evil-iedit-state/iedit-mode ; start iedit in emacs
+  ;; "sc" 'shell-command
   ;; "ll" 'my-wg-switch-workgroup ; load windows layout
   "kk" 'scroll-other-window
   "jj" 'scroll-other-window-up
@@ -649,8 +652,8 @@ If the character before and after CH is space or tab, CH is NOT slash"
   "tt" 'my-toggle-indentation
   "hg" 'hydra-git/body
   "he" 'hydra-thing-edit/body
-    ;; "ps" 'profiler-start
-   ;; "pr" 'profiler-report
+  ;; "ps" 'profiler-start
+  ;; "pr" 'profiler-report
   ;; "ud" 'my-gud-gdb
   ;; "uk" 'gud-kill-yes
   ;; "ur" 'gud-remove

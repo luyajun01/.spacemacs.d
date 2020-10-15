@@ -105,7 +105,7 @@
 (use-package bind-key)
 
 ;; Update GPG keyring for GNU ELPA
-(use-package gnu-elpa-keyring-update)
+;; (use-package gnu-elpa-keyring-update)
 
 ;; Initialization benchmark
 (when centaur-benchmark-init
@@ -141,11 +141,11 @@
               t)))
 
 ;; Auto update packages
-(use-package auto-package-update
-  :init
-  (setq auto-package-update-delete-old-versions t
-        auto-package-update-hide-results t)
-  (defalias 'upgrade-packages #'auto-package-update-now))
+;; (use-package auto-package-update
+;;   :init
+;;   (setq auto-package-update-delete-old-versions t
+;;         auto-package-update-hide-results t)
+;;   (defalias 'upgrade-packages #'auto-package-update-now))
 
 (provide 'init-package)
 

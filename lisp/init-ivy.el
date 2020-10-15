@@ -377,8 +377,8 @@
       (setq magit-completing-read-function 'ivy-completing-read)))
 
   ;; Enhance M-x
-  (use-package amx
-    :init (setq amx-history-length 20))
+  ;; (use-package amx
+  ;;   :init (setq amx-history-length 20))
 
   ;; Better sorting and filtering
   (use-package prescient
@@ -432,8 +432,8 @@ This is for use in `ivy-re-builders-alist'."
     :init (setq counsel-projectile-grep-initial-input '(ivy-thing-at-point)))
 
   ;; Integrate yasnippet
-  (use-package ivy-yasnippet
-    :bind ("C-c C-y" . ivy-yasnippet))
+  ;; (use-package ivy-yasnippet
+  ;;   :bind ("C-c C-y" . ivy-yasnippet))
 
   ;; Select from xref candidates with Ivy
   (use-package ivy-xref
@@ -447,9 +447,10 @@ This is for use in `ivy-re-builders-alist'."
    (sys/linux-x-p
     (bind-key "s-<f6>" #'counsel-linux-app counsel-mode-map))
    (sys/macp
-    (use-package counsel-osx-app
-      :bind (:map counsel-mode-map
-             ("s-<f6>" . counsel-osx-app)))))
+    ;; (use-package counsel-osx-app
+    ;;   :bind (:map counsel-mode-map
+    ;;          ("s-<f6>" . counsel-osx-app)))
+    ))
 
   ;; Display world clock using Ivy
   (use-package counsel-world-clock
@@ -528,6 +529,7 @@ This is for use in `ivy-re-builders-alist'."
   :init
   ;; For better performance
   (setq ivy-rich-parse-remote-buffer nil))
+
 
 (provide 'init-ivy)
 

@@ -33,6 +33,8 @@
 (require 'init-const)
 (require 'init-custom)
 
+;; org-roam
+
 (use-package org
   :ensure nil
   :custom-face (org-ellipsis ((t (:foreground nil))))
@@ -82,7 +84,7 @@ prepended to the element after the #+HEADER: tag."
      ("m" (hot-expand "<s" "emacs-lisp") "emacs-lisp")
      ("y" (hot-expand "<s" "python :results output") "python")
      ("p" (hot-expand "<s" "perl") "perl")
-     ("r" (hot-expand "<s" "ruby") "ruby")
+     ("r" (hot-expand "<s" "R :results output :exports both") "R")
      ("S" (hot-expand "<s" "sh") "sh")
      ("g" (hot-expand "<s" "go :imports '\(\"fmt\"\)") "golang"))
     "Misc"
@@ -192,16 +194,16 @@ prepended to the element after the #+HEADER: tag."
       (cl-pushnew '(shell . t) load-language-list)
     (cl-pushnew '(sh . t) load-language-list))
 
-  (use-package ob-go
-    :init (cl-pushnew '(go . t) load-language-list))
+  ;; (use-package ob-go
+    ;; :init (cl-pushnew '(go . t) load-language-list))
 
   (use-package ob-ipython
     :if (executable-find "jupyter")     ; DO NOT remove
     :init (cl-pushnew '(ipython . t) load-language-list))
 
   ;; Use mermadi-cli: npm install -g @mermaid-js/mermaid-cli
-  (use-package ob-mermaid
-    :init (cl-pushnew '(mermaid . t) load-language-list))
+   ;; (use-package ob-mermaid
+  ;;   :init (cl-pushnew '(mermaid . t) load-language-list))
 
   (org-babel-do-load-languages 'org-babel-load-languages
                                load-language-list)
@@ -227,28 +229,28 @@ prepended to the element after the #+HEADER: tag."
     :diminish)
 
   ;; Presentation
-  (use-package org-tree-slide
-    :diminish
-    :functions (org-display-inline-images
-                org-remove-inline-images)
-    :bind (:map org-mode-map
-           ("s-<f7>" . org-tree-slide-mode)
-           :map org-tree-slide-mode-map
-           ("<left>" . org-tree-slide-move-previous-tree)
-           ("<right>" . org-tree-slide-move-next-tree)
-           ("S-SPC" . org-tree-slide-move-previous-tree)
-           ("SPC" . org-tree-slide-move-next-tree))
-    :hook ((org-tree-slide-play . (lambda ()
-                                    (text-scale-increase 4)
-                                    (org-display-inline-images)
-                                    (read-only-mode 1)))
-           (org-tree-slide-stop . (lambda ()
-                                    (text-scale-increase 0)
-                                    (org-remove-inline-images)
-                                    (read-only-mode -1))))
-    :config
-    (org-tree-slide-simple-profile)
-    (setq org-tree-slide-skip-outline-level 2))
+  ;; (use-package org-tree-slide
+  ;;   :diminish
+  ;;   :functions (org-display-inline-images
+  ;;               org-remove-inline-images)
+  ;;   :bind (:map org-mode-map
+  ;;          ("s-<f7>" . org-tree-slide-mode)
+  ;;          :map org-tree-slide-mode-map
+  ;;          ("<left>" . org-tree-slide-move-previous-tree)
+  ;;          ("<right>" . org-tree-slide-move-next-tree)
+  ;;          ("S-SPC" . org-tree-slide-move-previous-tree)
+  ;;          ("SPC" . org-tree-slide-move-next-tree))
+  ;;   :hook ((org-tree-slide-play . (lambda ()
+  ;;                                   (text-scale-increase 4)
+  ;;                                   (org-display-inline-images)
+  ;;                                   (read-only-mode 1)))
+  ;;          (org-tree-slide-stop . (lambda ()
+  ;;                                   (text-scale-increase 0)
+  ;;                                   (org-remove-inline-images)
+  ;;                                   (read-only-mode -1))))
+  ;;   :config
+  ;;   (org-tree-slide-simple-profile)
+  ;;   (setq org-tree-slide-skip-outline-level 2))
 
   ;; Pomodoro
   (use-package org-pomodoro
@@ -257,37 +259,36 @@ prepended to the element after the #+HEADER: tag."
     (org-pomodoro-mode-line-overtime ((t (:inherit error))))
     (org-pomodoro-mode-line-break ((t (:inherit success))))
     :bind (:map org-agenda-mode-map
-           ("P" . org-pomodoro))))
+                ("P" . org-pomodoro))))
+;; (when (and emacs/>=26p (executable-find "cc"))
+;;   (use-package org-roam
+;;     :diminish
+;;     :custom (org-roam-directory centaur-org-directory)
+;;     :hook (after-init . org-roam-mode)
+;;     :bind (:map org-roam-mode-map
+;;                 (("C-c n l" . org-roam)
+;;                  ("C-c n f" . org-roam-find-file)
+;;                  ("C-c n g" . org-roam-graph))
+;;                 :map org-mode-map
+;;                 (("C-c n i" . org-roam-insert))
+;;                 (("C-c n I" . org-roam-insert-immediate)))
+;;     )
 
-;; org-roam
-(when (and emacs/>=26p (executable-find "cc"))
-  (use-package org-roam
-    :diminish
-    :custom (org-roam-directory centaur-org-directory)
-    :hook (after-init . org-roam-mode)
-    :bind (:map org-roam-mode-map
-           (("C-c n l" . org-roam)
-            ("C-c n f" . org-roam-find-file)
-            ("C-c n g" . org-roam-graph))
-           :map org-mode-map
-           (("C-c n i" . org-roam-insert))
-           (("C-c n I" . org-roam-insert-immediate))))
-
-  (use-package org-roam-server
-    :functions xwidget-buffer xwidget-webkit-current-session
-    :hook (org-roam-server-mode . org-roam-server-browse)
-    :init
-    (defun org-roam-server-browse ()
-      (when org-roam-server-mode
-        (let ((url (format "http://%s:%d" org-roam-server-host org-roam-server-port)))
-          (if (featurep 'xwidget-internal)
-              (progn
-                (xwidget-webkit-browse-url url)
-                (let ((buf (xwidget-buffer (xwidget-webkit-current-session))))
-                  (when (buffer-live-p buf)
-                    (and (eq buf (current-buffer)) (quit-window))
-                    (pop-to-buffer buf))))
-            (browse-url url)))))))
+;;   (use-package org-roam-server
+;;     :functions xwidget-buffer xwidget-webkit-current-session
+;;     :hook (org-roam-server-mode . org-roam-server-browse)
+;;     :init
+;;     (defun org-roam-server-browse ()
+;;       (when org-roam-server-mode
+;;         (let ((url (format "http://%s:%d" org-roam-server-host org-roam-server-port)))
+;;           (if (featurep 'xwidget-internal)
+;;               (progn
+;;                 (xwidget-webkit-browse-url url)
+;;                 (let ((buf (xwidget-buffer (xwidget-webkit-current-session))))
+;;                   (when (buffer-live-p buf)
+;;                     (and (eq buf (current-buffer)) (quit-window))
+;;                     (pop-to-buffer buf))))
+;;             (browse-url url)))))))
 
 ;; (defun run-python-first (&rest args)
 ;;   "Start a inferior python if there isn't one."

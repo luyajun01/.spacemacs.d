@@ -182,7 +182,13 @@ In that case, insert the number."
 ;;rainbow-delimiters
 (add-to-list 'load-path "~/.spacemacs.d/private/rainbow-delimiters") ; add auto-save to your load-path
 (require 'rainbow-delimiters)
+(add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
+(add-hook 'org-mode-hook #'rainbow-delimiters-mode)
+(add-hook 'python-mode-hook #'rainbow-delimiters-mode)
 
+;; ov-hight
+(add-to-list 'load-path "~/.spacemacs.d/private/ov-highlight") ; add auto-save to your load-path
+(require 'ov-highlight)
 ;;plain-org-wiki
 (add-to-list 'load-path "~/.spacemacs.d/private/plain-org-wiki") ; add auto-save to your load-path
 (require 'plain-org-wiki)
@@ -199,70 +205,77 @@ In that case, insert the number."
 ;;   (add-hook 'org-mode-hook #'valign-mode))
 
 ;;awesome-pair
-;; (add-to-list 'load-path "~/.spacemacs.d/private/awesome-pair") ; add auto-save to your load-path
-;; (require 'awesome-pair)
-;; (dolist (hook (list
-;;                'c-mode-common-hook
-;;                'c-mode-hook
-;;                'c++-mode-hook
-;;                'java-mode-hook
-;;                'org-mode-hook
-;;                'haskell-mode-hook
-;;                'emacs-lisp-mode-hook
-;;                'lisp-interaction-mode-hook
-;;                'lisp-mode-hook
-;;                'maxima-mode-hook
-;;                'ielm-mode-hook
-;;                'sh-mode-hook
-;;                'makefile-gmake-mode-hook
-;;                'php-mode-hook
-;;                'python-mode-hook
-;;                'js-mode-hook
-;;                'go-mode-hook
-;;                'qml-mode-hook
-;;                'jade-mode-hook
-;;                'css-mode-hook
-;;                'ruby-mode-hook
-;;                'coffee-mode-hook
-;;                'rust-mode-hook
-;;                'qmake-mode-hook
-;;                'lua-mode-hook
-;;                'swift-mode-hook
-;;                'minibuffer-inactive-mode-hook
-;;                ))
+(add-to-list 'load-path "~/.spacemacs.d/private/awesome-pair") ; add auto-save to your load-path
+(require 'awesome-pair)
+(dolist (hook (list
+               'c-mode-common-hook
+               'c-mode-hook
+               'c++-mode-hook
+               'java-mode-hook
+               'org-mode-hook
+               'haskell-mode-hook
+               'emacs-lisp-mode-hook
+               'lisp-interaction-mode-hook
+               'lisp-mode-hook
+               ;; 'maxima-mode-hook
+               'ielm-mode-hook
+               'sh-mode-hook
+               'makefile-gmake-mode-hook
+               ;; 'php-mode-hook
+               'python-mode-hook
+               ;; 'js-mode-hook
+               ;; 'go-mode-hook
+               ;; 'qml-mode-hook
+               ;; 'jade-mode-hook
+               ;; 'css-mode-hook
+               ;; 'ruby-mode-hook
+               ;; 'coffee-mode-hook
+               ;; 'rust-mode-hook
+               ;; 'qmake-mode-hook
+               ;; 'lua-mode-hook
+               ;; 'swift-mode-hook
+               'minibuffer-inactive-mode-hook
+               ))
 
-;;   (add-hook hook '(lambda () (awesome-pair-mode 1))))
+  (add-hook hook '(lambda () (awesome-pair-mode 1))))
 
-;; (define-key awesome-pair-mode-map (kbd "(") 'awesome-pair-open-round)
-;; (define-key awesome-pair-mode-map (kbd "[") 'awesome-pair-open-bracket)
-;; (define-key awesome-pair-mode-map (kbd "{") 'awesome-pair-open-curly)
-;; (define-key awesome-pair-mode-map (kbd ")") 'awesome-pair-close-round)
-;; (define-key awesome-pair-mode-map (kbd "]") 'awesome-pair-close-bracket)
-;; (define-key awesome-pair-mode-map (kbd "}") 'awesome-pair-close-curly)
-;; (define-key awesome-pair-mode-map (kbd "=") 'awesome-pair-equal)
+(define-key awesome-pair-mode-map (kbd "(") 'awesome-pair-open-round)
+(define-key awesome-pair-mode-map (kbd "[") 'awesome-pair-open-bracket)
+(define-key awesome-pair-mode-map (kbd "{") 'awesome-pair-open-curly)
+(define-key awesome-pair-mode-map (kbd ")") 'awesome-pair-close-round)
+(define-key awesome-pair-mode-map (kbd "]") 'awesome-pair-close-bracket)
+(define-key awesome-pair-mode-map (kbd "}") 'awesome-pair-close-curly)
+(define-key awesome-pair-mode-map (kbd "=") 'awesome-pair-equal)
 
-;; (define-key awesome-pair-mode-map (kbd "%") 'awesome-pair-match-paren)
-;; (define-key awesome-pair-mode-map (kbd "\"") 'awesome-pair-double-quote)
+(define-key awesome-pair-mode-map (kbd "%") 'awesome-pair-match-paren)
+(define-key awesome-pair-mode-map (kbd "\"") 'awesome-pair-double-quote)
 
-;; (define-key awesome-pair-mode-map (kbd "SPC") 'awesome-pair-space)
+(define-key awesome-pair-mode-map (kbd "SPC") 'awesome-pair-space)
 
-;; (define-key awesome-pair-mode-map (kbd "M-o") 'awesome-pair-backward-delete)
-;; (define-key awesome-pair-mode-map (kbd "C-d") 'awesome-pair-forward-delete)
-;; (define-key awesome-pair-mode-map (kbd "C-k") 'awesome-pair-kill)
+(define-key awesome-pair-mode-map (kbd "M-o") 'awesome-pair-backward-delete)
+(define-key awesome-pair-mode-map (kbd "C-d") 'awesome-pair-forward-delete)
+(define-key awesome-pair-mode-map (kbd "C-k") 'awesome-pair-kill)
 
-;; (define-key awesome-pair-mode-map (kbd "M-\"") 'awesome-pair-wrap-double-quote)
-;; (define-key awesome-pair-mode-map (kbd "M-[") 'awesome-pair-wrap-bracket)
-;; (define-key awesome-pair-mode-map (kbd "M-{") 'awesome-pair-wrap-curly)
-;; (define-key awesome-pair-mode-map (kbd "M-(") 'awesome-pair-wrap-round)
-;; (define-key awesome-pair-mode-map (kbd "M-)") 'awesome-pair-unwrap)
+(define-key awesome-pair-mode-map (kbd "M-\"") 'awesome-pair-wrap-double-quote)
+(define-key awesome-pair-mode-map (kbd "M-[") 'awesome-pair-wrap-bracket)
+(define-key awesome-pair-mode-map (kbd "M-{") 'awesome-pair-wrap-curly)
+(define-key awesome-pair-mode-map (kbd "M-(") 'awesome-pair-wrap-round)
+(define-key awesome-pair-mode-map (kbd "M-)") 'awesome-pair-unwrap)
 
-;; (define-key awesome-pair-mode-map (kbd "M-p") 'awesome-pair-jump-right)
-;; (define-key awesome-pair-mode-map (kbd "M-n") 'awesome-pair-jump-left)
-;; (define-key awesome-pair-mode-map (kbd "M-:") 'awesome-pair-jump-out-pair-and-newline)
-;; (setq electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
-;; (electric-pair-mode 1)
+(define-key awesome-pair-mode-map (kbd "M-p") 'awesome-pair-jump-right)
+(define-key awesome-pair-mode-map (kbd "M-n") 'awesome-pair-jump-left)
+(define-key awesome-pair-mode-map (kbd "M-:") 'awesome-pair-jump-out-pair-and-newline)
+(setq electric-pair-inhibit-predicate 'electric-pair-conservative-inhibit)
+(electric-pair-mode 1)
 
-;;pyim
+;;org-download
+(add-to-list 'load-path "~/.spacemacs.d/private/org-download") ; add auto-save to your load-path
+(require 'org-download)
+
+;; Drag-and-drop to `dired`
+(add-hook 'dired-mode-hook 'org-download-enable)
+
+;; pyim
 ;; (use-package pyim
 ;;   :ensure nil
 ;;   :demand t
@@ -497,17 +510,16 @@ In that case, insert the number."
 ;;   )
 
 ;;awesome-tray
-;; (add-to-list 'load-path "~/.spacemacs.d/private/awesome-tray")
-;; (require 'awesome-tray)
-
+(add-to-list 'load-path "~/.spacemacs.d/private/awesome-tray")
+(require 'awesome-tray)
 
 ;;google-translate
-(add-to-list 'load-path "~/.spacemacs.d/private/google-translate") ; add color-rg to your load-path
-(require 'google-translate)
+;; (add-to-list 'load-path "~/.spacemacs.d/private/google-translate") ; add color-rg to your load-path
+;; (require 'google-translate)
 
 ;;multi-translate
-(add-to-list 'load-path "~/.spacemacs.d/private/multi-translate.el") ; add color-rg to your load-path
-(require 'multi-translate)
+;; (add-to-list 'load-path "~/.spacemacs.d/private/multi-translate.el") ; add color-rg to your load-path
+;; (require 'multi-translate)
 
 ;;org-wiki
 (add-to-list 'load-path "~/.spacemacs.d/private/org-wiki") ; add color-rg to your load-path
@@ -516,7 +528,6 @@ In that case, insert the number."
 ;;org-noter
 (add-to-list 'load-path "~/.spacemacs.d/private/org-noter") ; add color-rg to your load-path
 (require 'org-noter)
-
 
 ;;python
 (defun my-python-line ()
@@ -630,9 +641,9 @@ In that case, insert the number."
      )))
 
 
-(use-package so-long
-  :ensure nil
-  :config (global-so-long-mode 1))
+;; (use-package so-long
+;;   :ensure nil
+;;   :config (global-so-long-mode 1))
 
 (use-package autorevert
   :ensure nil
@@ -787,7 +798,115 @@ In that case, insert the number."
               (set (make-local-variable 'company-backends) '(company-math-symbols-unicode company-math-symbols-latex company-files company-en-words company-dabbrev)))
             )
 
+;;换行符
+(define-fringe-bitmap 'right-curly-arrow
+  [#b00000000
+   #b00000000
+   #b00000000
+   #b00000000
+   #b01110000
+   #b00010000
+   #b00010000
+   #b00000000])
+(define-fringe-bitmap 'left-curly-arrow
+  [#b00000000
+   #b00001000
+   #b00001000
+   #b00001110
+   #b00000000
+   #b00000000
+   #b00000000
+   #b00000000])
 
+;;ivy-posframe-style
+(require 'ivy-posframe)
+;; display at `ivy-posframe-style'
+;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display)))
+(setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
+;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-center)))
+;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-bottom-left)))
+;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-bottom-left)))
+;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center)))
+;; Different command can use different display function.
+(setq ivy-posframe-parameters
+      '((left-fringe . 8)
+        (right-fringe . 8)))
+;; Different command can use different display function.
+(setq ivy-posframe-display-functions-alist
+      '((swiper          . ivy-posframe-display-at-frame-center)
+        (counsel-recentf . ivy-posframe-display-at-window-center)
+        (counsel-M-x     . ivy-posframe-display-at-window-center)
+        (t               . ivy-posframe-display)))
+(ivy-posframe-mode 1)
+
+;; org-brain
+(add-to-list 'load-path "~/.spacemacs.d/private/org-brain")
+(require 'org-brain)
+
+;; (use-package org-brain
+;;   :ensure t
+;;   :init
+;;   (setq org-brain-path "~/Documents/坚果云/我的坚果云/github/wiki")
+;;   ;; For Evil users
+;;   (with-eval-after-load 'evil
+;;     (evil-set-initial-state 'org-brain-visualize-mode 'emacs))
+;;   :config
+;;   (bind-key "C-c b" 'org-brain-prefix-map org-mode-map)
+;;   ;; (setq org-id-track-globally t)
+;;   ;; (setq org-id-locations-file "~/.emacs.d/.org-id-locations")
+;;   ;; (add-hook 'before-save-hook #'org-brain-ensure-ids-in-buffer)
+;;   ;; (push '("b" "Brain" plain (function org-brain-goto-end)
+;;   ;;         "* %i%?" :empty-lines 1)
+;;   ;;       org-capture-templates)
+;;   (setq org-brain-visualize-default-choices 'all)
+;;   (setq org-brain-title-max-length 12)
+;;   (setq org-brain-include-file-entries nil
+;;         org-brain-file-entries-use-title nil))
+
+;; Allows you to edit entries directly from org-brain-visualize
+(use-package polymode
+  :config
+  (add-hook 'org-brain-visualize-mode-hook #'org-brain-polymode))
+
+
+     ;; dired-mode
+    ;; ;; ;;返回上层目录，我绑定了快捷键i, 特别好按，非常流畅
+    (add-hook 'dired-mode-hook
+               (lambda ()
+                 (define-key dired-mode-map (kbd "i")
+                   (lambda () (interactive) (find-alternate-file "..")))))
+
+;;; R related modes
+    (use-package polymode
+      :mode
+      (("\\.Rmd" . poly-markdown+r-mode))
+      :init
+      (autoload 'r-mode "ess-site.el" "Major mode for editing R source." t)
+      :defer t
+      )
+    (add-to-list 'auto-mode-alist '("\\.md" . poly-markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.org" . poly-org-mode))
+    (add-to-list 'auto-mode-alist '("\\.Snw" . poly-noweb+r-mode))
+    (add-to-list 'auto-mode-alist '("\\.Rnw" . poly-noweb+r-mode))
+    (add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode))
+    (add-to-list 'auto-mode-alist '("\\.Snw$" . poly-noweb+r-mode))
+    (add-to-list 'auto-mode-alist '("\\.Rnw$" . poly-noweb+r-mode))
+    (add-to-list 'auto-mode-alist '("\\.Rmd$" .  poly-markdown+r-mode))
+    (add-to-list 'auto-mode-alist '("\\.rapport$" . poly-rapport-mode))
+    (add-to-list 'auto-mode-alist '("\\.Rhtml$" . poly-html+r-mode))
+    (add-to-list 'auto-mode-alist '("\\.Rbrew$" . poly-brew+r-mode))
+    (add-to-list 'auto-mode-alist '("\\.Rcpp$" . poly-r+c++-mode))
+    (add-to-list 'auto-mode-alist '("\\.cppR$" . poly-c++r-mode))
+     (defun ess/init-polymode ()
+       (use-package poly-R
+         :defer t)
+       (use-package poly-markdown
+         :defer t)
+       (use-package poly-markdown+r
+         :defer t)
+       (use-package poly-noweb+r
+         :defer t)
+       )
 
 
 (provide 'init-private)

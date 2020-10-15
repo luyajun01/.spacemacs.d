@@ -82,7 +82,6 @@ pdf-tools
                                                            ;; company-etags
                                                            ;; company-gtags
                                                            ;; company-tabnine
-                                                           company-auctex
                                                            company-files
                                                            company-capf
                                                            ;; company-tabnine
@@ -172,100 +171,104 @@ pdf-tools
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '(  ;sicp
+ess-view-data
+                                      ov
                                       ebib
                                       org-ref
+org-pdftools
+org-brain
                                       auctex
                                       company-math
                                       cdlatex
 org-edit-latex
-                                      so-long
-                                      bing-dict
-                                      color-moccur
+                                      ;; so-long
+                                      ;; bing-dict
+                                      ;; color-moccur
                                       evil-lispy
-                                      sdcv
-                                      google-translate
+                                      ;; sdcv
+                                      ;; google-translate
                                       quelpa
-                                      interleave
+                                      ;; interleave
                                       lispy
                                       quelpa-use-package
                                       rg
-                                      json-mode
-                                      skewer-mode
-                                      csharp-mode
-                                      pdf-view-restore
-                                      haml-mode
-                                      prettier-js
+                                      ;; json-mode
+                                      ;; skewer-mode
+                                      ;; csharp-mode
+                                      ;; pdf-view-restore
+                                      ;; haml-mode
+                                      ;; prettier-js
                                       evil-snipe
-                                      mocha
-                                      forge
-                                      js2-mode
-                                      scss-mode
-                                      fish-mode
-                                      protobuf-mode
-                                      swift-mode
-                                      lsp-sourcekit
-                                      browse-at-remote
-                                      org-roam
-                                      org-roam-server
-                                      counsel-osx-app
-                                      dired-quick-sort
+                                      ;; mocha
+                                      ;; forge
+                                      ;; js2-mode
+                                      ;; scss-mode
+                                      ;; fish-mode
+                                      ;; protobuf-mode
+                                      ;; swift-mode
+                                      ;; lsp-sourcekit
+                                      ;; browse-at-remote
+                                      ;; org-roam
+                                      ;; org-roam-server
+                                      ;; counsel-osx-app
+                                      ;; dired-quick-sort
                                       rainbow-delimiters
                                       volatile-highlights
-                                      all-the-icons-ibuffer
+                                      ;; all-the-icons-ibuffer
                                       major-mode-hydra
                                       ivy-prescient
                                       evil-escape
-                                      gnu-elpa-keyring-update
-                                      auto-package-update
-                                      hide-mode-line
-                                      default-text-scale
-                                      goto-line-preview
-                                      avy-zap
-                                      dired-git-info
-                                      dired-rsync
-                                      symbol-overlay
-                                      highlight-indent-guides
-                                      diff-hl
+                                      ;; gnu-elpa-keyring-update
+                                      ;; auto-package-update
+                                      ;; hide-mode-line
+                                      ;; default-text-scale
+                                      ;; goto-line-preview
+                                      ;; avy-zap
+                                      ;; dired-git-info
+                                      ;; dired-rsync
+                                      ;; symbol-overlay
+                                      ;; highlight-indent-guides
+                                      ;; diff-hl
                                       volatile-highlights
-                                      ibuffer-projectile
-                                      easy-kill-extras
-                                      shackle
-                                      ob-go
-                                      ob-rust
+                                      ;; ibuffer-projectile
+                                      ;; easy-kill-extras
+                                      ;; shackle
+                                      ;; ob-go
+                                      ;; ob-rust
                                       ob-ipython
-                                      ob-mermaid
-                                      beginend
-                                      comment-dwim-2
-                                      drag-stuff
+                                      ;; ob-mermaid
+                                      ;; beginend
+                                      ;; comment-dwim-2
+                                      ;; drag-stuff
                                       multiple-cursors
-                                      smart-region
-                                      mwim
-                                      pager
-                                      goto-last-point
-                                      goto-char-preview
-                                      sudo-edit
-                                      fancy-narrow
-                                      amx
-                                      ivy-yasnippet
+                                      ;; smart-region
+                                      ;; mwim
+                                      ;; pager
+                                      ;; goto-last-point
+                                      ;; goto-char-preview
+                                      ;; sudo-edit
+                                      ;; fancy-narrow
+                                      ;; amx
+                                      ;; ivy-yasnippet
                                       counsel-world-clock
                                       counsel-tramp
                                       all-the-icons-ivy-rich
                                       yasnippet-snippets
-                                      calfw
-                                      calfw-org
-                                      calfw-ical
+                                      ;; calfw
+                                      ;; calfw-org
+                                      ;; calfw-ical
                                       dashboard
                                       company-box
-                                      diredfl
-                                      solaire-mode
-                                      doom-themes
-                                      doom-modeline
-                                      emmet-mode
-                                      mixed-pitch
+                                      ;; diredfl
+                                      ;; solaire-mode
+                                      ;; doom-themes
+                                      ;; doom-modeline
+                                      ;; emmet-mode
+                                      ;; mixed-pitch
                                         ;iy-go-to-char
                                         ;ssh-agency
                                         ;format-all
-                                      evil-textobj-syntax
+                                      ;; evil-textobj-syntax
                                       evil-lion
                                       evil-find-char-pinyin
                                       bash-completion
@@ -273,14 +276,14 @@ org-edit-latex
                                       flymake-aspell
                                       ;; company-box
                                       keyfreq
-                                      counsel-css
+                                      ;; counsel-css
                                       ;; emojify
                                         ;fzf
                                       ivy-rich
-                                      all-the-icons-dired
-                                      ibuffer-vc
+                                      ;; all-the-icons-dired
+                                      ;; ibuffer-vc
                                       company-prescient
-                                      org-re-reveal
+                                      ;; org-re-reveal
                                       ;; evil-escape
                                       evil-exchange
                                       ivy-xref
@@ -296,7 +299,7 @@ org-edit-latex
                                         ;anaconda-mode
                                       evil-leader
                                         ;bm
-                                      smex
+                                      ;; smex
                                       evil-nerd-commenter
                                         ;company-jedi
                                         ;company-anaconda
@@ -308,7 +311,7 @@ org-edit-latex
                                       smartparens
                                         ;ranger
                                       ;; pophint
-                                      all-the-icons
+                                      ;; all-the-icons
                                         ;xah-replace-pairs
                                       hydra
                                         ;spaceline-all-the-icons
@@ -325,61 +328,61 @@ org-edit-latex
                                       jupyter
                                       counsel-etags
                                       company-ctags
-                                      mmm-mode
-                                      lsp-mode
+                                      ;; mmm-mode
+                                      ;; lsp-mode
                                       lsp-python-ms
-                                      lsp-ui
-                                      slime
-                                      helm-lsp
-                                      lsp-treemacs
+                                      ;; lsp-ui
+                                      ;; slime
+                                      ;; helm-lsp
+                                      ;; lsp-treemacs
                                       ;; org-journal
-                                      company-lsp
-                                      elfeed
+                                      ;; company-lsp
+                                      ;; elfeed
                                       olivetti
-                                      bongo
-                                      ztree
-                                      diffview
-                                      memory-usage
-                                      howdoyou
-                                      esup
-                                      focus
-                                      tldr
-                                      ccls
-                                      lsp-julia
-                                      lsp-java
+                                      ;; bongo
+                                      ;; ztree
+                                      ;; diffview
+                                      ;; memory-usage
+                                      ;; howdoyou
+                                      ;; esup
+                                      ;; focus
+                                      ;; tldr
+                                      ;; ccls
+                                      ;; lsp-julia
+                                      ;; lsp-java
                                       quickrun
-                                      cask-mode
-                                      csv-mode
-                                      lua-mode
-                                      mermaid-mode
-                                      rmsbolt
-                                      scala-mode
-                                      bmx-mode
+                                      ;; cask-mode
+                                      ;; csv-mode
+                                      ;; lua-mode
+                                      ;; mermaid-mode
+                                      ;; rmsbolt
+                                      ;; scala-mode
+                                      ;; bmx-mode
                                       helpful
                                       overseer
-                                      modern-cpp-font-lock
-                                      daemons
-                                      editorconfig
+                                      ;; modern-cpp-font-lock
+                                      ;; daemons
+                                      ;; editorconfig
                                       list-environment
-                                      css-eldoc
-                                      coffee-mode
-                                      web-mode
-                                      php-mode
+                                      ;; css-eldoc
+                                      ;; coffee-mode
+                                      ;; web-mode
+                                      ;; php-mode
                                       restclient
-                                      plantuml-mode
+                                      ;; plantuml-mode
                                       org-rich-yank
                                       org-fancy-priorities
                                       esh-autosuggest
                                       treemacs-projectile
                                       treemacs-magit
                                       treemacs-persp
-                                      grip-mode
-                                      nov
-                                      lsp-ivy
+                                      ;; grip-mode
+                                      ;; nov
+                                      ;; lsp-ivy
                                       lsp-pyright
-                                      dap-mode
-                                      powershell
-                                      vimrc-mode
+                                      ;; dap-mode
+                                      ;; powershell
+                                      ;; vimrc-mode
                                       evil-exchange
                                       ;; org-alert
                                         ;el2org
@@ -390,11 +393,11 @@ org-edit-latex
                                         ;simple-httpd
                                         ;plain-org-wiki
                                       magit-todos
-                                      copyit
-                                      atomic-chrome
-                                      pomidor
-                                      persistent-scratch
-                                      org-tree-slide
+                                      ;; copyit
+                                      ;; atomic-chrome
+                                      ;; pomidor
+                                      ;; persistent-scratch
+                                      ;; org-tree-slide
                                       org-preview-html
                                       ;; company-tabnine
                                       ;; yasnippet-snippets
@@ -402,7 +405,7 @@ org-edit-latex
                                         ;ivy-yasnippet
                                       cnfonts
                                       electric-operator
-                                      persp-mode-projectile-bridge
+                                      ;; persp-mode-projectile-bridge
                                       highlight-defined
                                         ;leuven-theme
                                         ;helm-bm
@@ -548,6 +551,7 @@ It should only modify the values of Spacemacs settings."
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(
+                         ;; flucui-dark
                          monokai
                          ;; leuven
                          ;; solarized-light
@@ -835,8 +839,17 @@ dump."
   )
 
 (defun dotspacemacs/user-config ()
+  ;;awesome-tray
+  (add-to-list 'load-path "~/.spacemacs.d/private/awesome-tray")
+  (require 'awesome-tray)
+  (awesome-tray-mode 1)
+  ;;可以压缩modeline 厚度
+  (if (display-graphic-p)
+      (setq-default mode-line-format '(" "))
+    (setq-default mode-line-format nil))
+
   (add-hook 'doc-view-mode-hook 'auto-revert-mode)
-  (require 'smex) ; Not needed if you use package.el
+  (require 'smex)                       ; Not needed if you use package.el
   (smex-initialize)
   (global-set-key (kbd "M-x") 'smex)
   (global-set-key (kbd "M-X") 'smex-major-mode-commands)
@@ -847,299 +860,265 @@ dump."
         (file-name-handler-alist nil))
 
     ;; Emacs配置文件内容写到下面.
-  ;; 中文字体
-  (cnfonts-enable)
-  (elpy-enable)
+    ;; 中文字体
+    (cnfonts-enable)
+    (elpy-enable)
 
 
-  ;;lazy-load
-  (add-to-list 'load-path (expand-file-name "~/.spacemacs.d/private/lazy-load"))
-  (require 'lazy-load)
+    ;;lazy-load
+    (add-to-list 'load-path (expand-file-name "~/.spacemacs.d/private/lazy-load"))
+    (require 'lazy-load)
 
 
-  (when (version< emacs-version "25.1")
-  (error "This requires Emacs 25.1 and above!"))
+    (when (version< emacs-version "25.1")
+      (error "This requires Emacs 25.1 and above!"))
 
-;; Speed up startup
-(defvar centaur-gc-cons-threshold (if (display-graphic-p) 16000000 1600000)
-  "The default value to use for `gc-cons-threshold'. If you experience freezing,
+    ;; Speed up startup
+    (defvar centaur-gc-cons-threshold (if (display-graphic-p) 16000000 1600000)
+      "The default value to use for `gc-cons-threshold'. If you experience freezing,
 decrease this. If you experience stuttering, increase this.")
 
-(defvar centaur-gc-cons-upper-limit (if (display-graphic-p) 400000000 100000000)
-  "The temporary value for `gc-cons-threshold' to defer it.")
+    (defvar centaur-gc-cons-upper-limit (if (display-graphic-p) 400000000 100000000)
+      "The temporary value for `gc-cons-threshold' to defer it.")
 
-(defvar centaur-gc-timer (run-with-idle-timer 10 t #'garbage-collect)
-  "Run garbarge collection when idle 10s.")
+    (defvar centaur-gc-timer (run-with-idle-timer 10 t #'garbage-collect)
+      "Run garbarge collection when idle 10s.")
 
-(defvar default-file-name-handler-alist file-name-handler-alist)
+    (defvar default-file-name-handler-alist file-name-handler-alist)
 
-(setq file-name-handler-alist nil)
-(setq gc-cons-threshold centaur-gc-cons-upper-limit
-      gc-cons-percentage 0.5)
-(add-hook 'emacs-startup-hook
-          (lambda ()
-            "Restore defalut values after startup."
-            (setq file-name-handler-alist default-file-name-handler-alist)
-            (setq gc-cons-threshold centaur-gc-cons-threshold
-                  gc-cons-percentage 0.1)
+    (setq file-name-handler-alist nil)
+    (setq gc-cons-threshold centaur-gc-cons-upper-limit
+          gc-cons-percentage 0.5)
+    (add-hook 'emacs-startup-hook
+              (lambda ()
+                "Restore defalut values after startup."
+                (setq file-name-handler-alist default-file-name-handler-alist)
+                (setq gc-cons-threshold centaur-gc-cons-threshold
+                      gc-cons-percentage 0.1)
 
-            ;; GC automatically while unfocusing the frame
-            ;; `focus-out-hook' is obsolete since 27.1
-            (if (boundp 'after-focus-change-function)
-                (add-function :after after-focus-change-function
-                  (lambda ()
-                    (unless (frame-focus-state)
-                      (garbage-collect))))
-              (add-hook 'focus-out-hook 'garbage-collect))
+                ;; GC automatically while unfocusing the frame
+                ;; `focus-out-hook' is obsolete since 27.1
+                (if (boundp 'after-focus-change-function)
+                    (add-function :after after-focus-change-function
+                                  (lambda ()
+                                    (unless (frame-focus-state)
+                                      (garbage-collect))))
+                  (add-hook 'focus-out-hook 'garbage-collect))
 
-            ;; Avoid GCs while using `ivy'/`counsel'/`swiper' and `helm', etc.
-            ;; @see http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
-            (defun my-minibuffer-setup-hook ()
-              (setq gc-cons-threshold centaur-gc-cons-upper-limit))
+                ;; Avoid GCs while using `ivy'/`counsel'/`swiper' and `helm', etc.
+                ;; @see http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
+                (defun my-minibuffer-setup-hook ()
+                  (setq gc-cons-threshold centaur-gc-cons-upper-limit))
 
-            (defun my-minibuffer-exit-hook ()
-              (setq gc-cons-threshold centaur-gc-cons-threshold))
+                (defun my-minibuffer-exit-hook ()
+                  (setq gc-cons-threshold centaur-gc-cons-threshold))
 
-            (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
-            (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)))
+                (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
+                (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)))
 
-;; Load path
-;; Optimize: Force "lisp"" and "site-lisp" at the head to reduce the startup time.
-(defun update-load-path (&rest _)
-  "Update `load-path'."
-  (dolist (dir '("site-lisp" "lisp"))
-    (push (expand-file-name dir "~/.spacemacs.d/") load-path)))
+    ;; Load path
+    ;; Optimize: Force "lisp"" and "site-lisp" at the head to reduce the startup time.
+    (defun update-load-path (&rest _)
+      "Update `load-path'."
+      (dolist (dir '("site-lisp" "lisp"))
+        (push (expand-file-name dir "~/.spacemacs.d/") load-path)))
 
-(defun add-subdirs-to-load-path (&rest _)
-  "Add subdirectories to `load-path'."
-  (let ((default-directory (expand-file-name "site-lisp" "~/.spacemacs.d/")))
-    (normal-top-level-add-subdirs-to-load-path)))
+    (defun add-subdirs-to-load-path (&rest _)
+      "Add subdirectories to `load-path'."
+      (let ((default-directory (expand-file-name "site-lisp" "~/.spacemacs.d/")))
+        (normal-top-level-add-subdirs-to-load-path)))
 
-(advice-add #'package-initialize :after #'update-load-path)
-(advice-add #'package-initialize :after #'add-subdirs-to-load-path)
+    (advice-add #'package-initialize :after #'update-load-path)
+    (advice-add #'package-initialize :after #'add-subdirs-to-load-path)
 
-(update-load-path)
-;; Packages
-;; Without this comment Emacs25 adds (package-initialize) here
+    (update-load-path)
+    ;; Packages
+    ;; Without this comment Emacs25 adds (package-initialize) here
 
-(require 'init-private)
-(require 'init-thing-edit)
-(require 'init-package)
-;; Preferences
-(require 'init-basic)
-(require 'init-hydra)
-(require 'init-ui)
-;; (require 'init-org)
-;; (require 'init-edit)
-(require 'init-ivy)
-(require 'init-pdftools)
-(require 'init-company)
-(require 'init-yasnippet)
-(require 'init-scimax-org-babel)
-(require 'init-python)
-;; (require 'init-calendar)
-(require 'init-dashboard)
-(require 'init-dired)
-(require 'init-highlight)
-(require 'init-ibuffer)
-(require 'init-kill-ring)
-;; (require 'init-persp)
-(require 'init-window)
-(require 'init-treemacs)
-(require 'init-ess)
-;; (require 'init-eshell)
-;; (require 'init-shell)
+    (require 'init-private)
+    (require 'init-thing-edit)
+    (require 'init-package)
+    (require 'init-scimax-ob)
+    (require 'init-scimax-org-latex)
+    ;; Preferences
+    (require 'init-basic)
+    (require 'init-hydra)
+    ;; (require 'init-ui)
+    ;; (require 'init-org)
+    ;; (require 'init-edit)
+    (require 'init-ivy)
+    (require 'init-pdftools)
+    (require 'init-company)
+    (require 'init-yasnippet)
+    (require 'init-scimax-org-babel)
+    (require 'init-python)
+    ;; (require 'init-calendar)
+    (require 'init-dashboard)
+    (require 'init-dired)
+    (require 'init-highlight)
+    (require 'init-ibuffer)
+    (require 'init-kill-ring)
+    (require 'init-theme)
+    ;; (require 'init-persp)
+    ;; (require 'init-window)
+    (require 'init-treemacs)
+    (require 'init-ess)
+    ;; (require 'init-eshell)
+    ;; (require 'init-shell)
 
-;; (require 'init-markdown)
-;; (require 'init-reader)
+    ;; (require 'init-markdown)
+    ;; (require 'init-reader)
 
-;; (require 'init-docker)
-(require 'init-utils)
+    ;; (require 'init-docker)
+    (require 'init-utils)
 
-;; Programming
-;; (require 'init-vcs)
-(require 'init-flycheck)
-(require 'init-projectile)
-(require 'init-evil)
-(require 'init-key)
-(require 'init-prog)
-;; (require 'init-lsp)
-;; (require 'init-company-tabnine)
-;; (require 'init-elisp)
-;; (require 'init-c)
-;; (require 'init-go)
-;; (require 'init-rust)
-;; (require 'init-ruby)
-;; (require 'init-dart)
-;; (require 'init-elixir)
-;; (require 'init-web)
-  ;; emacs 透明化 Transparency
-  ;(spacemacs/enable-transparency)
-  ;; 改变evil-insert-mode光标形状
-  (setq-default evil-insert-state-cursor '("green" (bar . 2)))
-  (setcdr evil-insert-state-map nil)
-  (define-key evil-insert-state-map [escape] 'evil-normal-state)
-  ;; ;;; lpy
-  ;; (add-to-list 'load-path "~/.spacemacs.d/private/lpy")
-  ;; (require 'lpy)
-  ;;company-lsp
-   ;; (with-eval-after-load 'lsp-mode
-   ;;   (push '(company-lsp :with company-yasnippet) company-backends))
+    ;; Programming
+    ;; (require 'init-vcs)
+    (require 'init-flycheck)
+    (require 'init-projectile)
+    (require 'init-evil)
+    (require 'init-key)
+    ;; (require 'init-prog)
+    ;; (require 'init-lsp)
+    ;; (require 'init-company-tabnine)
+    ;; (require 'init-elisp)
+    ;; (require 'init-c)
+    ;; (require 'init-go)
+    ;; (require 'init-rust)
+    ;; (require 'init-ruby)
+    ;; (require 'init-dart)
+    ;; (require 'init-elixir)
+    ;; (require 'init-web)
+    ;; emacs 透明化 Transparency
+                                        ;(spacemacs/enable-transparency)
+    ;; 改变evil-insert-mode光标形状
+    (setq-default evil-insert-state-cursor '("green" (bar . 2)))
+    (setcdr evil-insert-state-map nil)
+    (define-key evil-insert-state-map [escape] 'evil-normal-state)
+    ;; ;;; lpy
+    ;; (add-to-list 'load-path "~/.spacemacs.d/private/lpy")
+    ;; (require 'lpy)
+    ;;company-lsp
+    ;; (with-eval-after-load 'lsp-mode
+    ;;   (push '(company-lsp :with company-yasnippet) company-backends))
 
-  ;; The package is "python" but the mode is "python-mode":
-  (use-package python
-    :mode ("\\.py\\'" . python-mode)
-    :interpreter ("python" . python-mode))
-  ;;plain-org-wiki
-  ;; (add-to-list 'load-path "~/.spacemacs.d/private/plain-org-wiki")
-  ;; (require 'plain-org-wiki)
-  ;; (setq pow-directory "~/Documents/坚果云/我的坚果云/github/wiki/")
+    ;; The package is "python" but the mode is "python-mode":
+    (use-package python
+      :mode ("\\.py\\'" . python-mode)
+      :interpreter ("python" . python-mode))
+    ;;plain-org-wiki
+    ;; (add-to-list 'load-path "~/.spacemacs.d/private/plain-org-wiki")
+    ;; (require 'plain-org-wiki)
+    ;; (setq pow-directory "~/Documents/坚果云/我的坚果云/github/wiki/")
 
-  ;;valign
-  ;; (add-to-list 'load-path "~/.spacemacs.d/private/valign")
-  ;; (require 'valign)
-  ;; (add-hook 'org-mode-hook 'valign-mode)
-(use-package pyim
-  :ensure nil
-  :demand t
-  :config
-  ;; 激活 basedict 拼音词库，五笔用户请继续阅读 README
-  (use-package pyim-basedict
-    :ensure nil
-    :config (pyim-basedict-enable))
+    ;;valign
+    ;; (add-to-list 'load-path "~/.spacemacs.d/private/valign")
+    ;; (require 'valign)
+    ;; (add-hook 'org-mode-hook 'valign-mode)
+    (use-package pyim
+      :ensure nil
+      :demand t
+      :config
+      ;; 激活 basedict 拼音词库，五笔用户请继续阅读 README
+      (use-package pyim-basedict
+        :ensure nil
+        :config (pyim-basedict-enable))
 
-  (setq default-input-method "pyim")
+      (setq default-input-method "pyim")
 
-  ;; 我使用全拼
-  (setq pyim-default-scheme 'pyim-shuangpin)
+      ;; 我使用全拼
+      (setq pyim-default-scheme 'pyim-shuangpin)
 
-  ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-)
-  ;; 我自己使用的中英文动态切换规则是：
-  ;; 1. 光标只有在注释里面时，才可以输入中文。
-  ;; 2. 光标前是汉字字符时，才能输入中文。
-  ;; 3. 使用 M-j 快捷键，强制将光标前的拼音字符串转换为中文。
-  (setq-default pyim-english-input-switch-functions
-                '(pyim-probe-dynamic-english
-                  pyim-probe-isearch-mode
-                  pyim-probe-program-mode
-                  pyim-probe-org-structure-template))
+      ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-)
+      ;; 我自己使用的中英文动态切换规则是：
+      ;; 1. 光标只有在注释里面时，才可以输入中文。
+      ;; 2. 光标前是汉字字符时，才能输入中文。
+      ;; 3. 使用 M-j 快捷键，强制将光标前的拼音字符串转换为中文。
+      (setq-default pyim-english-input-switch-functions
+                    '(pyim-probe-dynamic-english
+                      pyim-probe-isearch-mode
+                      pyim-probe-program-mode
+                      pyim-probe-org-structure-template))
 
-  (setq-default pyim-punctuation-half-width-functions
-                '(pyim-probe-punctuation-line-beginning
-                  pyim-probe-punctuation-after-punctuation))
+      (setq-default pyim-punctuation-half-width-functions
+                    '(pyim-probe-punctuation-line-beginning
+                      pyim-probe-punctuation-after-punctuation))
 
-  ;; 开启拼音搜索功能
-  (pyim-isearch-mode 1)
+      ;; 开启拼音搜索功能
+      (pyim-isearch-mode 1)
 
-  ;; 使用 popup-el 来绘制选词框, 如果用 emacs26, 建议设置
-  ;; 为 'posframe, 速度很快并且菜单不会变形，不过需要用户
-  ;; 手动安装 posframe 包。
-  (setq pyim-page-tooltip 'popup)
+      ;; 使用 popup-el 来绘制选词框, 如果用 emacs26, 建议设置
+      ;; 为 'posframe, 速度很快并且菜单不会变形，不过需要用户
+      ;; 手动安装 posframe 包。
+      (setq pyim-page-tooltip 'popup)
 
-  ;; 选词框显示5个候选词
-  (setq pyim-page-length 5)
+      ;; 选词框显示5个候选词
+      (setq pyim-page-length 5)
 
-  :bind
-  (("C-S-P" . pyim-convert-string-at-point) ;与 pyim-probe-dynamic-english 配合
-   ("C-;" . pyim-delete-word-from-personal-buffer)))
+      :bind
+      (("C-S-P" . pyim-convert-string-at-point) ;与 pyim-probe-dynamic-english 配合
+       ("C-;" . pyim-delete-word-from-personal-buffer)))
 
-  ;;pdf-tools
+    ;;pdf-tools
 ;;; pdf-tools package and reinstall both as at the start.
-  ;; (use-package pdf-tools
-  ;;   :ensure t
-  ;;   :config
-  ;;   (custom-set-variables
-  ;;    '(pdf-tools-handle-upgrades nil)) ; Use brew upgrade pdf-tools instead.
-  ;;   (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo"))
-  ;; (pdf-tools-install)
-  (global-flycheck-mode)
-  ;;补充搜索括号特别有用
-  (require 'evil-matchit)
-  (global-evil-matchit-mode 1)
-  ;; 文字自动转行
-  (global-visual-line-mode 1)
-  ;; 行号
-  (global-linum-mode 1)
-  ;;evil-leader-mode
-  (window-numbering-mode 1)
-  (require 'evil-surround)
-  (global-evil-surround-mode)
-  (evilnc-default-hotkeys)
-  (define-key evil-normal-state-map (kbd ",/") 'evilnc-comment-or-uncomment-lines)
-  (define-key evil-visual-state-map (kbd ",/") 'evilnc-comment-or-uncomment-lines)
-;; ;;color-rg
-;;   (add-to-list 'load-path "~/.spacemacs.d/private/color-rg") ; add color-rg to your load-path
-;;   (require 'color-rg)
-  ;; ;;   ;; ivy
-  ;; ;; ;; (use-package ivy
-  ;; ;; ;;   :ensure t
-  ;; ;; ;;   :defer t
-  ;; ;; ;;   :diminish ivy-mode
-  ;; ;; ;;   :config
-  ;; ;; ;;   (progn
-  ;; ;; ;;     (ivy-mode)
-  ;; ;; ;;     (with-eval-after-load 'recentf
-  ;; ;; ;;       (setq ivy-use-virtual-buffers t))
-  ;; ;; ;;     (setq ivy-height 12
-  ;; ;; ;;           ivy-do-completion-in-region nil
-  ;; ;; ;;           ivy-wrap t
-  ;; ;; ;;           ivy-extra-directories nil
-  ;; ;; ;;           ivy-fixed-height-minibuffer t
-  ;; ;; ;;           ;; Don't use ^ as initial input
-  ;; ;; ;;           ivy-initial-inputs-alist nil
-  ;; ;; ;;           ;; highlight til EOL
-  ;; ;; ;;           ivy-format-function #'ivy-format-function-line
-  ;; ;; ;;           ;; disable magic slash on non-match
-  ;; ;; ;;           ;; ~ to /home/user
-  ;; ;; ;;           ;; ivy-magic-tilde nil
-  ;; ;; ;;           ivy-magic-slash-non-match-action nil)
-  ;; ;; ;;     ;; (setq ivy-re-builders-alist
-  ;; ;; ;;     ;;       '((t . ivy--regex-fuzzy)))
-  ;; ;; ;;     ;; (setq confirm-nonexistent-file-or-buffer t)
-  ;; ;; ;;     (setq ivy-re-builders-alist
-  ;; ;; ;;           '((t   . ivy--regex-ignore-order)))
-  ;; ;; ;;     (evil-make-overriding-map ivy-occur-mode-map 'normal)
-  ;; ;; ;;     ))
-  ;; ;; ;; dired-mode
-  ;; ;; ;;返回上层目录，我绑定了快捷键i, 特别好按，非常流畅
-  ;; ;; (add-hook 'dired-mode-hook
-  ;; ;;           (lambda ()
-  ;; ;;             (define-key dired-mode-map (kbd "i")
-  ;; ;;               (lambda () (interactive) (find-alternate-file "..")))))
+    ;; (use-package pdf-tools
+    ;;   :ensure t
+    ;;   :config
+    ;;   (custom-set-variables
+    ;;    '(pdf-tools-handle-upgrades nil)) ; Use brew upgrade pdf-tools instead.
+    ;;   (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo"))
+    ;; (pdf-tools-install)
+    (global-flycheck-mode)
+    ;;补充搜索括号特别有用
+    (require 'evil-matchit)
+    (global-evil-matchit-mode 1)
+    ;; 文字自动转行
+    (global-visual-line-mode 1)
+    ;; 行号
+    (global-linum-mode 1)
+    ;;evil-leader-mode
+    (window-numbering-mode 1)
+    (require 'evil-surround)
+    (global-evil-surround-mode)
+    (evilnc-default-hotkeys)
+    (define-key evil-normal-state-map (kbd ",/") 'evilnc-comment-or-uncomment-lines)
+    (define-key evil-visual-state-map (kbd ",/") 'evilnc-comment-or-uncomment-lines)
+    ;; ;;color-rg
+    ;;   (add-to-list 'load-path "~/.spacemacs.d/private/color-rg") ; add color-rg to your load-path
+    ;;   (require 'color-rg)
+    ;; ;;   ;; ivy
+    ;; ;; ;; (use-package ivy
+    ;; ;; ;;   :ensure t
+    ;; ;; ;;   :defer t
+    ;; ;; ;;   :diminish ivy-mode
+    ;; ;; ;;   :config
+    ;; ;; ;;   (progn
+    ;; ;; ;;     (ivy-mode)
+    ;; ;; ;;     (with-eval-after-load 'recentf
+    ;; ;; ;;       (setq ivy-use-virtual-buffers t))
+    ;; ;; ;;     (setq ivy-height 12
+    ;; ;; ;;           ivy-do-completion-in-region nil
+    ;; ;; ;;           ivy-wrap t
+    ;; ;; ;;           ivy-extra-directories nil
+    ;; ;; ;;           ivy-fixed-height-minibuffer t
+    ;; ;; ;;           ;; Don't use ^ as initial input
+    ;; ;; ;;           ivy-initial-inputs-alist nil
+    ;; ;; ;;           ;; highlight til EOL
+    ;; ;; ;;           ivy-format-function #'ivy-format-function-line
+    ;; ;; ;;           ;; disable magic slash on non-match
+    ;; ;; ;;           ;; ~ to /home/user
+    ;; ;; ;;           ;; ivy-magic-tilde nil
+    ;; ;; ;;           ivy-magic-slash-non-match-action nil)
+    ;; ;; ;;     ;; (setq ivy-re-builders-alist
+    ;; ;; ;;     ;;       '((t . ivy--regex-fuzzy)))
+    ;; ;; ;;     ;; (setq confirm-nonexistent-file-or-buffer t)
+    ;; ;; ;;     (setq ivy-re-builders-alist
+    ;; ;; ;;           '((t   . ivy--regex-ignore-order)))
+    ;; ;; ;;     (evil-make-overriding-map ivy-occur-mode-map 'normal)
+    ;; ;; ;;     ))
 
-  ;;   ;;Chinese and English fonts alignment
-    ;;; R related modes
-  (use-package polymode
-    :mode
-    (("\\.Rmd" . poly-markdown+r-mode))
-    :init
-    (autoload 'r-mode "ess-site.el" "Major mode for editing R source." t)
-    :defer t
-    )
-                                        ;(add-to-list 'auto-mode-alist '("\\.md" . poly-markdown-mode))
-                                        ;(add-to-list 'auto-mode-alist '("\\.Snw" . poly-noweb+r-mode))
-                                        ;(add-to-list 'auto-mode-alist '("\\.Rnw" . poly-noweb+r-mode))
-                                        ;(add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode))
-  (add-to-list 'auto-mode-alist '("\\.Snw$" . poly-noweb+r-mode))
-  (add-to-list 'auto-mode-alist '("\\.Rnw$" . poly-noweb+r-mode))
-  (add-to-list 'auto-mode-alist '("\\.Rmd$" .  poly-markdown+r-mode))
-  (add-to-list 'auto-mode-alist '("\\.rapport$" . poly-rapport-mode))
-  (add-to-list 'auto-mode-alist '("\\.Rhtml$" . poly-html+r-mode))
-  (add-to-list 'auto-mode-alist '("\\.Rbrew$" . poly-brew+r-mode))
-  (add-to-list 'auto-mode-alist '("\\.Rcpp$" . poly-r+c++-mode))
-  (add-to-list 'auto-mode-alist '("\\.cppR$" . poly-c++r-mode))
-  ;; (defun ess/init-polymode ()
-  ;;   (use-package poly-R
-  ;;     :defer t)
-  ;;   (use-package poly-markdown
-  ;;     :defer t)
-  ;;   (use-package poly-markdown+r
-  ;;     :defer t)
-  ;;   ;;  ;   (use-package poly-noweb+r
-  ;;   ;;  ; :defer t)
-  ;;   )
-    )
-)
+       )
+  )
 (setq custom-file (expand-file-name "custom.el" dotspacemacs-directory))
 (load custom-file 'no-error 'no-message)
 (defun dotspacemacs/emacs-custom-settings ()

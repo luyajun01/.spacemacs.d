@@ -76,22 +76,22 @@
          ("C-c x" . quickrun)))
 
 (use-package cask-mode)
-(use-package csharp-mode)
+;; (use-package csharp-mode)
 (use-package csv-mode)
 (use-package julia-mode)
-(use-package lua-mode)
-(use-package mermaid-mode)
-(use-package plantuml-mode)
+;; (use-package lua-mode)
+;; (use-package mermaid-mode)
+;; (use-package plantuml-mode)
 (use-package powershell)
-(use-package rmsbolt)                   ; A compiler output viewer
+;; (use-package rmsbolt)                   ; A compiler output viewer
 (use-package scala-mode)
-(use-package swift-mode)
-(use-package vimrc-mode)
+;; (use-package swift-mode)
+;; (use-package vimrc-mode)
 
-(use-package protobuf-mode
-  :hook (protobuf-mode . (lambda ()
-                           (setq imenu-generic-expression
-                                 '((nil "^[[:space:]]*\\(message\\|service\\|enum\\)[[:space:]]+\\([[:alnum:]]+\\)" 2))))))
+;; (use-package protobuf-mode
+;;   :hook (protobuf-mode . (lambda ()
+;;                            (setq imenu-generic-expression
+;;                                  '((nil "^[[:space:]]*\\(message\\|service\\|enum\\)[[:space:]]+\\([[:alnum:]]+\\)" 2))))))
 
 (use-package nxml-mode
   :ensure nil
@@ -108,10 +108,10 @@
   :hook (after-init . bmx-mode-setup-defaults))
 
 ;; Fish shell
-(use-package fish-mode
-  :hook (fish-mode . (lambda ()
-                       (add-hook 'before-save-hook
-                                 #'fish_indent-before-save))))
+;; (use-package fish-mode
+;;   :hook (fish-mode . (lambda ()
+;;                        (add-hook 'before-save-hook
+;;                                  #'fish_indent-before-save))))
 
 (provide 'init-prog)
 

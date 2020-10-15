@@ -41,5 +41,44 @@
              )
           )
 
+;; -------- highlight function names & keywords in R --------
+(dolist (hook '(ess-mode-hook ess-r-mode-hook inferior-ess-r-mode-hook))
+  (add-hook hook
+            '(lambda()
+               (font-lock-add-keywords
+                nil
+                '(("\\<\\(if\\|for\\|function\\|return\\|$\\|@\\)\\>[\n[:blank:]]*(" 1
+                   font-lock-keyword-face) ; must go first to override highlighting below
+                  ("\\<\\([.A-Za-z][._A-Za-z0-9]*\\)[\n[:blank:]]*(" 1
+                   font-lock-function-name-face) ; highlight function names
+                  ("\\([(,]\\|[\n[:blank:]]*\\)\\([.A-Za-z][._A-Za-z0-9]*\\)[\n[:blank:]]*=[^=]"
+                   2 font-lock-builtin-face)
+                  ;; highlight numbers
+                  ("\\(-?[0-9]*\\.?[0-9]*[eE]?-?[0-9]+[iL]?\\)" 1 font-lock-constant-face)
+                  ;; highlight operators
+                  ("\\(\\$\\|\\@\\|\\!\\|\\%\\|\\^\\|\\&\\|\\*\\|\(\\|\)\\|\{\\|\}\\|\\[\\|\\]\\|\\-\\|\\+\\|\=\\|\\/\\|\<\\|\>\\|:\\)" 1 font-lock-type-face)
+                  ;; highlight S4 methods
+                  ("\\(setMethod\\|setGeneric\\|setGroupGeneric\\|setClass\\|setRefClass\\|setReplaceMethod\\)" 1 font-lock-preprocessor-face)
+                  ;; highlight packages called through ::, :::
+                  ("\\(\\w+\\):\\{2,3\\}" 1 font-lock-type-face)
+                  )))))
 
+
+(setq inferior-R-font-lock-keywords
+      '((ess-S-fl-keyword:prompt . t)
+        (ess-R-fl-keyword:messages . t)
+        (ess-R-fl-keyword:modifiers . t)
+        (ess-R-fl-keyword:fun-defs . t)
+        (ess-R-fl-keyword:keywords . t)
+        (ess-R-fl-keyword:assign-ops . t)
+        (ess-R-fl-keyword:constants . t)
+        (ess-fl-keyword:matrix-labels . t)
+        (ess-fl-keyword:fun-calls . t)
+        (ess-fl-keyword:numbers . t)
+        (ess-fl-keyword:operators . t)
+        (ess-fl-keyword:delimiters . t)
+        (ess-fl-keyword:= . t)
+        (ess-R-fl-keyword:F&T . t)
+        ;; (ess-R-fl-keyword:%op% . t)
+        ))
 (provide 'init-ess)
