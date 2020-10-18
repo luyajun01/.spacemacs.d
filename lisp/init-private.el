@@ -1,11 +1,56 @@
 ;;posframe
 (add-to-list 'load-path "~/.spacemacs.d/private/posframe")
 (require 'posframe)
+;;rime
+(add-to-list 'load-path "~/.spacemacs.d/private/emacs-rime")
+(require 'rime)
+
 (ivy-posframe-mode 1)
 (company-posframe-mode 1)
 ;;snails
-(add-to-list 'load-path "~/.spacemacs.d/private/snails")
-(require 'snails)
+;; (add-to-list 'load-path "~/.spacemacs.d/private/snails")
+;; (require 'snails)
+
+;;doi
+(add-to-list 'load-path "~/.spacemacs.d/private/doi")
+(require 'doi)
+
+;;go-translate
+(setq go-translate-base-url "https://translate.google.cn")
+
+(setq go-translate-local-language "en")
+;; (setq go-translate-buffer-follow-p t)       ; 翻译完成后，总是将光标切换到翻译结果窗口
+;; (setq go-translate-buffer-source-fold-p t)  ; 在结果页面，折叠源文本。可以通过回车或鼠标点击展开
+;; (setq go-translate-buffer-line-wrap-p nil)  ; 在结果页面，不允许过长的行折行显示
+;; (setq go-translate-buffer-window-config ..) ; 更改翻译窗口的位置和样式
+;; 设置输入风格。默认情况下，是通过 Minibuffer 方式补全用户输入
+;; 可以修改为 `go-translate-inputs-noprompt` 或 `go-translate-inputs-current-or-prompt`
+;; 前者表示直接翻译选中内容或光标下单词；后者表示若光标下没内容则打开 Minibuffer 读取内容
+;; (setq go-translate-inputs-function #'go-translate-inputs-current-or-prompt)
+(defun go-translate-raise-error-when-nothing-at-point ()
+  (interactive)
+  (let ((go-translate-inputs-function #'go-translate-inputs-noprompt))
+    (call-interactively #'go-translate)))
+
+(defun go-translate-continue-prompt-from-user-when-nothing-at-point ()
+  (interactive)
+  (let ((go-translate-inputs-function #'go-translate-inputs-current-or-prompt))
+    (call-interactively #'go-translate)))
+(setq go-translate-inputs-function #'go-translate-inputs-current-or-prompt)
+(advice-add #'go-translate-text-local-p :filter-args
+            (lambda (args)
+              (setf (car args)
+                    (with-temp-buffer
+                      (insert (car args))
+                      (replace-regexp "\\s." "" nil (point-min) (point-max))
+                      (buffer-string)))
+              args))
+(setq go-translate-local-language "zh-CN")
+(setq go-translate-target-language "en")
+;; You can bind keys for them. such as:
+(global-set-key "\C-ct" 'go-translate)
+(global-set-key "\C-cT" 'go-translate-popup)
+;; (setq go-translate-extra-directions '(("zh-CN" . "en") ("en" . "zh-CN")))
 
 ;;company-mode-add-digit
 (defun ora-company-number ()
@@ -395,62 +440,62 @@ In that case, insert the number."
 ;;         ;(liberime-select-schema "xhup_fluency")
 ;;         (setq pyim-default-scheme 'pyim-shuangpin)))))
 
-(use-package pyim
-  :ensure nil
-  :demand t
-  :config
-  ;; 激活 basedict 拼音词库，五笔用户请继续阅读 README
-  (use-package pyim-basedict
-    :ensure nil
-    :config (pyim-basedict-enable))
+;; (use-package pyim
+;;   :ensure nil
+;;   :demand t
+;;   :config
+;;   ;; 激活 basedict 拼音词库，五笔用户请继续阅读 README
+;;   (use-package pyim-basedict
+;;     :ensure nil
+;;     :config (pyim-basedict-enable))
 
-  (setq default-input-method "pyim")
+;;   (setq default-input-method "pyim")
 
-  ;; 我使用全拼
-  (setq pyim-default-scheme 'xiaohe-shuangpin)
+;;   ;; 我使用全拼
+;;   (setq pyim-default-scheme 'xiaohe-shuangpin)
 
-  ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-)
-  ;; 我自己使用的中英文动态切换规则是：
-  ;; 1. 光标只有在注释里面时，才可以输入中文。
-  ;; 2. 光标前是汉字字符时，才能输入中文。
-  ;; 3. 使用 M-j 快捷键，强制将光标前的拼音字符串转换为中文。
-  (setq-default pyim-english-input-switch-functions
-                '(pyim-probe-dynamic-english
-                  pyim-probe-isearch-mode
-                  pyim-probe-program-mode
-                  pyim-probe-org-structure-template))
+;;   ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-)
+;;   ;; 我自己使用的中英文动态切换规则是：
+;;   ;; 1. 光标只有在注释里面时，才可以输入中文。
+;;   ;; 2. 光标前是汉字字符时，才能输入中文。
+;;   ;; 3. 使用 M-j 快捷键，强制将光标前的拼音字符串转换为中文。
+;;   (setq-default pyim-english-input-switch-functions
+;;                 '(pyim-probe-dynamic-english
+;;                   pyim-probe-isearch-mode
+;;                   pyim-probe-program-mode
+;;                   pyim-probe-org-structure-template))
 
-  (setq-default pyim-punctuation-half-width-functions
-                '(pyim-probe-punctuation-line-beginning
-                  pyim-probe-punctuation-after-punctuation))
+;;   (setq-default pyim-punctuation-half-width-functions
+;;                 '(pyim-probe-punctuation-line-beginning
+;;                   pyim-probe-punctuation-after-punctuation))
 
-  ;; 开启拼音搜索功能
-  (pyim-isearch-mode 1)
+;;   ;; 开启拼音搜索功能
+;;   (pyim-isearch-mode 1)
 
-  ;; 使用 popup-el 来绘制选词框, 如果用 emacs26, 建议设置
-  ;; 为 'posframe, 速度很快并且菜单不会变形，不过需要用户
-  ;; 手动安装 posframe 包。
-  (setq pyim-page-tooltip 'posframe)
+;;   ;; 使用 popup-el 来绘制选词框, 如果用 emacs26, 建议设置
+;;   ;; 为 'posframe, 速度很快并且菜单不会变形，不过需要用户
+;;   ;; 手动安装 posframe 包。
+;;   (setq pyim-page-tooltip 'posframe)
 
-  ;; 选词框显示5个候选词
-  (setq pyim-page-length 6)
+;;   ;; 选词框显示5个候选词
+;;   (setq pyim-page-length 6)
 
-  :bind
-  (
-   ("C-S-p" . pyim-convert-string-at-point) ;与 pyim-probe-dynamic-english 配合
-   ;; ("C-;" . pyim-delete-word-from-personal-buffer)
-   )
-  )
+;;   :bind
+;;   (
+;;    ("C-S-p" . pyim-convert-string-at-point) ;与 pyim-probe-dynamic-english 配合
+;;    ;; ("C-;" . pyim-delete-word-from-personal-buffer)
+;;    )
+;;   )
 ;;color-rg
 (add-to-list 'load-path "~/.spacemacs.d/private/color-rg") ; add color-rg to your load-path
 (require 'color-rg)
 
 ;;   ;;Chinese and English fonts alignment
-(use-package cnfonts
-  :config
-  (cnfonts-enable)
-  (setq cnfonts-use-face-font-rescale t)
-  )
+;; (use-package cnfonts
+;;   :config
+;;   (cnfonts-enable)
+;;   (setq cnfonts-use-face-font-rescale t)
+;;   )
 
 ;;awesome-tab
 (add-to-list 'load-path "~/.spacemacs.d/private/awesome-tab") ; add color-rg to your load-path
@@ -461,28 +506,28 @@ In that case, insert the number."
 (awesome-tab-mode t)
 
 ;;evil-snipe
- (evil-snipe-override-mode 1)
+ ;; (evil-snipe-override-mode 1)
 ;; 恢复evil的s/S，要用evil-define-key, define-key不行，a bit tricky，一个issue里抄来的
-  (with-eval-after-load 'evil-snipe
-    (evil-define-key* '(normal) evil-snipe-mode-map
-                      "s" #'evil-substitute
-                      "S" #'evil-change-whole-line)
-    (define-key evil-normal-state-map "s" #'evil-substitute)
-    (define-key evil-normal-state-map "S" #'evil-change-whole-line)
-    )
+  ;; (with-eval-after-load 'evil-snipe
+  ;;   (evil-define-key* '(normal) evil-snipe-mode-map
+  ;;                     "s" #'evil-substitute
+  ;;                     "S" #'evil-change-whole-line)
+  ;;   (define-key evil-normal-state-map "s" #'evil-substitute)
+  ;;   (define-key evil-normal-state-map "S" #'evil-change-whole-line)
+  ;;   )
 ;; 只用;来repeat，禁用移动后立即按f/t来repeat
-(setq evil-snipe-repeat-keys nil)
+;; (setq evil-snipe-repeat-keys nil)
 ;; override-mode之后如果要给evil-repeat绑其他键位要用evil-snipe的对应函数
-  (define-key evil-normal-state-map (kbd "DEL") 'evil-snipe-repeat-reverse)
+  ;; (define-key evil-normal-state-map (kbd "DEL") 'evil-snipe-repeat-reverse)
 ;; 不用s/S那用gs之类的吧
-  (evil-define-key 'normal evil-snipe-mode-map (kbd "g s") #'evil-snipe-s)
-  (evil-define-key 'normal evil-snipe-mode-map (kbd "g S") #'evil-snipe-S)
-  (evil-define-key 'normal evil-snipe-mode-map (kbd "g t") #'evil-snipe-x)
-  (evil-define-key 'normal evil-snipe-mode-map (kbd "g T") #'evil-snipe-X)
-  (evil-define-key 'visual evil-snipe-mode-map "z" #'evil-snipe-s)
-  (evil-define-key 'visual evil-snipe-mode-map "Z" #'evil-snipe-S)
-  (evil-define-key 'visual evil-snipe-mode-map "x" #'evil-snipe-x)
-  (evil-define-key 'visual evil-snipe-mode-map "X" #'evil-snipe-X)
+  ;; (evil-define-key 'normal evil-snipe-mode-map (kbd "g s") #'evil-snipe-s)
+  ;; (evil-define-key 'normal evil-snipe-mode-map (kbd "g S") #'evil-snipe-S)
+  ;; (evil-define-key 'normal evil-snipe-mode-map (kbd "g t") #'evil-snipe-x)
+  ;; (evil-define-key 'normal evil-snipe-mode-map (kbd "g T") #'evil-snipe-X)
+  ;; (evil-define-key 'visual evil-snipe-mode-map "z" #'evil-snipe-s)
+  ;; (evil-define-key 'visual evil-snipe-mode-map "Z" #'evil-snipe-S)
+  ;; (evil-define-key 'visual evil-snipe-mode-map "x" #'evil-snipe-x)
+  ;; (evil-define-key 'visual evil-snipe-mode-map "X" #'evil-snipe-X)
 
 ;;olivetti
 (require 'olivetti)
@@ -640,7 +685,6 @@ In that case, insert the number."
      tab-mark         ; tabs (show by symbol)
      )))
 
-
 ;; (use-package so-long
 ;;   :ensure nil
 ;;   :config (global-so-long-mode 1))
@@ -658,12 +702,12 @@ In that case, insert the number."
 (require 'evil-easymotion)
 
 ;; Globally
-(evil-snipe-override-mode 1)
-(define-key evil-snipe-parent-transient-map (kbd "C-,")
-  (evilem-create 'evil-snipe-repeat
-                 :bind ((evil-snipe-scope 'buffer)
-                        (evil-snipe-enable-highlight)
-                        (evil-snipe-enable-incremental-highlight))))
+;; (evil-snipe-override-mode 1)
+;; (define-key evil-snipe-parent-transient-map (kbd "C-,")
+;;   (evilem-create 'evil-snipe-repeat
+;;                  :bind ((evil-snipe-scope 'buffer)
+;;                         (evil-snipe-enable-highlight)
+;;                         (evil-snipe-enable-incremental-highlight))))
 
 ;;thingatpt
 (add-to-list 'load-path "~/.spacemacs.d/private/thingatpt")
@@ -793,10 +837,12 @@ In that case, insert the number."
               (add-to-list 'company-backends #'company-auctex-bibs)))
 
   (add-hook 'org-mode-hook 'company-mode)
-  (add-hook 'org-mode-hook
-            (lambda ()
-              (set (make-local-variable 'company-backends) '(company-math-symbols-unicode company-math-symbols-latex company-files company-en-words company-dabbrev)))
-            )
+  ;; (add-hook 'org-mode-hook
+  ;;           (lambda ()
+  ;;             (set (make-local-variable 'company-backends) '(company-capf company-yasnippet company-math-symbols-unicode company-math-symbols-latex company-files
+  ;;                                                                                         ;; company-en-words
+  ;;                                                                                         company-dabbrev)))
+  ;;           )
 
 ;;换行符
 (define-fringe-bitmap 'right-curly-arrow
@@ -878,35 +924,47 @@ In that case, insert the number."
 
 ;;; R related modes
     (use-package polymode
+      :ensure markdown-mode
+      :ensure poly-R
+      :ensure poly-noweb
       :mode
       (("\\.Rmd" . poly-markdown+r-mode))
       :init
       (autoload 'r-mode "ess-site.el" "Major mode for editing R source." t)
-      :defer t
+      ;; :defer t
+      :config
+      (add-to-list 'auto-mode-alist '("\\.md" . poly-markdown-mode))
+      (add-to-list 'auto-mode-alist '("\\.org" . poly-org-mode))
+      (add-to-list 'auto-mode-alist '("\\.Snw" . poly-noweb+r-mode))
+      (add-to-list 'auto-mode-alist '("\\.Rnw" . poly-noweb+r-mode))
+      (add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode))
+      (add-to-list 'auto-mode-alist '("\\.Snw$" . poly-noweb+r-mode))
+      (add-to-list 'auto-mode-alist '("\\.Rnw$" . poly-noweb+r-mode))
+      (add-to-list 'auto-mode-alist '("\\.Rmd$" .  poly-markdown+r-mode))
+      (add-to-list 'auto-mode-alist '("\\.rapport$" . poly-rapport-mode))
+      (add-to-list 'auto-mode-alist '("\\.Rhtml$" . poly-html+r-mode))
+      (add-to-list 'auto-mode-alist '("\\.Rbrew$" . poly-brew+r-mode))
+      (add-to-list 'auto-mode-alist '("\\.Rcpp$" . poly-r+c++-mode))
+      (add-to-list 'auto-mode-alist '("\\.cppR$" . poly-c++r-mode))
       )
-    (add-to-list 'auto-mode-alist '("\\.md" . poly-markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.org" . poly-org-mode))
-    (add-to-list 'auto-mode-alist '("\\.Snw" . poly-noweb+r-mode))
-    (add-to-list 'auto-mode-alist '("\\.Rnw" . poly-noweb+r-mode))
-    (add-to-list 'auto-mode-alist '("\\.Rmd" . poly-markdown+r-mode))
-    (add-to-list 'auto-mode-alist '("\\.Snw$" . poly-noweb+r-mode))
-    (add-to-list 'auto-mode-alist '("\\.Rnw$" . poly-noweb+r-mode))
-    (add-to-list 'auto-mode-alist '("\\.Rmd$" .  poly-markdown+r-mode))
-    (add-to-list 'auto-mode-alist '("\\.rapport$" . poly-rapport-mode))
-    (add-to-list 'auto-mode-alist '("\\.Rhtml$" . poly-html+r-mode))
-    (add-to-list 'auto-mode-alist '("\\.Rbrew$" . poly-brew+r-mode))
-    (add-to-list 'auto-mode-alist '("\\.Rcpp$" . poly-r+c++-mode))
-    (add-to-list 'auto-mode-alist '("\\.cppR$" . poly-c++r-mode))
-     (defun ess/init-polymode ()
-       (use-package poly-R
-         :defer t)
-       (use-package poly-markdown
-         :defer t)
-       (use-package poly-markdown+r
-         :defer t)
-       (use-package poly-noweb+r
-         :defer t)
-       )
+
+;; poly-R
+(use-package poly-R
+  :ensure polymode
+  :ensure poly-markdown
+  :ensure poly-noweb
+  :defer t
+  :config
+  ;; Add a chunk for rmarkdown
+  ;; Need to add a keyboard shortcut
+  ;; https://emacs.stackexchange.com/questions/27405/insert-code-chunk-in-r-markdown-with-yasnippet-and-polymode
+  ;; (defun insert-r-chunk (header)
+  ;;   "Insert an r-chunk in markdown mode. Necessary due to interactions between polymode and yas snippet"
+  ;;   (interactive "sHeader: ")
+  ;;   (insert (concat "```{r " header "}\n\n\n```"))
+  ;;   (forward-line -2))
+  ;; (define-key poly-markdown+r-mode-map (kbd "M-c") #'insert-r-chunk)
+)
 
 
 (provide 'init-private)

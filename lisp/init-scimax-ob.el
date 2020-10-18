@@ -10,6 +10,7 @@
 (require 's)
 (require 'dash)
 (require 'avy)
+(pyvenv-mode 1)
 
 (defun scimax-insert-src-block (&optional below)
   "Insert a src block above the current point.
@@ -19,30 +20,30 @@ If point is in a block, copy the header to the new block"
   (interactive "P")
   (if (org-in-src-block-p)
       (let* ((src (org-element-context))
-	     (start (org-element-property :begin src))
-	     (end (org-element-property :end src))
-	     (lang (org-element-property :language src))
-	     (switches (or (org-element-property :switches src) ""))
-	     (parameters (or (org-element-property :parameters src) ""))
-	     location)
-	(if below
-	    (progn
-	      (goto-char start)
-	      (setq location (org-babel-where-is-src-block-result nil nil))
-	      (if (not  location)
-		  (goto-char end)
-		(goto-char location)
-		(goto-char (org-element-property :end (org-element-context))))
-	      (insert (format "\n#+BEGIN_SRC %s %s %s
+	           (start (org-element-property :begin src))
+	           (end (org-element-property :end src))
+	           (lang (org-element-property :language src))
+	           (switches (or (org-element-property :switches src) ""))
+	           (parameters (or (org-element-property :parameters src) ""))
+	           location)
+	      (if below
+	          (progn
+	            (goto-char start)
+	            (setq location (org-babel-where-is-src-block-result nil nil))
+	            (if (not  location)
+		              (goto-char end)
+		            (goto-char location)
+		            (goto-char (org-element-property :end (org-element-context))))
+	            (insert (format "\n#+BEGIN_SRC %s %s %s
 
 #+END_SRC\n\n" lang switches parameters))
-	      (forward-line -3))
-	  ;; after current block
-	  (goto-char (org-element-property :begin (org-element-context)))
-	  (insert (format "\n#+BEGIN_SRC %s %s %s
+	            (forward-line -3))
+	        ;; after current block
+	        (goto-char (org-element-property :begin (org-element-context)))
+	        (insert (format "\n#+BEGIN_SRC %s %s %s
 
 #+END_SRC\n\n" lang switches parameters))
-	  (forward-line -3)))
+	        (forward-line -3)))
 
     ;; Not in a src block, just insert a block
     (beginning-of-line)

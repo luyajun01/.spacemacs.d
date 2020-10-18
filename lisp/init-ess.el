@@ -81,4 +81,10 @@
         (ess-R-fl-keyword:F&T . t)
         ;; (ess-R-fl-keyword:%op% . t)
         ))
+
+;;company-ess
+(add-to-list 'load-path "~/.spacemacs.d/private/company-ess")
+(require 'company-ess)
+(add-to-list 'company-backends 'company-ess-backend)
+
 (provide 'init-ess)

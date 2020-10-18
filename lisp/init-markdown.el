@@ -119,6 +119,22 @@ mermaid.initialize({
     :bind (:map markdown-mode-command-map
            ("r" . markdown-toc-generate-or-refresh-toc))))
 
+
+;;; Require
+(require 'markdown-mode)
+
+;;; Code:
+
+(dolist (hook (list
+               'markdown-mode-hook
+               ))
+  (add-hook hook
+            '(lambda ()
+               (require 'olivetti)
+               (olivetti-mode 1)
+               (olivetti-set-width 120)
+               )))
+
 (provide 'init-markdown)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

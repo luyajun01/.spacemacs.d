@@ -67,6 +67,45 @@
     (use-package flycheck-popup-tip
       :hook (flycheck-mode . flycheck-popup-tip-mode))))
 
+
+;; I don't like `global-flycheck-mode', some mode, such as elisp mode don't need.
+(dolist (hook (list
+               'org-mode-hook
+               ;; 'python-mode-hook
+               ;; 'swift-mode-hook
+               ;; 'go-mode-hook
+               ;; 'js-mode-hook
+               ))
+  (add-hook
+   hook
+   '(lambda ()
+      ;; OS Config
+      (when (featurep 'cocoa)
+        ;; Initialize environment from user's shell to make eshell know every PATH by other shell.
+        (require 'exec-path-from-shell)
+        (setq exec-path-from-shell-variables '("PATH" "MANPATH" "GEM_PATH"))
+        (exec-path-from-shell-initialize))
+
+      (require 'flycheck)
+
+      (setq-default flycheck-disabled-checkers ;disable json-jsonlist checking for json files
+                    (append flycheck-disabled-checkers
+                            '(json-jsonlist)))
+
+      (setq-default flycheck-disabled-checkers ;disable jshint since we prefer eslint checking
+                    (append flycheck-disabled-checkers
+                            '(javascript-jshint)))
+
+      (flycheck-add-mode 'javascript-eslint 'web-mode) ;use eslint with web-mode for jsx files
+
+      (setq-default flycheck-temp-prefix ".flycheck")
+
+      (with-eval-after-load 'flycheck
+        (require 'flycheck-posframe)
+        (add-hook 'flycheck-mode-hook #'flycheck-posframe-mode))
+      (flycheck-mode 1))))
+
+
 (provide 'init-flycheck)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

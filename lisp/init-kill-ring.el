@@ -64,6 +64,16 @@
 ;;                                 (?F string-up-to-char-forward "")
 ;;                                 (?t string-to-char-backward "")
 ;;                                 (?T string-up-to-char-backward ""))))
+(require 'kill-ring-search)
+
+;;; Code:
+
+(lazy-load-local-keys
+ '(
+   ("C-s" . kill-ring-search-prev))     ;下一个匹配
+ kill-ring-search-keymap
+ "kill-ring-search"
+ )
 
 (provide 'init-kill-ring)
 

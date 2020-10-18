@@ -35,7 +35,7 @@
 ;; Display available keybindings in popup
 (use-package which-key
   :diminish
-  :bind ("C-h M-m" . which-key-show-major-mode)
+  ;; :bind ("C-h M-m" . which-key-show-major-mode)
   :hook (after-init . which-key-mode)
   :init (setq which-key-max-description-length 30
               which-key-show-remaining-keys t)
@@ -130,9 +130,9 @@
      ("F" . counsel-fzf))))
 
 ;; Dictionary
-(when sys/macp
-  (use-package osx-dictionary
-    :bind (("C-c D" . osx-dictionary-search-pointer))))
+;; (when sys/macp
+;;   (use-package osx-dictionary
+;;     :bind (("C-c D" . osx-dictionary-search-pointer))))
 
 ;; Youdao Dictionary
 (use-package youdao-dictionary
@@ -292,7 +292,7 @@
 ;; (use-package diffview)                  ; side-by-side diff view
 ;; (use-package esup)                      ; Emacs startup profiler
 ;; (use-package focus)                     ; Focus on the current region
-(use-package list-environment)
+;; (use-package list-environment)
 ;; (use-package memory-usage)
 (unless sys/win32p
   ;; (use-package daemons)                 ; system services/daemons

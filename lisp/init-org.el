@@ -165,13 +165,13 @@ prepended to the element after the #+HEADER: tag."
     :hook (org-mode . org-bullets-mode)
     :init (setq org-bullets-bullet-list '("⚫" "⚫" "⚫" "⚫")))
 
-  (use-package org-fancy-priorities
-    :diminish
-    :hook (org-mode . org-fancy-priorities-mode)
-    :init (setq org-fancy-priorities-list
-                (if (char-displayable-p ?⯀)
-                    '("⯀" "⯀" "⯀" "⯀")
-                  '("HIGH" "MEDIUM" "LOW" "OPTIONAL"))))
+  ;; (use-package org-fancy-priorities
+  ;;   :diminish
+  ;;   :hook (org-mode . org-fancy-priorities-mode)
+  ;;   :init (setq org-fancy-priorities-list
+  ;;               (if (char-displayable-p ?⯀)
+  ;;                   '("⯀" "⯀" "⯀" "⯀")
+  ;;                 '("HIGH" "MEDIUM" "LOW" "OPTIONAL"))))
 
   ;; Babel
   (setq org-confirm-babel-evaluate nil
@@ -183,6 +183,7 @@ prepended to the element after the #+HEADER: tag."
                                (python . t)
                                (ruby . t)
                                (js . t)
+                               (R . t)
                                (css . t)
                                (sass . t)
                                (C . t)
@@ -209,20 +210,20 @@ prepended to the element after the #+HEADER: tag."
                                load-language-list)
 
   ;; Rich text clipboard
-  (use-package org-rich-yank
-    :bind (:map org-mode-map
-           ("C-M-y" . org-rich-yank)))
+  ;; (use-package org-rich-yank
+  ;;   :bind (:map org-mode-map
+  ;;          ("C-M-y" . org-rich-yank)))
 
   ;; Table of contents
   (use-package toc-org
     :hook (org-mode . toc-org-mode))
 
   ;; Export text/html MIME emails
-  (use-package org-mime
-    :bind (:map message-mode-map
-           ("C-c M-o" . org-mime-htmlize)
-           :map org-mode-map
-           ("C-c M-o" . org-mime-org-buffer-htmlize)))
+  ;; (use-package org-mime
+  ;;   :bind (:map message-mode-map
+  ;;          ("C-c M-o" . org-mime-htmlize)
+  ;;          :map org-mode-map
+  ;;          ("C-c M-o" . org-mime-org-buffer-htmlize)))
 
   ;; Preview
   (use-package org-preview-html
@@ -253,13 +254,14 @@ prepended to the element after the #+HEADER: tag."
   ;;   (setq org-tree-slide-skip-outline-level 2))
 
   ;; Pomodoro
-  (use-package org-pomodoro
-    :custom-face
-    (org-pomodoro-mode-line ((t (:inherit warning))))
-    (org-pomodoro-mode-line-overtime ((t (:inherit error))))
-    (org-pomodoro-mode-line-break ((t (:inherit success))))
-    :bind (:map org-agenda-mode-map
-                ("P" . org-pomodoro))))
+  ;; (use-package org-pomodoro
+  ;;   :custom-face
+  ;;   (org-pomodoro-mode-line ((t (:inherit warning))))
+  ;;   (org-pomodoro-mode-line-overtime ((t (:inherit error))))
+  ;;   (org-pomodoro-mode-line-break ((t (:inherit success))))
+  ;;   :bind (:map org-agenda-mode-map
+  ;;               ("P" . org-pomodoro)))
+  )
 ;; (when (and emacs/>=26p (executable-find "cc"))
 ;;   (use-package org-roam
 ;;     :diminish
@@ -322,6 +324,41 @@ prepended to the element after the #+HEADER: tag."
 ;; (add-hook 'org-mode-hook
 ;;           (lambda ()
 ;;             (setq-default eldoc-documentation-function 'ob-ipython-eldoc-function)))
+
+(with-eval-after-load 'org
+  (setq org-odt-preferred-output-format "docx") ;ODT转换格式默认为docx
+  (setq org-startup-folded nil)                 ;默认展开内容
+  (setq org-startup-indented t)                 ;默认缩进内容
+
+  (defun org-export-docx ()
+    (interactive)
+    (let ((docx-file (concat (file-name-sans-extension (buffer-file-name)) ".docx"))
+          (template-file (concat (file-name-as-directory lazycat-emacs-root-dir)
+                                 (file-name-as-directory "template")
+                                 "template.docx")))
+      (shell-command (format "pandoc %s -o %s --reference-doc=%s"
+                             (buffer-file-name)
+                             docx-file
+                             template-file
+                             ))
+      (message "Convert finish: %s" docx-file))))
+
+(dolist (hook (list
+               'org-mode-hook
+               ))
+  (add-hook hook '(lambda ()
+                    (require 'valign)
+                    (valign-mode)
+
+                    (setq truncate-lines nil) ;默认换行
+
+                    (lazy-load-set-keys
+                     '(
+                       ("M-h" . set-mark-command) ;选中激活
+                       )
+                     org-mode-map
+                     )
+                    )))
 
 (provide 'init-org)
 

@@ -637,10 +637,13 @@ If the character before and after CH is space or tab, CH is NOT slash"
   "sd" 'scimax-ob-move-src-block-down
   ;; "mm" 'counsel-evil-goto-global-marker
   "hg" 'hydra-magit/body
+  "hp" 'hydra-pdftools/body
   "hm" 'hydra-multiple-cursors/body
+  "te" 'one-key-menu-thing-edit
   ;; "mf" 'mark-defun
   "xc" 'save-buffers-kill-terminal      ; not used frequently
   "cc" 'my-dired-redo-last-command
+  "po" 'plain-org-wiki-helm
   ;; "ss" 'wg-create-workgroup ; save windows layout
   ;; "se" 'evil-iedit-state/iedit-mode ; start iedit in emacs
   ;; "sc" 'shell-command
@@ -809,7 +812,7 @@ If the character before and after CH is space or tab, CH is NOT slash"
 ;; fifteen = 15
 ;;
 ;; If the align separator is / you will be prompted for a regular expression instead of a plain character.
-(evil-lion-mode)
+;; (evil-lion-mode)
 ;; }}
 
 ;; {{ @see https://github.com/syl20bnr/spacemacs/blob/master/doc/DOCUMENTATION.org#replacing-text-with-iedit
@@ -822,12 +825,12 @@ If the character before and after CH is space or tab, CH is NOT slash"
 ;; }}
 
 ;; {{ Evil’s f/F/t/T command can search PinYin ,
-(evil-find-char-pinyin-mode 1)
+;; (evil-find-char-pinyin-mode 1)
 ;; }}
 
 ;; {{ Port of vim-textobj-syntax.
 ;; It provides evil text objects for consecutive items with same syntax highlight.
-(require 'evil-textobj-syntax)
+;; (require 'evil-textobj-syntax)
 ;; }}
 
 ;; {{ evil-args

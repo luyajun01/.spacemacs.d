@@ -50,7 +50,8 @@
   (with-eval-after-load 'exec-path-from-shell
     (exec-path-from-shell-copy-env "PYTHONPATH"))
   ;; Live Coding in Python
-  (use-package live-py-mode))
+  ;; (use-package live-py-mode)
+  )
 
 (provide 'init-python)
 
