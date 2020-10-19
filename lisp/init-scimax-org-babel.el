@@ -11,12 +11,13 @@
 ;; :async is not new, but it works by itself now, and causes an asynchronous evaluation of the cell
 ;; (require 'init-scimax-ob)
 (require 'init-org)
+;; (require 'scimax-ob)
 (add-to-list 'load-path (expand-file-name "~/.spacemacs.d/private/lispy"))
 (require 'lispy)
 
-(use-package scimax-ob
-  :ensure nil
-  :load-path "~/.spacemacs.d/private/scimax")
+;; (use-package scimax-ob
+;;   :ensure nil
+;;   :load-path "~/.spacemacs.d/private/scimax")
 
 ;; * Customizations
 

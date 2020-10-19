@@ -39,7 +39,8 @@
              (require 'company)
              (require 'company-yasnippet)
              (require 'company-dabbrev)
-             (require 'company-files)
+             (require 'ob-ipython)
+             (require 'company-anaconda)
              (require 'company-tng)
 
              ;; Config for company mode.
@@ -56,6 +57,7 @@
              (setq company-backends (delete 'company-etags company-backends))
              (setq company-backends (delete 'company-oddmuse company-backends))
              (add-to-list 'company-backends 'company-files)
+             (add-to-list 'company-backends 'company-ob-ipython)
 
              ;; Use the tab-and-go frontend.
              ;; Allows TAB to select and complete at the same time.
@@ -150,9 +152,9 @@
         company-dabbrev-downcase nil
         company-global-modes '(not erc-mode message-mode help-mode
                                    gud-mode eshell-mode shell-mode)
-        ;;       company-backends '((company-capf :with company-yasnippet)
+        ;; company-backends '((company-anconda company-capf)
         ;;                          (company-dabbrev-code company-keywords company-files)
-        ;; company-dabbrev)
+         ;; company-dabbrev)
   )
 
   (defun my-company-yasnippet ()
@@ -200,8 +202,8 @@
       (advice-add #'company-yasnippet :around #'my-company-yasnippet-disable-inline)))
 
   ;;   ;; Better sorting and filtering
-  ;; (use-package company-prescient
-  ;;   :init (company-prescient-mode 1))
+  (use-package company-prescient
+    :init (company-prescient-mode 1))
 
   ;; Icons and quickhelp
   (when emacs/>=26p

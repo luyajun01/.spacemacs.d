@@ -6,6 +6,7 @@
 (require 'pdf-outline)
 (require 'pdf-annot)
 (require 'pdf-sync)
+(require 'lazy-set-key)
 (add-to-list 'load-path "~/.spacemacs.d/private/pdf-tools-extension")
 (require 'pdf-tools-extension)
 
@@ -200,13 +201,6 @@ PNG images in Emacs buffers." t nil)
 (setq pdf-view-use-scaling t
       pdf-view-use-imagemagick nil)
 
-(defun pdf-view-use-scaling-p ()
-  "Return t if scaling should be used."
-  (and (or (and (eq system-type 'darwin) (string-equal emacs-version "27.0.50"))
-           (memq (pdf-view-image-type)
-                 '(imagemagick image-io)))
-       pdf-view-use-scaling))
-
 (defun pdf-view-create-page (page &optional window)
   "Create an image of PAGE for display on WINDOW."
   (let* ((size (pdf-view-desired-image-size page window))
@@ -346,14 +340,50 @@ frame's PPI is larger than 180. Otherwise, return 1."
         :map hotspots
         :pointer 'arrow)))
 
-(provide 'init-pdftools)
 
+;; -*- lexical-binding: t -*-
+(with-eval-after-load "pdf-util"
+  (defun pdf-util-frame-scale-factor () 2))
+(with-eval-after-load "pdf-view"
+  (defun pdf-view-use-scaling-p () t))
 
+(eval-when-compile (require 'pdf-isearch))
+(with-eval-after-load "pdf-isearch"
 
-
-
-
-
+(defun pdf-isearch-hl-matches (current matches &optional occur-hack-p)
+  "Highlighting edges CURRENT and MATCHES."
+  (cl-check-type current pdf-isearch-match)
+  (cl-check-type matches (list-of pdf-isearch-match))
+  (cl-destructuring-bind (fg1 bg1 fg2 bg2)
+      (pdf-isearch-current-colors)
+    (let* ((width (car (pdf-view-image-size)))
+           (page (pdf-view-current-page))
+           (window (selected-window))
+           (buffer (current-buffer))
+           (tick (cl-incf pdf-isearch--hl-matches-tick))
+           (pdf-info-asynchronous
+            (lambda (status data)
+              (when (and (null status)
+                         (eq tick pdf-isearch--hl-matches-tick)
+                         (buffer-live-p buffer)
+                         (window-live-p window)
+                         (eq (window-buffer window)
+                             buffer))
+                (with-selected-window window
+                  (when (and (derived-mode-p 'pdf-view-mode)
+                             (or isearch-mode
+                                 occur-hack-p)
+                             (eq page (pdf-view-current-page)))
+                    (pdf-view-display-image
+                     (pdf-view-create-image data :width width)))))))) ; <-- add width
+      (pdf-info-renderpage-text-regions
+       page width t nil
+       `(,fg1 ,bg1 ,@(pdf-util-scale-pixel-to-relative
+                      current))
+       `(,fg2 ,bg2 ,@(pdf-util-scale-pixel-to-relative
+                      (apply 'append
+                        (remove current matches))))))))
+)
 
 ;; midnite mode hook
 (add-hook 'pdf-view-mode-hook (lambda ()
@@ -431,7 +461,21 @@ frame's PPI is larger than 180. Otherwise, return 1."
    )
  pdf-view-mode-map
  )
-;; (lazy-set-key sdcv-key-alist pdf-view-mode-map) ;sdcv的局部按键绑定
+;;; ### Unset key ###
+;;; --- 卸载按键
+(lazy-unset-key                         ;全局按键的卸载
+ '("C-z" "C-q" "s-W" "s-z" "M-h" "C-x C-c"))
+;;; ### Sdcv ###
+;;; --- 星际译王命令行
+(defvar sdcv-key-alist nil
+  "The key alist that sdcv.")
+(setq sdcv-key-alist
+      '(("p" . sdcv-search-pointer)     ;光标处的单词, buffer显示
+        ("y" . sdcv-search-pointer+)    ;光标处的单词, tooltip显示
+        ("i" . sdcv-search-input)       ;输入的单词, buffer显示
+        (";" . sdcv-search-input+)))    ;输入的单词, tooltip显示
+(lazy-set-key sdcv-key-alist nil "C-z") ;sdcv的全局按键绑定
+(lazy-set-key sdcv-key-alist pdf-view-mode-map) ;sdcv的局部按键绑定
 
 (provide 'init-pdftools)
 

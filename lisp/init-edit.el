@@ -29,7 +29,6 @@
 ;;
 
 ;;; Code:
-
 (require 'init-const)
 
 ;; Delete selection if you insert
@@ -70,98 +69,98 @@
             (rectangle-mark-mode 1))
       "reset")))))
 
-;; Automatically reload files was modified by external program
-(use-package autorevert
-  :ensure nil
-  :diminish
-  :hook (after-init . global-auto-revert-mode))
+;; ;; Automatically reload files was modified by external program
+;; (use-package autorevert
+;;   :ensure nil
+;;   :diminish
+;;   :hook (after-init . global-auto-revert-mode))
 
-;; Pass a URL to a WWW browser
-(use-package browse-url
-  :ensure nil
-  :defines dired-mode-map
-  :bind (("C-c C-z ." . browse-url-at-point)
-         ("C-c C-z b" . browse-url-of-buffer)
-         ("C-c C-z r" . browse-url-of-region)
-         ("C-c C-z u" . browse-url)
-         ("C-c C-z e" . browse-url-emacs)
-         ("C-c C-z v" . browse-url-of-file))
-  :init
-  (with-eval-after-load 'dired
-    (bind-key "C-c C-z f" #'browse-url-of-file dired-mode-map)))
+;; ;; Pass a URL to a WWW browser
+;; (use-package browse-url
+;;   :ensure nil
+;;   :defines dired-mode-map
+;;   :bind (("C-c C-z ." . browse-url-at-point)
+;;          ("C-c C-z b" . browse-url-of-buffer)
+;;          ("C-c C-z r" . browse-url-of-region)
+;;          ("C-c C-z u" . browse-url)
+;;          ("C-c C-z e" . browse-url-emacs)
+;;          ("C-c C-z v" . browse-url-of-file))
+;;   :init
+;;   (with-eval-after-load 'dired
+;;     (bind-key "C-c C-z f" #'browse-url-of-file dired-mode-map)))
 
-(use-package xwidget
-  :ensure nil
-  :if (featurep 'xwidget-internal)
-  :bind (("C-c C-z w" . xwidget-webkit-browse-url)
-         :map xwidget-webkit-mode-map
-         ("?" . xwidget-hydra/body))
-  :pretty-hydra
-  ((:title (pretty-hydra-title "Webkit" 'faicon "chrome")
-    :color amaranth :quit-key "q")
-   ("Navigate"
-    (("b" xwidget-webkit-back "back")
-     ("f" xwidget-webkit-forward "forward")
-     ("r" xwidget-webkit-reload "refresh")
-     ("SPC" xwidget-webkit-scroll-up "scroll up")
-     ("DEL" xwidget-webkit-scroll-down "scroll down")
-     ("S-SPC" xwidget-webkit-scroll-down "scroll down"))
-    "Zoom"
-    (("+" xwidget-webkit-zoom-in "zoom in")
-     ("=" xwidget-webkit-zoom-in "zoom in")
-     ("-" xwidget-webkit-zoom-out "zoom out"))
-    "Misc"
-    (("g" xwidget-webkit-browse-url "browse url" :exit t)
-     ("u" xwidget-webkit-current-url "show url" :exit t)
-     ("w" xwidget-webkit-current-url-message-kill "copy url" :exit t)
-     ("h" describe-mode "help" :exit t)
-     ("Q" quit-window "quit" :exit t)))))
+;; (use-package xwidget
+;;   :ensure nil
+;;   :if (featurep 'xwidget-internal)
+;;   :bind (("C-c C-z w" . xwidget-webkit-browse-url)
+;;          :map xwidget-webkit-mode-map
+;;          ("?" . xwidget-hydra/body))
+;;   :pretty-hydra
+;;   ((:title (pretty-hydra-title "Webkit" 'faicon "chrome")
+;;     :color amaranth :quit-key "q")
+;;    ("Navigate"
+;;     (("b" xwidget-webkit-back "back")
+;;      ("f" xwidget-webkit-forward "forward")
+;;      ("r" xwidget-webkit-reload "refresh")
+;;      ("SPC" xwidget-webkit-scroll-up "scroll up")
+;;      ("DEL" xwidget-webkit-scroll-down "scroll down")
+;;      ("S-SPC" xwidget-webkit-scroll-down "scroll down"))
+;;     "Zoom"
+;;     (("+" xwidget-webkit-zoom-in "zoom in")
+;;      ("=" xwidget-webkit-zoom-in "zoom in")
+;;      ("-" xwidget-webkit-zoom-out "zoom out"))
+;;     "Misc"
+;;     (("g" xwidget-webkit-browse-url "browse url" :exit t)
+;;      ("u" xwidget-webkit-current-url "show url" :exit t)
+;;      ("w" xwidget-webkit-current-url-message-kill "copy url" :exit t)
+;;      ("h" describe-mode "help" :exit t)
+;;      ("Q" quit-window "quit" :exit t)))))
 
-;; Click to browse URL or to send to e-mail address
-(use-package goto-addr
-  :ensure nil
-  :hook ((text-mode . goto-address-mode)
-         (prog-mode . goto-address-prog-mode)))
+;; ;; Click to browse URL or to send to e-mail address
+;; (use-package goto-addr
+;;   :ensure nil
+;;   :hook ((text-mode . goto-address-mode)
+;;          (prog-mode . goto-address-prog-mode)))
 
-;; Jump to things in Emacs tree-style
-(use-package avy
-  :bind (("C-:" . avy-goto-char)
-         ("C-'" . avy-goto-char-2)
-         ("M-g f" . avy-goto-line)
-         ("M-g w" . avy-goto-word-1)
-         ("M-g e" . avy-goto-word-0))
-  :hook (after-init . avy-setup-default)
-  :config (setq avy-all-windows nil
-                avy-all-windows-alt t
-                avy-background t
-                avy-style 'pre))
+;; ;; Jump to things in Emacs tree-style
+;; (use-package avy
+;;   :bind (("C-:" . avy-goto-char)
+;;          ("C-'" . avy-goto-char-2)
+;;          ;; ("M-g f" . avy-goto-line)
+;;          ;; ("M-g w" . avy-goto-word-1)
+;;          ;; ("M-g e" . avy-goto-word-0))
+;;   :hook (after-init . avy-setup-default)
+;;   :config (setq avy-all-windows nil
+;;                 avy-all-windows-alt t
+;;                 avy-background t
+;;                 avy-style 'pre))
 
-;; Kill text between the point and the character CHAR
-(use-package avy-zap
-  :bind (("M-z" . avy-zap-to-char-dwim)
-         ("M-Z" . avy-zap-up-to-char-dwim)))
+;; ;; Kill text between the point and the character CHAR
+;; (use-package avy-zap
+;;   :bind (("M-z" . avy-zap-to-char-dwim)
+;;          ("M-Z" . avy-zap-up-to-char-dwim)))
 
-;; Quickly follow links
-(use-package ace-link
-  :defines (org-mode-map
-            gnus-summary-mode-map
-            gnus-article-mode-map
-            ert-results-mode-map)
-  :bind ("M-o" . ace-link-addr)
-  :hook (after-init . ace-link-setup-default)
-  :config
-  (with-eval-after-load 'org
-    (bind-key "M-o" #'ace-link-org org-mode-map))
-  (with-eval-after-load 'gnus
-    (bind-keys
-     :map gnus-summary-mode-map
-     ("M-o" . ace-link-gnus)
-     :map gnus-article-mode-map
-     ("M-o" . ace-link-gnus)))
-  (with-eval-after-load 'ert
-    (bind-key "o" #'ace-link-help ert-results-mode-map)))
+;; ;; Quickly follow links
+;; (use-package ace-link
+;;   :defines (org-mode-map
+;;             gnus-summary-mode-map
+;;             gnus-article-mode-map
+;;             ert-results-mode-map)
+;;   :bind ("M-o" . ace-link-addr)
+;;   :hook (after-init . ace-link-setup-default)
+;;   :config
+;;   (with-eval-after-load 'org
+;;     (bind-key "M-o" #'ace-link-org org-mode-map))
+;;   (with-eval-after-load 'gnus
+;;     (bind-keys
+;;      :map gnus-summary-mode-map
+;;      ("M-o" . ace-link-gnus)
+;;      :map gnus-article-mode-map
+;;      ("M-o" . ace-link-gnus)))
+;;   (with-eval-after-load 'ert
+;;     (bind-key "o" #'ace-link-help ert-results-mode-map)))
 
-;; Jump to Chinese characters
+;; ;; Jump to Chinese characters
 (use-package ace-pinyin
   :diminish
   :hook (after-init . ace-pinyin-global-mode))

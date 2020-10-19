@@ -635,6 +635,7 @@ If the character before and after CH is space or tab, CH is NOT slash"
   "pw" 'pwd
   "su" 'scimax-ob-move-src-block-up
   "sd" 'scimax-ob-move-src-block-down
+  "sh" 'scimax-ob-jump-to-header
   ;; "mm" 'counsel-evil-goto-global-marker
   "hg" 'hydra-magit/body
   "hp" 'hydra-pdftools/body

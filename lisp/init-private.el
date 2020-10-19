@@ -8,10 +8,16 @@
 (ivy-posframe-mode 1)
 (company-posframe-mode 1)
 ;;snails
-;; (add-to-list 'load-path "~/.spacemacs.d/private/snails")
-;; (require 'snails)
+(add-to-list 'load-path "~/.spacemacs.d/private/snails")
+(require 'snails)
+;;delete-block
+(add-to-list 'load-path "~/.spacemacs.d/private/delete-block")
+(require 'delete-block)
+;;kill-ring-search
+(add-to-list 'load-path "~/.spacemacs.d/private/kill-ring-search")
+(require 'kill-ring-search)
 
-;;doi
+;; doi
 (add-to-list 'load-path "~/.spacemacs.d/private/doi")
 (require 'doi)
 
@@ -559,9 +565,14 @@ In that case, insert the number."
 (require 'awesome-tray)
 
 ;;google-translate
-;; (add-to-list 'load-path "~/.spacemacs.d/private/google-translate") ; add color-rg to your load-path
-;; (require 'google-translate)
-
+(add-to-list 'load-path "~/.spacemacs.d/private/google-translate") ; add color-rg to your load-path
+(require 'google-translate)
+;;load color theme
+;; (add-to-list 'load-path "~/.spacemacs.d/private/color-theme")
+;; (require 'color-theme)
+;; (load-file "~/Dropbox/emacs/emacs-24.3/etc/themes/tango-light-theme.el")
+;; (color-theme-initialize)
+;; (color-theme-aliceblue)
 ;;multi-translate
 ;; (add-to-list 'load-path "~/.spacemacs.d/private/multi-translate.el") ; add color-rg to your load-path
 ;; (require 'multi-translate)
@@ -721,9 +732,9 @@ In that case, insert the number."
 (add-to-list 'load-path "~/.spacemacs.d/private/one-key")
 (require 'one-key)
 ;;lispy
-(add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1)))
-(add-hook 'python-mode-hook (lambda () (lispy-mode 1)))
-(add-hook 'ipython-mode-hook (lambda () (lispy-mode 1)))
+;; (add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1)))
+;; (add-hook 'python-mode-hook (lambda () (lispy-mode 1)))
+;; (add-hook 'ipython-mode-hook (lambda () (lispy-mode 1)))
 
 ;;org-ref
 (require 'org-ref)

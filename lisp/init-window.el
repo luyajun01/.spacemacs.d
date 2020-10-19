@@ -152,7 +152,7 @@
       (interactive)
       (ignore-errors
         (display-buffer shackle-last-buffer)))
-    (bind-key "C-h z" #'shackle-last-popup-buffer)
+    ;; (bind-key "C-h z" #'shackle-last-popup-buffer)
 
     ;; Add keyword: `autoclose'
     (defun shackle-display-buffer-hack (fn buffer alist plist)

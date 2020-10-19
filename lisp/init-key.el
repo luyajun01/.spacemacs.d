@@ -7,17 +7,36 @@
 ;; (require 'paredit)
 ;; (paredit-mode 1)
 (lazy-unset-key                         ;全局按键的卸载
- '("C-/" "C-c C-n" "C-c C-p" "M-g" "C-<return>" "C-l" "C-S-p" "C-r" "C-c C-e" "C-c C-b" "C-s" "C-)" "C-S-j" "C-c h"))
+ '("C-/" "C-c C-n" "C-c C-p" "M-g" "C-<return>" "C-l" "C-S-p" "C-r" "C-c C-e" "C-c C-b" "C-s" "C-)" "C-S-j" "C-c h" "s-a"))
 
 ;;; ### Aweshell ###
 ;;; --- 多标签式的shell
 (lazy-load-global-keys
  '(
-   ("s-n" . aweshell-new)
+   ("s-a" . aweshell-new)
    ("s-h" . aweshell-toggle)
    ;; ("s-x s-x" . aweshell-dedicated-toggle)
    )
  "aweshell")
+
+(lazy-load-global-keys
+ '(
+   ("M-x" . smex+)
+   ("C-c C-c M-x" . execute-extended-command)
+   )
+ "init-smex")
+
+(lazy-load-global-keys
+ '(
+   ("M-g" . goto-line-preview))
+ "goto-line-preview")
+
+(lazy-load-global-keys
+ '(
+   ("s-y" . snails)
+   ("s-u" . snails-search-point)
+   )
+ "snails")
 
 (lazy-set-key
  '(
@@ -34,6 +53,8 @@
    ("C-r" . python-shell-send-region)
    ("C-c C-n" . scimax-ob-move-src-block-down)
    ("C-c C-p" . scimax-ob-move-src-block-up)
+   ("s-a" . scimax-ob-ipython-complete-ivy)
+   ("s-h" . scimax-ob-jump-to-header)
    ("C-)" . lispy-wrap-round)
    ;; ("C-q" . emac)        ;退出emacs
    ("C-x c" . delete-other-windows)
@@ -55,7 +76,7 @@
 ;;; ### Unset key ###
 ;;; --- 卸载按键
 (lazy-unset-key                         ;全局按键的卸载
- '("C-x C-f" "C-z" "C-q" "s-W" "s-z" "M-h" "SPC" "C-x C-c" "C-\\" "s-c" "s-x" "s-v"))
+ '("C-x C-f" "C-z" "C-q" "s-W" "s-z" "M-h" "C-x C-c" "C-\\" "s-c" "s-x" "s-v"))
 ;;; ### Vi-move ###
 ;;; --- Vi式移动
 (defvar vi-move-key-alist nil
@@ -77,6 +98,13 @@
    ("C-&" . switch-to-messages)         ;跳转到 *Messages* buffer
    ))
 
+;;; ### Delete block ###
+;;; --- 快速删除光标左右的内容
+(lazy-load-global-keys
+ '(
+   ("M-N" . delete-block-backward)
+   ("M-M" . delete-block-forward))
+ "delete-block")
 ;;; ### Awesome-Pair ###
 ;;; --- 结构化编程
 (lazy-load-unset-keys
@@ -113,6 +141,19 @@
         ("M-:" . awesome-pair-jump-out-pair-and-newline) ;跳出括号并换行
         ))
 (lazy-load-set-keys awesome-pair-key-alist awesome-pair-mode-map)
+
+;;; ### Color-Rg ###
+;;; --- 搜索重构
+(lazy-load-global-keys
+ '(
+   ("s-x g" . color-rg-search-symbol)
+   ("s-x h" . color-rg-search-input)
+   ("s-x j" . color-rg-search-symbol-in-project)
+   ("s-x k" . color-rg-search-input-in-project)
+   ("s-x ," . color-rg-search-symbol-in-current-file)
+   ("s-x ." . color-rg-search-input-in-current-file)
+   )
+ "color-rg")
 
 ;;; ### Magit ###
 ;;
@@ -208,6 +249,8 @@
 (lazy-load-global-keys
  '(
    ("M-s" . symbol-overlay-put)         ;懒惰搜索
+   ("s-n" . symbol-overlay-jump-next)
+   ("s-p" . symbol-overlay-jump-prev)
    )
  "init-symbol-overlay")
 

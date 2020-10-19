@@ -47,6 +47,11 @@ command-log
      ;; lsp
      ;; dap
      ;; colors
+(python :variables
+       python-backend 'anaconda
+        python-formatter 'yapf
+        python-format-on-save t
+        )
      lpy
     ;; tabnine
      (ess :variables
@@ -85,16 +90,19 @@ search-engine
      ;;                  :disabled-for org markdown)
      (auto-completion :variables
                       spacemacs-default-company-backends '(
+                                                           (company-anaconda company-capf)
+                                                           (company-dabbrev-code company-gtags company-etags company-keywords)
+                                                           company-files company-dabbrev
                                                            ;; company-etags
                                                            ;; company-gtags
                                                            ;; company-tabnine
-                                                           company-files
-                                                           company-capf
+                                                           ;; company-files
+                                                           ;; company-capf
                                                            ;; company-tabnine
-                                                           company-anaconda
-                                                           company-keywords
-                                                           company-yasnippet
-                                                           company-dabbrev
+                                                           ;; company-anaconda
+                                                           ;; company-keywords
+                                                           ;; company-yasnippet
+                                                           ;; company-dabbrev
                                                            )
                       auto-completion-idle-delay 0
                       auto-completion-return-key-behavior 'complete
@@ -135,7 +143,7 @@ search-engine
      ;; (python :variables
      ;;          python-test-runner '(nose pytest)
      ;;          python-backend 'lsp
-     ;;          python-lsp-server 'mspyls
+     ;;          python-lsp-server 'pyls
      ;;          python-lsp-git-root "~/Github/python-language-server")
      ;; (ruby :variables ruby-version-manager 'chruby)
      ;; ruby-on-rails
@@ -179,11 +187,19 @@ search-engine
    dotspacemacs-additional-packages ;; A list of packages that cannot be updated.
    '(                               ;sicp
      ;; pyim
+     ;; sunburn-theme
+     grip-mode
+     flycheck-popup-tip
+     ;; dracula-theme
+     ;; anaconda-mode
+     company-anaconda
+     live-py-mode
+markdown-toc
      ov
      rime
      ace-pinyin
      pinyinlib
-fcitx
+     fcitx
      sr-speedbar
      ;; ess-view-data
      go-translate
@@ -202,7 +218,7 @@ fcitx
      ;; color-moccur
      evil-lispy
      ;; sdcv
-     ;; google-translate
+     google-translate
      quelpa
      ;; interleave
      lispy
@@ -264,7 +280,7 @@ fcitx
      goto-char-preview
      sudo-edit
      fancy-narrow
-goto-line-preview
+     goto-line-preview
      ;; amx
      ;; ivy-yasnippet
      ;; counsel-world-clock
@@ -298,7 +314,7 @@ goto-line-preview
      ;; ivy-rich
      ;; all-the-icons-dired
      ;; ibuffer-vc
-     ;; company-prescient
+     company-prescient
      ;; org-re-reveal
      ;; evil-escape
      ;; evil-exchange
@@ -485,7 +501,7 @@ It should only modify the values of Spacemacs settings."
    ;; when invoking Emacs 27.1 executable on the command line, for instance:
    ;;   ./emacs --dump-file=~/.emacs.d/.cache/dumps/spacemacs.pdmp
    ;; (default spacemacs.pdmp)
-   dotspacemacs-emacs-dumper-dump-file "spacemacs.pdmp"
+   dotspacemacs-emacs-dumper-dump-file "~/.spacemacs.d/emacs.pdmp"
 
    ;; If non-nil ELPA repositories are contacted via HTTPS whenever it's
    ;; possible. Set it to nil if you have no way to use HTTPS in your
@@ -567,11 +583,12 @@ It should only modify the values of Spacemacs settings."
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-themes '(
                          ;; flucui-dark
-                         monokai
-                         ;; leuven
+;; tsdh-light
+                         ;; monokai
+                         leuven
                          ;; solarized-light
                          ;underwater
-;                         solarized-light
+                         ;; solarized-light
                                         ;solarized-dark
                          )
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
@@ -823,12 +840,14 @@ This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
 dump."
   (defun org/pre-dump ()
-    (spacemacs/dump-modes '(org-mode)))
+    (spacemacs/dump-modes '(
+                           python-mode org-mode emacs-lisp-mode c++-mode web-mode magit-status-mode
+                            )))
   )
 
 (defun dotspacemacs/user-init ()
   ;; (setq-default configuration-layer-elpa-archives
-  ;;               '(("melpa-cn" . "http://elpa.emacs-china.org/melpa/")
+  ;;              '(("melpa-cn" . "http://elpa.emacs-china.org/melpa/")
   ;;                 ("org-cn"   . "http://elpa.emacs-china.org/org/")
   ;;                 ("gnu-cn"   . "http://elpa.emacs-china.org/gnu/")))
   (setq configuration-layer--elpa-archives
@@ -872,274 +891,248 @@ dump."
   ;; (global-set-key (kbd "M-X") 'smex-major-mode-commands)
   ;;https://emacs-china.org/t/lazy-load-el-emacs/9208
 
-    (let (;; 加载的时候临时增大`gc-cons-threshold'以加速启动速度。
-          (gc-cons-threshold most-positive-fixnum)
-          ;; 清空避免加载远程文件的时候分析文件。
-          (file-name-handler-alist nil))
-      ;;lazy-load
-      (add-to-list 'load-path (expand-file-name "~/.spacemacs.d/private/lazy-load"))
-      (require 'lazy-load)
+  (let (;; 加载的时候临时增大`gc-cons-threshold'以加速启动速度。
+        (gc-cons-threshold most-positive-fixnum)
+        ;; 清空避免加载远程文件的时候分析文件。
+        (file-name-handler-alist nil))
+    ;;lazy-load
+    (add-to-list 'load-path (expand-file-name "~/.spacemacs.d/private/lazy-load"))
+    (require 'lazy-load)
 
-      (cnfonts-enable)
-      (elpy-enable)
+    (cnfonts-enable)
+    (elpy-enable)
 
-      (when (version< emacs-version "25.1")
-        (error "This requires Emacs 25.1 and above!"))
+    (when (version< emacs-version "25.1")
+      (error "This requires Emacs 25.1 and above!"))
 
-      ;; Speed up startup
-      (defvar centaur-gc-cons-threshold (if (display-graphic-p) 16000000 1600000)
-        "The default value to use for `gc-cons-threshold'. If you experience freezing,
+    ;; Speed up startup
+    (defvar centaur-gc-cons-threshold (if (display-graphic-p) 16000000 1600000)
+      "The default value to use for `gc-cons-threshold'. If you experience freezing,
 decrease this. If you experience stuttering, increase this.")
 
-      (defvar centaur-gc-cons-upper-limit (if (display-graphic-p) 400000000 100000000)
-        "The temporary value for `gc-cons-threshold' to defer it.")
+    (defvar centaur-gc-cons-upper-limit (if (display-graphic-p) 400000000 100000000)
+      "The temporary value for `gc-cons-threshold' to defer it.")
 
-      (defvar centaur-gc-timer (run-with-idle-timer 10 t #'garbage-collect)
-        "Run garbarge collection when idle 10s.")
+    (defvar centaur-gc-timer (run-with-idle-timer 10 t #'garbage-collect)
+      "Run garbarge collection when idle 10s.")
 
-      (defvar default-file-name-handler-alist file-name-handler-alist)
+    (defvar default-file-name-handler-alist file-name-handler-alist)
 
-      (setq file-name-handler-alist nil)
-      (setq gc-cons-threshold centaur-gc-cons-upper-limit
-            gc-cons-percentage 0.5)
-      (add-hook 'emacs-startup-hook
-                (lambda ()
-                  "Restore defalut values after startup."
-                  (setq file-name-handler-alist default-file-name-handler-alist)
-                  (setq gc-cons-threshold centaur-gc-cons-threshold
-                        gc-cons-percentage 0.1)
+    (setq file-name-handler-alist nil)
+    (setq gc-cons-threshold centaur-gc-cons-upper-limit
+          gc-cons-percentage 0.5)
+    (add-hook 'emacs-startup-hook
+              (lambda ()
+                "Restore defalut values after startup."
+                (setq file-name-handler-alist default-file-name-handler-alist)
+                (setq gc-cons-threshold centaur-gc-cons-threshold
+                      gc-cons-percentage 0.1)
 
-                  ;; GC automatically while unfocusing the frame
-                  ;; `focus-out-hook' is obsolete since 27.1
-                  (if (boundp 'after-focus-change-function)
-                      (add-function :after after-focus-change-function
-                                    (lambda ()
-                                      (unless (frame-focus-state)
-                                        (garbage-collect))))
-                    (add-hook 'focus-out-hook 'garbage-collect))
+                ;; GC automatically while unfocusing the frame
+                ;; `focus-out-hook' is obsolete since 27.1
+                (if (boundp 'after-focus-change-function)
+                    (add-function :after after-focus-change-function
+                                  (lambda ()
+                                    (unless (frame-focus-state)
+                                      (garbage-collect))))
+                  (add-hook 'focus-out-hook 'garbage-collect))
 
-                  ;; Avoid GCs while using `ivy'/`counsel'/`swiper' and `helm', etc.
-                  ;; @see http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
-                  (defun my-minibuffer-setup-hook ()
-                    (setq gc-cons-threshold centaur-gc-cons-upper-limit))
+                ;; Avoid GCs while using `ivy'/`counsel'/`swiper' and `helm', etc.
+                ;; @see http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
+                (defun my-minibuffer-setup-hook ()
+                  (setq gc-cons-threshold centaur-gc-cons-upper-limit))
 
-                  (defun my-minibuffer-exit-hook ()
-                    (setq gc-cons-threshold centaur-gc-cons-threshold))
+                (defun my-minibuffer-exit-hook ()
+                  (setq gc-cons-threshold centaur-gc-cons-threshold))
 
-                  (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
-                  (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)))
+                (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
+                (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)))
 
-      ;; Load path
-      ;; Optimize: Force "lisp"" and "site-lisp" at the head to reduce the startup time.
-      (defun update-load-path (&rest _)
-        "Update `load-path'."
-        (dolist (dir '("site-lisp" "lisp"))
-          (push (expand-file-name dir "~/.spacemacs.d/") load-path)))
+    ;; Load path
+    ;; Optimize: Force "lisp"" and "site-lisp" at the head to reduce the startup time.
+    (defun update-load-path (&rest _)
+      "Update `load-path'."
+      (dolist (dir '("site-lisp" "lisp"))
+        (push (expand-file-name dir "~/.spacemacs.d/") load-path)))
 
-      (defun add-subdirs-to-load-path (&rest _)
-        "Add subdirectories to `load-path'."
-        (let ((default-directory (expand-file-name "site-lisp" "~/.spacemacs.d/")))
-          (normal-top-level-add-subdirs-to-load-path)))
+    (defun add-subdirs-to-load-path (&rest _)
+      "Add subdirectories to `load-path'."
+      (let ((default-directory (expand-file-name "site-lisp" "~/.spacemacs.d/")))
+        (normal-top-level-add-subdirs-to-load-path)))
 
-      (advice-add #'package-initialize :after #'update-load-path)
-      (advice-add #'package-initialize :after #'add-subdirs-to-load-path)
+    (advice-add #'package-initialize :after #'update-load-path)
+    (advice-add #'package-initialize :after #'add-subdirs-to-load-path)
 
-      (update-load-path)
-      ;; Packages
-      ;; Without this comment Emacs25 adds (package-initialize) here
+    (update-load-path)
+    ;; Packages
+    ;; Without this comment Emacs25 adds (package-initialize) here
+    (require 'init-private)
+    (require 'init-scimax-ob)
+    (require 'init-scimax-org-latex)
+    (require 'init-rime)
+    (require 'init-python)
+    (require 'init-evil)
+    (require 'init-google-translate)
+    (require 'init-doi)
+    (require 'init-one-key)
+    (require 'init-key)
+    (require 'init-symbol-overlay)
+    (require 'init-git)
+    (require 'init-mode)
+    (require 'init-pdftools)
+    (require 'init-thing-edit)
+    (require 'init-company)
+    (require 'init-package)
+    (require 'init-speedbar)
+    ;; Preferences
+    ;; (require 'init-basic)
+    (require 'init-hydra)
+    ;; (require 'init-line-number)
+    (require 'init-org)
+    (require 'init-edit)
+    (require 'init-ivy)
+    (require 'init-yasnippet)
+    (require 'init-scimax-org-babel)
+    (require 'init-dired)
+    (require 'init-highlight)
+    ;; (require 'init-ibuffer)
+    (require 'init-kill-ring)
+    (require 'init-window)
+    (require 'init-treemacs)
+    (require 'init-ess)
+    (require 'init-smex)
+    (require 'init-markdown)
+    ;; Programming
+    (require 'init-flycheck)
+    ;; (require 'init-projectile)
+    ;; (require 'init-lsp)
+    (require 'init-company-tabnine)
+    ;; (require 'init-elisp)
+    (require 'init-c)
+    ;; 改变evil-insert-mode光标形状
+    (setq-default evil-insert-state-cursor '("green" (bar . 2)))
+    (setcdr evil-insert-state-map nil)
+    (define-key evil-insert-state-map [escape] 'evil-normal-state)
+    ;; ;;; lpy
+    ;; (add-to-list 'load-path "~/.spacemacs.d/private/lpy")
+    ;; (require 'lpy)
+    ;;company-lsp
+    ;; (with-eval-after-load 'lsp-mode
+    ;;   (push '(company-lsp :with company-yasnippet) company-backends))
 
-      (require 'init-private)
-      (require 'init-rime)
-      (require 'init-doi)
-      (require 'init-one-key)
-      (require 'init-key)
-(require 'init-symbol-overlay)
-(require 'init-git)
-      (require 'init-mode)
-      (require 'init-pdftools)
-      (require 'init-thing-edit)
-      (require 'init-company)
-      (require 'init-package)
-      (require 'init-scimax-ob)
-      (require 'init-scimax-org-latex)
-      (require 'init-speedbar)
-      ;; Preferences
-      (require 'init-basic)
-      (require 'init-hydra)
-      (require 'init-line-number)
-      ;; (require 'init-ui)
-      (require 'init-org)
-      (require 'init-edit)
-      (require 'init-ivy)
-      (require 'init-yasnippet)
-      (require 'init-scimax-org-babel)
-      (require 'init-python)
-      ;; (require 'init-calendar)
-      ;; (require 'init-dashboard)
-      (require 'init-dired)
-      (require 'init-highlight)
-      ;; (require 'init-ibuffer)
-      (require 'init-kill-ring)
-      ;; (require 'init-theme)
-      ;; (require 'init-persp)
-      (require 'init-window)
-      (require 'init-treemacs)
-      (require 'init-ess)
-(require 'init-smex)
-      ;; (require 'init-eshell)
-      ;; (require 'init-shell)
+    ;; The package is "python" but the mode is "python-mode":
+    ;;plain-org-wiki
+    ;; (add-to-list 'load-path "~/.spacemacs.d/private/plain-org-wiki")
+    ;; (require 'plain-org-wiki)
+    ;; (setq pow-directory "~/Documents/坚果云/我的坚果云/github/wiki/")
 
-      (require 'init-markdown)
-      ;; (require 'init-reader)
+    ;;valign
+    ;; (add-to-list 'load-path "~/.spacemacs.d/private/valign")
+    ;; (require 'valign)
+    ;; (add-hook 'org-mode-hook 'valign-mode)
+    ;; (use-package pyim
+    ;;   :ensure nil
+    ;;   :demand t
+    ;;   :config
+    ;;   ;; 激活 basedict 拼音词库，五笔用户请继续阅读 README
+    ;;   (use-package pyim-basedict
+    ;;     :ensure nil
+    ;;     :config (pyim-basedict-enable))
 
-      ;; (require 'init-docker)
-      ;; (require 'init-utils)
+    ;;   (setq default-input-method "pyim")
 
-      ;; Programming
-      ;; (require 'init-vcs)
-      (require 'init-flycheck)
-      ;; (require 'init-projectile)
-      (require 'init-evil)
-      ;; (require 'init-prog)
-      ;; (require 'init-lsp)
-      (require 'init-company-tabnine)
-      ;; (require 'init-elisp)
-      (require 'init-c)
-      ;; (require 'init-go)
-      ;; (require 'init-rust)
-      ;; (require 'init-ruby)
-      ;; (require 'init-dart)
-      ;; (require 'init-elixir)
-      ;; (require 'init-web)
-      ;; emacs 透明化 Transparency
-                                        ;(spacemacs/enable-transparency)
-      ;; 改变evil-insert-mode光标形状
-      (setq-default evil-insert-state-cursor '("green" (bar . 2)))
-      (setcdr evil-insert-state-map nil)
-      (define-key evil-insert-state-map [escape] 'evil-normal-state)
-      ;; ;;; lpy
-      ;; (add-to-list 'load-path "~/.spacemacs.d/private/lpy")
-      ;; (require 'lpy)
-      ;;company-lsp
-      ;; (with-eval-after-load 'lsp-mode
-      ;;   (push '(company-lsp :with company-yasnippet) company-backends))
+    ;;   ;; 我使用全拼
+    ;;   (setq pyim-default-scheme 'pyim-shuangpin)
 
-      ;; The package is "python" but the mode is "python-mode":
-      (use-package python
-        :mode ("\\.py\\'" . python-mode)
-        :interpreter ("python" . python-mode))
-      ;;plain-org-wiki
-      ;; (add-to-list 'load-path "~/.spacemacs.d/private/plain-org-wiki")
-      ;; (require 'plain-org-wiki)
-      ;; (setq pow-directory "~/Documents/坚果云/我的坚果云/github/wiki/")
+    ;;   ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-)
+    ;;   ;; 我自己使用的中英文动态切换规则是：
+    ;;   ;; 1. 光标只有在注释里面时，才可以输入中文。
+    ;;   ;; 2. 光标前是汉字字符时，才能输入中文。
+    ;;   ;; 3. 使用 M-j 快捷键，强制将光标前的拼音字符串转换为中文。
+    ;;   (setq-default pyim-english-input-switch-functions
+    ;;                 '(pyim-probe-dynamic-english
+    ;;                   pyim-probe-isearch-mode
+    ;;                   pyim-probe-program-mode
+    ;;                   pyim-probe-org-structure-template))
 
-      ;;valign
-      ;; (add-to-list 'load-path "~/.spacemacs.d/private/valign")
-      ;; (require 'valign)
-      ;; (add-hook 'org-mode-hook 'valign-mode)
-      ;; (use-package pyim
-      ;;   :ensure nil
-      ;;   :demand t
-      ;;   :config
-      ;;   ;; 激活 basedict 拼音词库，五笔用户请继续阅读 README
-      ;;   (use-package pyim-basedict
-      ;;     :ensure nil
-      ;;     :config (pyim-basedict-enable))
+    ;;   (setq-default pyim-punctuation-half-width-functions
+    ;;                 '(pyim-probe-punctuation-line-beginning
+    ;;                   pyim-probe-punctuation-after-punctuation))
 
-      ;;   (setq default-input-method "pyim")
+    ;;   ;; 开启拼音搜索功能
+    ;;   (pyim-isearch-mode 1)
 
-      ;;   ;; 我使用全拼
-      ;;   (setq pyim-default-scheme 'pyim-shuangpin)
+    ;;   ;; 使用 popup-el 来绘制选词框, 如果用 emacs26, 建议设置
+    ;;   ;; 为 'posframe, 速度很快并且菜单不会变形，不过需要用户
+    ;;   ;; 手动安装 posframe 包。
+    ;;   (setq pyim-page-tooltip 'popup)
 
-      ;;   ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-)
-      ;;   ;; 我自己使用的中英文动态切换规则是：
-      ;;   ;; 1. 光标只有在注释里面时，才可以输入中文。
-      ;;   ;; 2. 光标前是汉字字符时，才能输入中文。
-      ;;   ;; 3. 使用 M-j 快捷键，强制将光标前的拼音字符串转换为中文。
-      ;;   (setq-default pyim-english-input-switch-functions
-      ;;                 '(pyim-probe-dynamic-english
-      ;;                   pyim-probe-isearch-mode
-      ;;                   pyim-probe-program-mode
-      ;;                   pyim-probe-org-structure-template))
+    ;;   ;; 选词框显示5个候选词
+    ;;   (setq pyim-page-length 5)
 
-      ;;   (setq-default pyim-punctuation-half-width-functions
-      ;;                 '(pyim-probe-punctuation-line-beginning
-      ;;                   pyim-probe-punctuation-after-punctuation))
-
-      ;;   ;; 开启拼音搜索功能
-      ;;   (pyim-isearch-mode 1)
-
-      ;;   ;; 使用 popup-el 来绘制选词框, 如果用 emacs26, 建议设置
-      ;;   ;; 为 'posframe, 速度很快并且菜单不会变形，不过需要用户
-      ;;   ;; 手动安装 posframe 包。
-      ;;   (setq pyim-page-tooltip 'popup)
-
-      ;;   ;; 选词框显示5个候选词
-      ;;   (setq pyim-page-length 5)
-
-      ;;   :bind
-      ;;   (("C-S-P" . pyim-convert-string-at-point) ;与 pyim-probe-dynamic-english 配合
-      ;;    ("C-;" . pyim-delete-word-from-personal-buffer)))
-
-      ;;pdf-tools
+    ;;   :bind
+    ;;   (("C-S-P" . pyim-convert-string-at-point) ;与 pyim-probe-dynamic-english 配合
+    ;;    ("C-;" . pyim-delete-word-from-personal-buffer)))
+        ;; load theme
+    ;;pdf-tools
 ;;; pdf-tools package and reinstall both as at the start.
-      ;; (use-package pdf-tools
-      ;;   :ensure t
-      ;;   :config
-      ;;   (custom-set-variables
-      ;;    '(pdf-tools-handle-upgrades nil)) ; Use brew upgrade pdf-tools instead.
-      ;;   (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo"))
-      ;; (pdf-tools-install)
-      (global-flycheck-mode)
-      ;;补充搜索括号特别有用
-      (require 'evil-matchit)
-      (global-evil-matchit-mode 1)
-      ;; 文字自动转行
-      (global-visual-line-mode 1)
-      ;; 行号
-      (global-linum-mode 1)
-      ;;evil-leader-mode
-      ;; (window-numbering-mode 1)
-      (require 'evil-surround)
-      (global-evil-surround-mode)
-      (evilnc-default-hotkeys)
-      (define-key evil-normal-state-map (kbd ",/") 'evilnc-comment-or-uncomment-lines)
-      (define-key evil-visual-state-map (kbd ",/") 'evilnc-comment-or-uncomment-lines)
-      ;; ;;color-rg
-      ;;   (add-to-list 'load-path "~/.spacemacs.d/private/color-rg") ; add color-rg to your load-path
-      ;;   (require 'color-rg)
-      ;; ;;   ;; ivy
-      ;; ;; ;; (use-package ivy
-      ;; ;; ;;   :ensure t
-      ;; ;; ;;   :defer t
-      ;; ;; ;;   :diminish ivy-mode
-      ;; ;; ;;   :config
-      ;; ;; ;;   (progn
-      ;; ;; ;;     (ivy-mode)
-      ;; ;; ;;     (with-eval-after-load 'recentf
-      ;; ;; ;;       (setq ivy-use-virtual-buffers t))
-      ;; ;; ;;     (setq ivy-height 12
-      ;; ;; ;;           ivy-do-completion-in-region nil
-      ;; ;; ;;           ivy-wrap t
-      ;; ;; ;;           ivy-extra-directories nil
-      ;; ;; ;;           ivy-fixed-height-minibuffer t
-      ;; ;; ;;           ;; Don't use ^ as initial input
-      ;; ;; ;;           ivy-initial-inputs-alist nil
-      ;; ;; ;;           ;; highlight til EOL
-      ;; ;; ;;           ivy-format-function #'ivy-format-function-line
-      ;; ;; ;;           ;; disable magic slash on non-match
-      ;; ;; ;;           ;; ~ to /home/user
-      ;; ;; ;;           ;; ivy-magic-tilde nil
-      ;; ;; ;;           ivy-magic-slash-non-match-action nil)
-      ;; ;; ;;     ;; (setq ivy-re-builders-alist
-      ;; ;; ;;     ;;       '((t . ivy--regex-fuzzy)))
-      ;; ;; ;;     ;; (setq confirm-nonexistent-file-or-buffer t)
-      ;; ;; ;;     (setq ivy-re-builders-alist
-      ;; ;; ;;           '((t   . ivy--regex-ignore-order)))
-      ;; ;; ;;     (evil-make-overriding-map ivy-occur-mode-map 'normal)
-      ;; ;; ;;     ))
+    ;; (use-package pdf-tools
+    ;;   :ensure t
+    ;;   :config
+    ;;   (custom-set-variables
+    ;;    '(pdf-tools-handle-upgrades nil)) ; Use brew upgrade pdf-tools instead.
+    ;;   (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo"))
+    ;; (pdf-tools-install)
+    (global-flycheck-mode)
+    ;;补充搜索括号特别有用
+    (require 'evil-matchit)
+    (global-evil-matchit-mode 1)
+    ;; 文字自动转行
+    (global-visual-line-mode 1)
+    ;; 行号
+    (global-linum-mode 1)
+    ;;evil-leader-mode
+    ;; (window-numbering-mode 1)
+    (require 'evil-surround)
+    (global-evil-surround-mode)
+    (evilnc-default-hotkeys)
+    (define-key evil-normal-state-map (kbd ",/") 'evilnc-comment-or-uncomment-lines)
+    (define-key evil-visual-state-map (kbd ",/") 'evilnc-comment-or-uncomment-lines)
+    ;; ;;color-rg
+    ;;   (add-to-list 'load-path "~/.spacemacs.d/private/color-rg") ; add color-rg to your load-path
+    ;;   (require 'color-rg)
+    ;; ;;   ;; ivy
+    ;; ;; ;; (use-package ivy
+    ;; ;; ;;   :ensure t
+    ;; ;; ;;   :defer t
+    ;; ;; ;;   :diminish ivy-mode
+    ;; ;; ;;   :config
+    ;; ;; ;;   (progn
+    ;; ;; ;;     (ivy-mode)
+    ;; ;; ;;     (with-eval-after-load 'recentf
+    ;; ;; ;;       (setq ivy-use-virtual-buffers t))
+    ;; ;; ;;     (setq ivy-height 12
+    ;; ;; ;;           ivy-do-completion-in-region nil
+    ;; ;; ;;           ivy-wrap t
+    ;; ;; ;;           ivy-extra-directories nil
+    ;; ;; ;;           ivy-fixed-height-minibuffer t
+    ;; ;; ;;           ;; Don't use ^ as initial input
+    ;; ;; ;;           ivy-initial-inputs-alist nil
+    ;; ;; ;;           ;; highlight til EOL
+    ;; ;; ;;           ivy-format-function #'ivy-format-function-line
+    ;; ;; ;;           ;; disable magic slash on non-match
+    ;; ;; ;;           ;; ~ to /home/user
+    ;; ;; ;;           ;; ivy-magic-tilde nil
+    ;; ;; ;;           ivy-magic-slash-non-match-action nil)
+    ;; ;; ;;     ;; (setq ivy-re-builders-alist
+    ;; ;; ;;     ;;       '((t . ivy--regex-fuzzy)))
+    ;; ;; ;;     ;; (setq confirm-nonexistent-file-or-buffer t)
+    ;; ;; ;;     (setq ivy-re-builders-alist
+    ;; ;; ;;           '((t   . ivy--regex-ignore-order)))
+    ;; ;; ;;     (evil-make-overriding-map ivy-occur-mode-map 'normal)
+    ;; ;; ;;     ))
 
-      )
+    )
   )
 (setq custom-file (expand-file-name "custom.el" dotspacemacs-directory))
 (load custom-file 'no-error 'no-message)

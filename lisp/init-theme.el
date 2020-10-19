@@ -70,6 +70,6 @@ then check whether emacs should to modify theme, if so, modify it."
 
 
 ;; you could add more items.
-(mp-ui/config-time-themes-table '(("6" . spacemacs-light) ("17" . flucui-dark)))
+(mp-ui/config-time-themes-table '(("6" . tsdh-light) ("17" . tsdh-dark)))
 (mp-ui/open-themes-auto-change)
 (provide 'init-theme)

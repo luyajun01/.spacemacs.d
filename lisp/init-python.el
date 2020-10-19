@@ -50,8 +50,20 @@
   (with-eval-after-load 'exec-path-from-shell
     (exec-path-from-shell-copy-env "PYTHONPATH"))
   ;; Live Coding in Python
-  ;; (use-package live-py-mode)
+  (use-package live-py-mode)
+(require 'lpy)
+  (add-hook 'python-mode-hook (lambda () (lpy-mode 1)))
   )
+
+(setq python-shell-interpreter "~/.virtualenvs/test/bin/python")
+(setq python-shell-interpreter-args "-m IPython --simple-prompt -i")
+
+;; (add-hook 'org-mode-hook 'company-mode)
+;; (add-hook 'org-mode-hook
+;;           (lambda ()
+;;             (set (make-local-variable 'company-backends) '(company-anaconda company-capf)))
+;;           )
+(add-to-list 'company-backends 'company-ob-ipython)
 
 (provide 'init-python)
 
