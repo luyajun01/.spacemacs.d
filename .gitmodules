@@ -4,3 +4,12 @@
 [submodule "private/ov-highlight"]
 	path = private/ov-highlight
 	url = https://github.com/jkitchin/ov-highlight.git
+[submodule "private/geeknote"]
+	path = private/geeknote
+	url = https://github.com/pipakin/geeknote.git
+[submodule "s"]
+	path = private/emacs-geeknote
+	url = https://github.com/avendael/emacs-geeknote.git
+[submodule "private/emacs-rime"]
+	path = private/emacs-rime
+	url = https://github.com/DogLooksGood/emacs-rime

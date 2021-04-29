@@ -506,6 +506,126 @@ _1_ replace _0_      _2_      _3_      _4_       _5_           _6_  _7_
 ("q" nil)
 ("." nil :color blue))
 
+;; hydra-launcher
+(defhydra hydra-launcher (:color blue)
+  "
+^Misc^                    ^Audio^               ^Move^                          ^Pomodoro^
+----------------------------------------------------------------------------------------------
+[_ss_] Save workgroup     [_R_] Emms Random     [_sa_] Backward Sentence (M-a)  [_ss_] Start
+[_ll_] Load workgroup     [_n_] Emms Next       [_se_] Forward Sentence (M-e)   [_st_] Stop
+[_B_] New bookmark        [_p_] Emms Previous   [_la_] Backward Up List         [_sr_] Resume
+[_m_] Goto bookmark       [_P_] Emms Pause      [_le_] Forward List             [_sp_] Pause
+[_v_] Show/Hide undo      [_O_] Emms Open       [_pa_] Backward Paragraph (M-{)
+[_b_] Switch Gnus buffer  [_L_] Emms Playlist   [_pe_] Forward Paragraph (M-})
+[_f_] Recent file         [_w_] Pronounce word
+[_d_] Recent directory
+[_h_] Dired CMD history
+[_E_] Enable typewriter
+[_V_] Vintage typewriter
+[_q_] Quit
+"
+  ("h" my-dired-redo-from-commands-history)
+  ("B" bookmark-set)
+  ("m" counsel-bookmark-goto)
+  ("f" my-counsel-recentf)
+  ("d" counsel-recent-directory)
+  ("ss" wg-create-workgroup)
+  ("ll" my-wg-switch-workgroup)
+  ("E" toggle-typewriter)
+  ("V" twm/toggle-sound-style)
+  ("v" undo-tree-visualize)
+  ("ss" pomodoro-start)
+  ("st" pomodoro-stop)
+  ("sr" pomodoro-resume)
+  ("sp" pomodoro-pause)
+  ("sa" backward-sentence)
+  ("se" forward-sentence)
+  ("la" backward-up-list)
+  ("le" forward-list)
+  ("pa" backward-paragraph)
+  ("pe" forward-paragraph)
+  ("R" emms-random)
+  ("n" emms-next)
+  ("w" my-pronounce-current-word)
+  ("p" emms-previous)
+  ("P" emms-pause)
+  ("O" emms-play-playlist)
+  ("b" dianyou-switch-gnus-buffer)
+  ("L" emms-playlist-mode-go)
+  ("q" nil :color red))
+
+;; Because in message-mode/article-mode we've already use `y' as hotkey
+(global-set-key (kbd "C-c C-y") 'hydra-launcher/body)
+(defun org-mode-hook-hydra-setup ()
+  (local-set-key (kbd "C-c C-y") 'hydra-launcher/body))
+(add-hook 'org-mode-hook 'org-mode-hook-hydra-setup)
+
+
+(defun hydra-move-splitter-down (arg)
+  "Move window splitter down."
+  (interactive "p")
+  (if (let* ((windmove-wrap-around))
+        (windmove-find-other-window 'up))
+      (shrink-window arg)
+    (enlarge-window arg)))
+
+(defhydra hydra-window ()
+  "
+Movement^^   ^Split^         ^Switch^     ^Resize^
+-----------------------------------------------------
+_h_ Left     _v_ertical      _b_uffer     _q_ X left
+_j_ Down     _x_ horizontal  _f_ind files _w_ X Down
+_k_ Top      _z_ undo        _a_ce 1      _e_ X Top
+_l_ Right    _Z_ reset       _s_wap       _r_ X Right
+_F_ollow     _D_elete Other  _S_ave       max_i_mize
+_SPC_ cancel _o_nly this     _d_elete
+"
+  ("h" windmove-left )
+  ("j" windmove-down )
+  ("k" windmove-up )
+  ("l" windmove-right )
+  ("q" hydra-move-splitter-left)
+  ("w" hydra-move-splitter-down)
+  ("e" hydra-move-splitter-up)
+  ("r" hydra-move-splitter-right)
+  ("b" ivy-switch-buffer)
+  ("f" counsel-find-file)
+  ("F" follow-mode)
+  ("a" (lambda ()
+         (interactive)
+         (ace-window 1)
+         (add-hook 'ace-window-end-once-hook
+                   'hydra-window/body)))
+  ("v" (lambda ()
+         (interactive)
+         (split-window-right)
+         (windmove-right)))
+  ("x" (lambda ()
+         (interactive)
+         (split-window-below)
+         (windmove-down)))
+  ("s" (lambda ()
+         (interactive)
+         (ace-window 4)
+         (add-hook 'ace-window-end-once-hook
+                   'hydra-window/body)))
+  ("S" save-buffer)
+  ("d" delete-window)
+  ("D" (lambda ()
+         (interactive)
+         (ace-window 16)
+         (add-hook 'ace-window-end-once-hook
+                   'hydra-window/body)))
+  ("o" delete-other-windows)
+  ("i" ace-delete-other-windows)
+  ("z" (progn
+         (winner-undo)
+         (setq this-command 'winner-undo)))
+  ("Z" winner-redo)
+  ("SPC" nil))
+(global-set-key (kbd "C-c C-w") 'hydra-window/body)
+
+
 
 (provide 'init-hydra)
 

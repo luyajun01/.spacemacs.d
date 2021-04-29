@@ -40,12 +40,12 @@
   :group 'centaur
   :type 'string)
 
-(defcustom centaur-full-name "Vincent Zhang"
+(defcustom centaur-full-name "tony lu"
   "Set user full name."
   :group 'centaur
   :type 'string)
 
-(defcustom centaur-mail-address "seagle0128@gmail.com"
+(defcustom centaur-mail-address "luyajun01@gmail.com"
   "Set user email address."
   :group 'centaur
   :type 'string)
@@ -117,7 +117,9 @@
                     centaur-package-archives-alist)))
 
 (defcustom centaur-theme-alist
-  '((default  . doom-one)
+  '(
+    ;; (default  . doom-one)
+    (default  . leuven)
     (classic  . doom-monokai-classic)
     (colorful . doom-snazzy)
     (dark     . doom-dark+)
@@ -176,7 +178,7 @@ If Non-nil, save and restore the frame's geometry."
           (const :tag "Eglot" 'eglot)
           nil))
 
-(defcustom centaur-lsp-format-on-save-ignore-modes '(c-mode c++-mode)
+(defcustom centaur-lsp-format-on-save-ignore-modes '(c-mode c++-mode python-mode)
   "The modes that don't auto format and organize imports while saving the buffers.
 `prog-mode' means ignoring all derived modes.
 "

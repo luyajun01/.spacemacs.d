@@ -32,9 +32,46 @@
 
 (require 'init-const)
 (require 'init-custom)
+(require 'init-hydra)
+
+(defun zilongshanren/org-ispell ()
+  "Configure `ispell-skip-region-alist' for `org-mode'."
+  (make-local-variable 'ispell-skip-region-alist)
+  (add-to-list 'ispell-skip-region-alist '(org-property-drawer-re))
+  (add-to-list 'ispell-skip-region-alist '("~" "~"))
+  (add-to-list 'ispell-skip-region-alist '("=" "="))
+  (add-to-list 'ispell-skip-region-alist '("^#\\+BEGIN_SRC" . "^#\\+END_SRC")))
+
+(add-hook 'org-mode-hook #'zilongshanren/org-ispell)
+(defvar org-agenda-dir ""
+  "gtd org files location")
+
+(defvar deft-dir ""
+  "deft org files locaiton")
+
+(defvar blog-admin-dir ""
+  "blog-admin files location")
+
+(if (spacemacs/system-is-mswindows)
+    (setq
+     org-agenda-dir "f:/org-notes"
+     deft-dir "f:/org-notes"
+     blog-admin-dir "f:/zilongshanren.com")
+  (setq
+   org-agenda-dir "~/Documents/坚果云/我的坚果云/github/org-files"
+   deft-dir "~/Documents/坚果云/我的坚果云/github/org-files"
+   blog-admin-dir "~/zilongshanren.com"))
+
+;; define the refile targets
+(setq org-agenda-file-note (expand-file-name "notes.org" org-agenda-dir))
+(setq org-agenda-file-gtd (expand-file-name "todo.org" org-agenda-dir))
+(setq org-agenda-file-journal (expand-file-name "journal.org" org-agenda-dir))
+(setq org-agenda-file-code-snippet (expand-file-name "snippet.org" org-agenda-dir))
+(setq org-default-notes-file (expand-file-name "gtd.org" org-agenda-dir))
+(setq org-agenda-file-blogposts (expand-file-name "all-posts.org" org-agenda-dir))
+(setq org-agenda-files (list org-agenda-dir))
 
 ;; org-roam
-
 (use-package org
   :ensure nil
   :custom-face (org-ellipsis ((t (:foreground nil))))
@@ -61,7 +98,7 @@ prepended to the element after the #+HEADER: tag."
       (when text (insert text))))
   :pretty-hydra
   ((:title (pretty-hydra-title "Org Template" 'fileicon "org" :face 'all-the-icons-green :height 1.1 :v-adjust 0.0)
-    :color blue :quit-key "q")
+           :color blue :quit-key "q")
    ("Basic"
     (("a" (hot-expand "<a") "ascii")
      ("c" (hot-expand "<c") "center")
@@ -82,6 +119,8 @@ prepended to the element after the #+HEADER: tag."
     "Source"
     (("s" (hot-expand "<s") "src")
      ("m" (hot-expand "<s" "emacs-lisp") "emacs-lisp")
+     ("j" (hot-expand "<s" "java") "java")
+     ("b" (hot-expand "<s" "scala") "scala")
      ("y" (hot-expand "<s" "python :results output") "python")
      ("p" (hot-expand "<s" "perl") "perl")
      ("r" (hot-expand "<s" "R :results output :exports both") "R")
@@ -121,7 +160,7 @@ prepended to the element after the #+HEADER: tag."
         '(
           (sequence "TODO(t)" "STARTED(s)" "|" "DONE(d!/!)")
           ;; (sequence "TODO(t)" "DOING(i)" "HANGUP(h)" "|" "DONE(d)" "CANCEL(c)")
-          ;(sequence "⚑(T)" "🏴(I)" "❓(H)" "|" "✔(D)" "✘(C)")
+                                        ;(sequence "⚑(T)" "🏴(I)" "❓(H)" "|" "✔(D)" "✘(C)")
           (sequence "WAITING(w@/!)" "SOMEDAY(S)" "|" "CANCELLED(c@/!)" "MEETING(m)" "PHONE(p)")
           )
         org-todo-keyword-faces '(("HANGUP" . warning)
@@ -160,10 +199,10 @@ prepended to the element after the #+HEADER: tag."
     (bind-key [remap org-set-tags-command] #'counsel-org-tag org-mode-map))
 
   ;; Prettify UI
-  (use-package org-bullets
-    :if (char-displayable-p ?⚫)
-    :hook (org-mode . org-bullets-mode)
-    :init (setq org-bullets-bullet-list '("⚫" "⚫" "⚫" "⚫")))
+  ;; (use-package org-bullets
+  ;;   :if (char-displayable-p ?⚫)
+  ;;   :hook (org-mode . org-bullets-mode)
+  ;;   :init (setq org-bullets-bullet-list '("⚫" "⚫" "⚫" "⚫")))
 
   ;; (use-package org-fancy-priorities
   ;;   :diminish
@@ -196,14 +235,14 @@ prepended to the element after the #+HEADER: tag."
     (cl-pushnew '(sh . t) load-language-list))
 
   ;; (use-package ob-go
-    ;; :init (cl-pushnew '(go . t) load-language-list))
+  ;; :init (cl-pushnew '(go . t) load-language-list))
 
   (use-package ob-ipython
     :if (executable-find "jupyter")     ; DO NOT remove
     :init (cl-pushnew '(ipython . t) load-language-list))
 
   ;; Use mermadi-cli: npm install -g @mermaid-js/mermaid-cli
-   ;; (use-package ob-mermaid
+  ;; (use-package ob-mermaid
   ;;   :init (cl-pushnew '(mermaid . t) load-language-list))
 
   (org-babel-do-load-languages 'org-babel-load-languages
@@ -343,6 +382,76 @@ prepended to the element after the #+HEADER: tag."
                              ))
       (message "Convert finish: %s" docx-file))))
 
+;; org-capture
+(setq org-capture-templates
+            '(("t" "Todo" entry (file+headline org-agenda-file-gtd "Workspace")
+               "* TODO [#B] %?\n  %i\n %U"
+               :empty-lines 1)
+              ("n" "notes" entry (file+headline org-agenda-file-note "Quick notes")
+               "* %?\n  %i\n %U"
+               :empty-lines 1)
+              ("b" "Blog Ideas" entry (file+headline org-agenda-file-note "Blog Ideas")
+               "* TODO [#B] %?\n  %i\n %U"
+               :empty-lines 1)
+              ("s" "Code Snippet" entry
+               (file org-agenda-file-code-snippet)
+               "* %?\t%^g\n#+BEGIN_SRC %^{language}\n\n#+END_SRC")
+              ("w" "work" entry (file+headline org-agenda-file-gtd "Work")
+               "* TODO [#A] %?\n  %i\n %U"
+               :empty-lines 1)
+              ("c" "Chrome" entry (file+headline org-agenda-file-note "Quick notes")
+               "* TODO [#C] %?\n %(zilongshanren/retrieve-chrome-current-tab-url)\n %i\n %U"
+               :empty-lines 1)
+              ("l" "links" entry (file+headline org-agenda-file-note "Quick notes")
+               "* TODO [#C] %?\n  %i\n %a \n %U"
+               :empty-lines 1)
+              ("j" "Journal Entry"
+               entry (file+datetree org-agenda-file-journal)
+               "* %?"
+               :empty-lines 1)))
+
+      (with-eval-after-load 'org-capture
+        (defun org-hugo-new-subtree-post-capture-template ()
+          "Returns `org-capture' template string for new Hugo post.
+See `org-capture-templates' for more information."
+          (let* ((title (read-from-minibuffer "Post Title: ")) ;Prompt to enter the post title
+                 (fname (org-hugo-slug title)))
+            (mapconcat #'identity
+                       `(
+                         ,(concat "* TODO " title)
+                         ":PROPERTIES:"
+                         ,(concat ":EXPORT_FILE_NAME: " fname)
+                         ":END:"
+                         "\n\n")        ;Place the cursor here finally
+                       "\n")))
+
+        (add-to-list 'org-capture-templates
+                     '("h"              ;`org-capture' binding + h
+                       "Hugo post"
+                       entry
+                       ;; It is assumed that below file is present in `org-directory'
+                       ;; and that it has a "Blog Ideas" heading. It can even be a
+                       ;; symlink pointing to the actual location of all-posts.org!
+                       (file+headline org-agenda-file-blogposts "Blog Ideas")
+                       (function org-hugo-new-subtree-post-capture-template))))
+
+      ;;An entry without a cookie is treated just like priority ' B '.
+      ;;So when create new task, they are default 重要且紧急
+      (setq org-agenda-custom-commands
+            '(
+              ("w" . "任务安排")
+              ("wa" "重要且紧急的任务" tags-todo "+PRIORITY=\"A\"")
+              ("wb" "重要且不紧急的任务" tags-todo "-Weekly-Monthly-Daily+PRIORITY=\"B\"")
+              ("wc" "不重要且紧急的任务" tags-todo "+PRIORITY=\"C\"")
+              ("b" "Blog" tags-todo "BLOG")
+              ("p" . "项目安排")
+              ("pw" tags-todo "PROJECT+WORK+CATEGORY=\"work\"")
+              ("pl" tags-todo "PROJECT+DREAM+CATEGORY=\"zilongshanren\"")
+              ("W" "Weekly Review"
+               ((stuck "") ;; review stuck projects as designated by org-stuck-projects
+                (tags-todo "PROJECT") ;; review all projects (assuming you use todo keywords to designate projects)
+                ))))
+;;; lazy-load
 (dolist (hook (list
                'org-mode-hook
                ))
@@ -359,6 +468,51 @@ prepended to the element after the #+HEADER: tag."
                      org-mode-map
                      )
                     )))
+
+(add-hook 'org-mode-hook 'visual-line-mode)
+(setq org-hide-emphasis-markers t)
+;; (add-to-list 'org-emphasis-alist
+;;              '("*" (:foreground "red")
+;;                ))
+
+(defface org-bold
+  '((t :foreground "#d2268b"
+       :background "#2e2e2e"
+       :weight bold
+       :underline t
+       ))
+  "Face for org-mode bold."
+  :group 'org-faces)
+
+(setq org-emphasis-alist
+      '(("*" ;; (bold :foreground "Orange" )
+         org-bold)
+        ("/" italic)
+        ("_" underline)
+        ("=" ;; (:background "maroon" :foreground "white")
+         org-verbatim verbatim)
+        ("~" ;; (:background "deep sky blue" :foreground "MidnightBlue")
+         org-code verbatim)
+        ("+" (:strike-through t))))
+
+;; Because spacemacs had different ideas about the verbatim background
+(set-face-background 'org-bold "#2e2e2e")
+(set-face-background 'org-verbatim "#2e2e2e")
+(custom-theme-set-faces
+ 'user
+ '(org-block ((t (:inherit fixed-pitch))))
+ '(org-code ((t (:inherit (shadow fixed-pitch)))))
+ '(org-document-info ((t (:foreground "dark orange"))))
+ '(org-document-info-keyword ((t (:inherit (shadow fixed-pitch)))))
+ '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
+ '(org-link ((t (:foreground "royal blue" :underline t))))
+ '(org-meta-line ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+ '(org-property-value ((t (:inherit fixed-pitch))) t)
+ '(org-special-keyword ((t (:inherit (font-lock-comment-face fixed-pitch)))))
+ '(org-table ((t (:inherit fixed-pitch :foreground "#83a598"))))
+ '(org-tag ((t (:inherit (shadow fixed-pitch) :weight bold :height 0.8))))
+ '(org-verbatim ((t (:inherit (shadow fixed-pitch))))))
+
 
 (provide 'init-org)
 

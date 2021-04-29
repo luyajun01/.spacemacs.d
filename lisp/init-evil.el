@@ -633,8 +633,12 @@ If the character before and after CH is space or tab, CH is NOT slash"
   "pp" 'my-goto-previous-hunk
   "pc" 'my-dired-redo-from-commands-history
   "pw" 'pwd
+  "es" 'elpy-shell-send-group
+  "dp" 'dash-at-point
   "su" 'scimax-ob-move-src-block-up
   "sd" 'scimax-ob-move-src-block-down
+  "oc" 'org-capture
+  "oe" 'org-emphasize
   "sh" 'scimax-ob-jump-to-header
   ;; "mm" 'counsel-evil-goto-global-marker
   "hg" 'hydra-magit/body
@@ -645,6 +649,7 @@ If the character before and after CH is space or tab, CH is NOT slash"
   "xc" 'save-buffers-kill-terminal      ; not used frequently
   "cc" 'my-dired-redo-last-command
   "po" 'plain-org-wiki-helm
+  "ss" 'swiper
   ;; "ss" 'wg-create-workgroup ; save windows layout
   ;; "se" 'evil-iedit-state/iedit-mode ; start iedit in emacs
   ;; "sc" 'shell-command

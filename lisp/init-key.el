@@ -48,8 +48,11 @@
    ("C-l" . my-python-line)
    ("C-c C-e" . sp-end-of-sexp)         ;smartparens end
    ("C-c C-b" . sp-beginning-of-sexp)
-   ("C-S-j" . rime-inline-ascii)
-   ("C-S-p" . +rime-convert-string-at-point)
+   ("C-<return>" . org-insert-heading)
+   ("C-o" . org-insert-subheading)
+   ;; ("C-S-j" . rime-inline-ascii)
+   ;; ("C-S-p" . +rime-convert-string-at-point)
+   ("C-S-p" . pyim-convert-string-at-point)
    ("C-r" . python-shell-send-region)
    ("C-c C-n" . scimax-ob-move-src-block-down)
    ("C-c C-p" . scimax-ob-move-src-block-up)

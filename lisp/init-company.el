@@ -202,8 +202,8 @@
       (advice-add #'company-yasnippet :around #'my-company-yasnippet-disable-inline)))
 
   ;;   ;; Better sorting and filtering
-  (use-package company-prescient
-    :init (company-prescient-mode 1))
+  ;; (use-package company-prescient
+  ;;   :init (company-prescient-mode 1))
 
   ;; Icons and quickhelp
   (when emacs/>=26p

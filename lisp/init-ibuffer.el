@@ -39,9 +39,9 @@
   :init (setq ibuffer-filter-group-name-face '(:inherit (font-lock-string-face bold)))
   :config
   ;; Display icons for buffers
-  ;; (use-package all-the-icons-ibuffer
-  ;;   :if (icons-displayable-p)
-  ;;   :init (all-the-icons-ibuffer-mode 1))
+  (use-package all-the-icons-ibuffer
+    :if (icons-displayable-p)
+    :init (all-the-icons-ibuffer-mode 1))
 
   (with-eval-after-load 'counsel
     (with-no-warnings
