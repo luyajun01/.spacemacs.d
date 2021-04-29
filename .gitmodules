@@ -13,3 +13,9 @@
 [submodule "private/emacs-rime"]
 	path = private/emacs-rime
 	url = https://github.com/DogLooksGood/emacs-rime
+[submodule "private/company-ess"]
+	path = private/company-ess
+	url = https://github.com/Lompik/company-ess.git
+[submodule "private/cpputils-cmake"]
+	path = private/cpputils-cmake
+	url = https://github.com/redguardtoo/cpputils-cmake.git
