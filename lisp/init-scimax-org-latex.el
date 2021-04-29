@@ -1,8 +1,6 @@
 ;;; scimax-org-latex.el --- scimax customizations for latex in org-mode
-
 ;;; Commentary:
 ;; These are scimax modifications to how org generates Latex or Latex equation fragments.
-
 (require 'ox-latex)
 
 (defvar scimax-toggle-latex-fragment-func

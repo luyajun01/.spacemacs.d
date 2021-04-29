@@ -1,11 +1,50 @@
+;;cpputils
+(add-to-list 'load-path "~/.spacemacs.d/private/cpputils-cmake")
+(require 'cpputils-cmake)
+
+;;color-moccur
+;; (add-to-list 'load-path "~/.spacemacs.d/private/color-moccur")
+;; (require 'color-moccur)
+;; zshrc
+(let ((path (shell-command-to-string ". ~/.zshrc; echo -n $PATH")))
+  (setenv "PATH" path)
+  (setq exec-path
+        (append
+         (split-string-and-unquote path ":")
+         exec-path)))
+;; electric-indent-mode
+(electric-indent-mode -1)
+;; cnfonts
+(add-to-list 'load-path "~/scimax/elpa/cnfonts-20190314.1132")
+(require 'cnfonts)
+(cnfonts-enable)
+;;geeknote.el
+;; (add-to-list 'load-path "~/.spacemacs.d/private/emacs-geeknote")
+;; (require 'geeknote)
+;; (setq geeknote-command "python ~/.spacemacs.d/private/geeknote/geeknote/geeknote.py")
+;; (defun geeknote-create (title)
+;;   "Create a new note with the given title.
+
+;; TITLE the title of the new note to be created."
+;;   (interactive "sName: ")
+;;   (message (format "geeknote creating note: %s" title))
+;;   (let ((note-title (geeknote--parse-title title))
+;; 	      (note-tags (geeknote--parse-tags title))
+;; 	      (note-notebook (geeknote--parse-notebook title)))
+;;     (async-shell-command
+;;      (format (concat geeknote-command " create --content WRITE --title %s "
+;;                      (when note-notebook " --notebook %s"))
+;;              (shell-quote-argument note-title)
+;;              (shell-quote-argument (or note-tags ""))
+;;              (shell-quote-argument (or note-notebook ""))))))
 ;;posframe
 (add-to-list 'load-path "~/.spacemacs.d/private/posframe")
 (require 'posframe)
 ;;rime
-(add-to-list 'load-path "~/.spacemacs.d/private/emacs-rime")
-(require 'rime)
-
-(ivy-posframe-mode 1)
+;; (add-to-list 'load-path "~/.spacemacs.d/private/emacs-rime")
+;; (require 'rime)
+;;ivy-posframe 占用内存
+;; (ivy-posframe-mode 1)
 (company-posframe-mode 1)
 ;;snails
 (add-to-list 'load-path "~/.spacemacs.d/private/snails")
@@ -107,7 +146,7 @@ In that case, insert the number."
 (define-key evil-inner-text-objects-map "e" 'evil-inner-symbol)
 
 
-;;;###autoload
+;;;autoload
 (evil-define-motion evil-forward-symbol-begin(count)
   "Move to the end of the COUNT-th next symbol."
   ;; :jump t
@@ -122,7 +161,7 @@ In that case, insert the number."
     )
   )
 
-;;;###autoload
+;;;autoload
 (evil-define-motion evil-backward-symbol-begin(count)
   "Move to the end of the COUNT-th next symbol."
   ;; :jump t
@@ -191,15 +230,15 @@ In that case, insert the number."
 ;; (setq nox-python-path "~/.virtualenvs/test/bin/python/")
 
 ;;quela
-(quelpa
- '(quelpa-use-package
-   :fetcher git
-   :url "https://github.com/quelpa/quelpa-use-package.git"))
-(require 'quelpa-use-package)
+;; (quelpa
+;;  '(quelpa-use-package
+;;    :fetcher git
+;;    :url "https://github.com/quelpa/quelpa-use-package.git"))
+;; (require 'quelpa-use-package)
 
 ;; ;;lsp-pyright
-(add-to-list 'load-path "~/.spacemacs.d/private/lsp-pyright")
-(require 'lsp-pyright)
+;; (add-to-list 'load-path "~/.spacemacs.d/private/lsp-pyright")
+;; (require 'lsp-pyright)
 
 ;;lazy-set-key
 (add-to-list 'load-path "~/.spacemacs.d/private/lazy-set-key")
@@ -238,8 +277,8 @@ In that case, insert the number."
 (add-hook 'python-mode-hook #'rainbow-delimiters-mode)
 
 ;; ov-hight
-(add-to-list 'load-path "~/.spacemacs.d/private/ov-highlight") ; add auto-save to your load-path
-(require 'ov-highlight)
+;; (add-to-list 'load-path "~/.spacemacs.d/private/ov-highlight") ; add auto-save to your load-path
+;; (require 'ov-highlight)
 ;;plain-org-wiki
 (add-to-list 'load-path "~/.spacemacs.d/private/plain-org-wiki") ; add auto-save to your load-path
 (require 'plain-org-wiki)
@@ -290,7 +329,7 @@ In that case, insert the number."
 
   (add-hook hook '(lambda () (awesome-pair-mode 1))))
 
-(define-key awesome-pair-mode-map (kbd "(") 'awesome-pair-open-round)
+(define-key awesome-pair-mode-map (kbd "C-q") 'awesome-pair-open-round)
 (define-key awesome-pair-mode-map (kbd "[") 'awesome-pair-open-bracket)
 (define-key awesome-pair-mode-map (kbd "{") 'awesome-pair-open-curly)
 (define-key awesome-pair-mode-map (kbd ")") 'awesome-pair-close-round)
@@ -446,53 +485,53 @@ In that case, insert the number."
 ;;         ;(liberime-select-schema "xhup_fluency")
 ;;         (setq pyim-default-scheme 'pyim-shuangpin)))))
 
-;; (use-package pyim
-;;   :ensure nil
-;;   :demand t
-;;   :config
-;;   ;; 激活 basedict 拼音词库，五笔用户请继续阅读 README
-;;   (use-package pyim-basedict
-;;     :ensure nil
-;;     :config (pyim-basedict-enable))
+(use-package pyim
+  :ensure nil
+  :demand t
+  :config
+  ;; 激活 basedict 拼音词库，五笔用户请继续阅读 README
+  (use-package pyim-basedict
+    :ensure nil
+    :config (pyim-basedict-enable))
 
-;;   (setq default-input-method "pyim")
+  (setq default-input-method "pyim")
 
-;;   ;; 我使用全拼
-;;   (setq pyim-default-scheme 'xiaohe-shuangpin)
+  ;; 我使用全拼
+  (setq pyim-default-scheme 'xiaohe-shuangpin)
 
-;;   ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-)
-;;   ;; 我自己使用的中英文动态切换规则是：
-;;   ;; 1. 光标只有在注释里面时，才可以输入中文。
-;;   ;; 2. 光标前是汉字字符时，才能输入中文。
-;;   ;; 3. 使用 M-j 快捷键，强制将光标前的拼音字符串转换为中文。
-;;   (setq-default pyim-english-input-switch-functions
-;;                 '(pyim-probe-dynamic-english
-;;                   pyim-probe-isearch-mode
-;;                   pyim-probe-program-mode
-;;                   pyim-probe-org-structure-template))
+  ;; 设置 pyim 探针设置，这是 pyim 高级功能设置，可以实现 *无痛* 中英文切换 :-)
+  ;; 我自己使用的中英文动态切换规则是：
+  ;; 1. 光标只有在注释里面时，才可以输入中文。
+  ;; 2. 光标前是汉字字符时，才能输入中文。
+  ;; 3. 使用 M-j 快捷键，强制将光标前的拼音字符串转换为中文。
+  (setq-default pyim-english-input-switch-functions
+                '(pyim-probe-dynamic-english
+                  pyim-probe-isearch-mode
+                  pyim-probe-program-mode
+                  pyim-probe-org-structure-template))
 
-;;   (setq-default pyim-punctuation-half-width-functions
-;;                 '(pyim-probe-punctuation-line-beginning
-;;                   pyim-probe-punctuation-after-punctuation))
+  (setq-default pyim-punctuation-half-width-functions
+                '(pyim-probe-punctuation-line-beginning
+                  pyim-probe-punctuation-after-punctuation))
 
-;;   ;; 开启拼音搜索功能
-;;   (pyim-isearch-mode 1)
+  ;; 开启拼音搜索功能
+  (pyim-isearch-mode 1)
 
-;;   ;; 使用 popup-el 来绘制选词框, 如果用 emacs26, 建议设置
-;;   ;; 为 'posframe, 速度很快并且菜单不会变形，不过需要用户
-;;   ;; 手动安装 posframe 包。
-;;   (setq pyim-page-tooltip 'posframe)
+  ;; 使用 popup-el 来绘制选词框, 如果用 emacs26, 建议设置
+  ;; 为 'posframe, 速度很快并且菜单不会变形，不过需要用户
+  ;; 手动安装 posframe 包。
+  (setq pyim-page-tooltip 'posframe)
 
-;;   ;; 选词框显示5个候选词
-;;   (setq pyim-page-length 6)
+  ;; 选词框显示5个候选词
+  (setq pyim-page-length 6)
 
-;;   :bind
-;;   (
-;;    ("C-S-p" . pyim-convert-string-at-point) ;与 pyim-probe-dynamic-english 配合
-;;    ;; ("C-;" . pyim-delete-word-from-personal-buffer)
-;;    )
-;;   )
-;;color-rg
+  :bind
+  (
+   ("C-S-p" . pyim-convert-string-at-point) ;与 pyim-probe-dynamic-english 配合
+   ;; ("C-;" . pyim-delete-word-from-personal-buffer)
+   )
+  )
+;; color-rg
 (add-to-list 'load-path "~/.spacemacs.d/private/color-rg") ; add color-rg to your load-path
 (require 'color-rg)
 
@@ -536,7 +575,7 @@ In that case, insert the number."
   ;; (evil-define-key 'visual evil-snipe-mode-map "X" #'evil-snipe-X)
 
 ;;olivetti
-(require 'olivetti)
+;; (require 'olivetti)
 
 
 ;;avy
@@ -559,15 +598,25 @@ In that case, insert the number."
 ;;   (add-hook 'emacs-lisp-mode-hook #'evil-lispy-mode)
 ;;   (add-hook 'clojure-mode-hook #'evil-lispy-mode)
 ;;   )
+;; smex
+(require 'smex)                       ; Not needed if you use package.el
+(smex-initialize)
+(global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
 
-;;awesome-tray
+;; awesome-tray
 (add-to-list 'load-path "~/.spacemacs.d/private/awesome-tray")
 (require 'awesome-tray)
+(awesome-tray-mode 1)
+;; 可以压缩modeline 厚度
+(if (display-graphic-p)
+    (setq-default mode-line-format '(" "))
+  (setq-default mode-line-format nil))
 
-;;google-translate
+;; google-translate
 (add-to-list 'load-path "~/.spacemacs.d/private/google-translate") ; add color-rg to your load-path
 (require 'google-translate)
-;;load color theme
+;; load color theme
 ;; (add-to-list 'load-path "~/.spacemacs.d/private/color-theme")
 ;; (require 'color-theme)
 ;; (load-file "~/Dropbox/emacs/emacs-24.3/etc/themes/tango-light-theme.el")
@@ -586,34 +635,6 @@ In that case, insert the number."
 (require 'org-noter)
 
 ;;python
-(defun my-python-line ()
-  (interactive)
-  (save-excursion
-    (setq the_script_buffer (format (buffer-name)))
-    (end-of-line)
-    (kill-region (point) (progn (back-to-indentation) (point)))
-    (if  (get-buffer  "*Python*")
-        (message "")
-      (run-python "ipython" nil nil))
-    ;; (setq the_py_buffer (format "*Python[%s]*" (buffer-file-name)))
-    (setq the_py_buffer "*Python*")
-    (switch-to-buffer-other-window  the_py_buffer)
-    (goto-char (buffer-end 1))
-    (yank)
-    (comint-send-input)
-    (switch-to-buffer-other-window the_script_buffer)
-    (yank))
-  (end-of-line)
-  (next-line)
-  )
-
-(add-hook 'python-mode-hook
-          (lambda ()
-            (define-key python-mode-map "\C-l" 'my-python-line)
-            ))
-
-(setq-default electric-indent-inhibit t)
-
 ;;paredit-mode
 ;; (add-hook 'prog-mode-hook 'paredit-mode)
 ;; (add-hook 'python-mode-hook 'paredit-mode)
@@ -732,9 +753,9 @@ In that case, insert the number."
 (add-to-list 'load-path "~/.spacemacs.d/private/one-key")
 (require 'one-key)
 ;;lispy
-;; (add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1)))
-;; (add-hook 'python-mode-hook (lambda () (lispy-mode 1)))
-;; (add-hook 'ipython-mode-hook (lambda () (lispy-mode 1)))
+(add-hook 'emacs-lisp-mode-hook (lambda () (lispy-mode 1)))
+(add-hook 'python-mode-hook (lambda () (lispy-mode 1)))
+(add-hook 'ipython-mode-hook (lambda () (lispy-mode 1)))
 
 ;;org-ref
 (require 'org-ref)
@@ -876,25 +897,25 @@ In that case, insert the number."
    #b00000000])
 
 ;;ivy-posframe-style
-(require 'ivy-posframe)
+;; (require 'ivy-posframe)
 ;; display at `ivy-posframe-style'
 ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display)))
-(setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
+;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
 ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-center)))
 ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-bottom-left)))
 ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-window-bottom-left)))
 ;; (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center)))
 ;; Different command can use different display function.
-(setq ivy-posframe-parameters
-      '((left-fringe . 8)
-        (right-fringe . 8)))
+;; (setq ivy-posframe-parameters
+;;       '((left-fringe . 8)
+;;         (right-fringe . 8)))
 ;; Different command can use different display function.
-(setq ivy-posframe-display-functions-alist
-      '((swiper          . ivy-posframe-display-at-frame-center)
-        (counsel-recentf . ivy-posframe-display-at-window-center)
-        (counsel-M-x     . ivy-posframe-display-at-window-center)
-        (t               . ivy-posframe-display)))
-(ivy-posframe-mode 1)
+;; (setq ivy-posframe-display-functions-alist
+;;       '((swiper          . ivy-posframe-display-at-frame-center)
+;;         (counsel-recentf . ivy-posframe-display-at-window-center)
+;;         (counsel-M-x     . ivy-posframe-display-at-window-center)
+;;         (t               . ivy-posframe-display)))
+;; (ivy-posframe-mode 1)
 
 ;; org-brain
 (add-to-list 'load-path "~/.spacemacs.d/private/org-brain")

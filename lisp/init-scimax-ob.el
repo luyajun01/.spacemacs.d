@@ -11,6 +11,7 @@
 (require 'dash)
 (require 'avy)
 (pyvenv-mode 1)
+(require 'org)
 
 (defun scimax-insert-src-block (&optional below)
   "Insert a src block above the current point.

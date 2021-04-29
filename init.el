@@ -35,10 +35,10 @@ This function should only modify configuration layer settings."
      ;;      lsp-ui-flycheck t
      ;;      )
 command-log
-     ;; (python :variables
-     ;;         python-backend 'anaconda
-     ;;         ;; python-lsp-server 'pyright
-     ;;         )
+    (python :variables
+             python-backend 'anaconda
+             ;; python-lsp-server 'pyright
+             )
      (ivy :variables ivy-enable-advanced-buffer-information nil)
      ;better-defaults
      ;ranger
@@ -47,11 +47,11 @@ command-log
      ;; lsp
      ;; dap
      ;; colors
-(python :variables
-       python-backend 'anaconda
-        python-formatter 'yapf
-        python-format-on-save t
-        )
+;; (python :variables
+;;        python-backend 'lsp
+;;         python-formatter 'yapf
+;;         python-format-on-save t
+;;         )
      lpy
     ;; tabnine
      (ess :variables
@@ -59,13 +59,12 @@ command-log
           ;; ess-assign-key "M--"
           )
      imenu-list
-pdf-tools
-evernote
-search-engine
-(elfeed :variables
-        elfeed-feeds '(("http://nullprogram.com/feed/" blog emacs)
-                       "http://www.50ply.com/atom.xml"  ; no autotagging
-                       ("http://nedroid.com/feed/" webcomic)))
+;; pdf-tools
+;; search-engine
+;; (elfeed :variables
+;;         elfeed-feeds '(("http://nullprogram.com/feed/" blog emacs)
+;;                        "http://www.50ply.com/atom.xml"  ; no autotagging
+;;                        ("http://nedroid.com/feed/" webcomic)))
      ;ipython-notebook
      ;prodigy
      ;; spacemacs-language
@@ -123,10 +122,10 @@ search-engine
      ;(gtags :disabled-for clojure emacs-lisp javascript latex python shell-scripts)
      ;; (shell :variables shell-default-shell 'ansi-term
      ;;        shell-default-term-shell "/bin/zsh")
-     ;; (shell :variables
-     ;;        shell-default-term-shell "/bin/zsh" ;; find your zsh path using `$ whereis zsh`
-     ;;        shell-default-height 30
-     ;;        shell-default-position 'bottom)
+     (shell :variables
+            shell-default-term-shell "/bin/zsh" ;; find your zsh path using `$ whereis zsh`
+            shell-default-height 30
+            shell-default-position 'bottom)
      ;; docker
      (latex :variables
             latex-build-command "XeLaTeX"
@@ -186,26 +185,29 @@ search-engine
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages ;; A list of packages that cannot be updated.
    '(                               ;sicp
-     ;; pyim
+     pyim
+     ;; xterm-color
      ;; sunburn-theme
-     grip-mode
-     flycheck-popup-tip
+     ;; grip-mode
+     dash-at-point
+     ;; flycheck-popup-tip
+     pretty-symbols
      ;; dracula-theme
      ;; anaconda-mode
      company-anaconda
-     live-py-mode
-markdown-toc
-     ov
-     rime
-     ace-pinyin
-     pinyinlib
-     fcitx
-     sr-speedbar
-     ;; ess-view-data
-     go-translate
-     treemacs
+     ;; live-py-mode
+;; markdown-toc
      ;; ov
-     ebib
+     ;; rime
+     ace-pinyin
+     ;; pinyinlib
+     ;; fcitx
+     ;; sr-speedbar
+     ;; ess-view-data
+     ;; go-translate
+     ;; treemacs
+     ;; ov
+     ;; ebib
      org-ref
      ;; org-pdftools
      ;; org-brain
@@ -218,11 +220,11 @@ markdown-toc
      ;; color-moccur
      evil-lispy
      ;; sdcv
-     google-translate
-     quelpa
+     ;; google-translate
+     ;; quelpa
      ;; interleave
      lispy
-     quelpa-use-package
+     ;; quelpa-use-package
      rg
      ;; json-mode
      ;; skewer-mode
@@ -246,7 +248,7 @@ markdown-toc
      ;; dired-quick-sort
      rainbow-delimiters
      ;; volatile-highlights
-     ;; all-the-icons-ibuffer
+     all-the-icons-ibuffer
      major-mode-hydra
                                         ; ivy-prescient
      evil-escape
@@ -255,32 +257,32 @@ markdown-toc
      ;; hide-mode-line
      ;; default-text-scale
      ;; goto-line-preview
-     avy-zap
+     ;; avy-zap
      ;; dired-git-info
      ;; dired-rsync
-     symbol-overlay
+     ;; symbol-overlay
      ;; highlight-indent-guides
      ;; diff-hl
      ;; volatile-highlights
      ;; ibuffer-projectile
      ;; easy-kill-extras
-     shackle
+     ;; shackle
      ;; ob-go
      ;; ob-rust
      ob-ipython
      ;; ob-mermaid
-     beginend
-     comment-dwim-2
-     drag-stuff
+     ;; beginend
+     ;; comment-dwim-2
+     ;; drag-stuff
      multiple-cursors
-     smart-region
-     mwim
-     pager
-     goto-last-point
-     goto-char-preview
-     sudo-edit
-     fancy-narrow
-     goto-line-preview
+     ;; smart-region
+     ;; mwim
+     ;; pager
+     ;; goto-last-point
+     ;; goto-char-preview
+     ;; sudo-edit
+     ;; fancy-narrow
+     ;; goto-line-preview
      ;; amx
      ;; ivy-yasnippet
      ;; counsel-world-clock
@@ -314,18 +316,18 @@ markdown-toc
      ;; ivy-rich
      ;; all-the-icons-dired
      ;; ibuffer-vc
-     company-prescient
+     ;; company-prescient
      ;; org-re-reveal
      ;; evil-escape
      ;; evil-exchange
      ;; ivy-xref
-     ivy-posframe
+     ;; ivy-posframe
                                         ;lsp-python-ms
      evil-org
      general
      ;; keyfreq
      company-posframe
-     company-quickhelp
+     ;; company-quickhelp
      ;; window-numbering
      ;; ace-jump-zap
                                         ;anaconda-mode
@@ -357,11 +359,11 @@ markdown-toc
      ;; company-posframe
      ;; function-args
      elpy
-     jupyter
+     ;; jupyter
      ;; counsel-etags
      ;; company-ctags
      ;; mmm-mode
-     lsp-mode
+     ;; lsp-mode
      ;; lsp-python-ms
      ;; lsp-ui
      ;; slime
@@ -370,7 +372,7 @@ markdown-toc
      ;; org-journal
      ;; company-lsp
      ;; elfeed
-     olivetti
+     ;; olivetti
      ;; bongo
      ;; ztree
      ;; diffview
@@ -382,7 +384,7 @@ markdown-toc
      ;; ccls
      ;; lsp-julia
      ;; lsp-java
-     quickrun
+     ;; quickrun
      ;; cask-mode
      ;; csv-mode
      ;; lua-mode
@@ -444,6 +446,7 @@ markdown-toc
      poly-org
      polymode
      poly-R
+     git-gutter
      ;; poly-noweb
      ;; poly-markdown
      )
@@ -458,9 +461,9 @@ markdown-toc
                     ;skewer-mode
                     ;rainbow-delimiters
                     highlight-indentation vi-tilde-fringe eyebrowse ws-butler
-                    ;org-bullets
+                    org-bullets
                     smooth-scrolling org-repo-todo org-download org-timer
-                    livid-mode git-gutter git-gutter-fringe
+                    livid-mode git-gutter-fringe
                     ;; evil-escape
                     ;leuven-theme gh-md evil-lisp-state spray lorem-ipsum symon
                     ac-ispell ace-jump-mode auto-complete auto-dictionary
@@ -875,16 +878,7 @@ dump."
   )
 
 (defun dotspacemacs/user-config ()
-  ;;awesome-tray
-  (add-to-list 'load-path "~/.spacemacs.d/private/awesome-tray")
-  (require 'awesome-tray)
-  (awesome-tray-mode 1)
-  ;;可以压缩modeline 厚度
-  (if (display-graphic-p)
-      (setq-default mode-line-format '(" "))
-    (setq-default mode-line-format nil))
-
-  (add-hook 'doc-view-mode-hook 'auto-revert-mode)
+   (add-hook 'doc-view-mode-hook 'auto-revert-mode)
   ;; (require 'smex)                       ; Not needed if you use package.el
   ;; (smex-initialize)
   ;; (global-set-key (kbd "M-x") 'smex)
@@ -966,49 +960,53 @@ decrease this. If you experience stuttering, increase this.")
     (update-load-path)
     ;; Packages
     ;; Without this comment Emacs25 adds (package-initialize) here
-    (require 'init-private)
-    (require 'init-scimax-ob)
-    (require 'init-scimax-org-latex)
-    (require 'init-rime)
     (require 'init-python)
-    (require 'init-evil)
-    (require 'init-google-translate)
-    (require 'init-doi)
-    (require 'init-one-key)
-    (require 'init-key)
-    (require 'init-symbol-overlay)
+    (require 'init-private)
+    ;; (require 'init-scimax-ob)
+    ;; (require 'init-scimax-org-latex)
+    ;; (require 'init-rime)
+    ;; (require 'init-c)
+    ;; (require 'init-lsp)
+    (require 'init-utils)
     (require 'init-git)
-    (require 'init-mode)
-    (require 'init-pdftools)
+    (require 'init-org)
+    (require 'init-evil)
+    ;; (require 'init-custom)
+    ;; (require 'init-ui)
+    ;; (require 'init-google-translate)
+    ;; (require 'init-doi)
+    (require 'init-one-key)
+    ;; (require 'init-shell)
+    (require 'init-key)
+    ;; (require 'init-symbol-overlay)
+    ;; (require 'init-mode)
+    ;; (require 'init-pdftools)
     (require 'init-thing-edit)
     (require 'init-company)
-    (require 'init-package)
-    (require 'init-speedbar)
+    ;; (require 'init-package)
+    ;; (require 'init-speedbar)
     ;; Preferences
     ;; (require 'init-basic)
     (require 'init-hydra)
     ;; (require 'init-line-number)
-    (require 'init-org)
-    (require 'init-edit)
+    ;; (require 'init-edit)
     (require 'init-ivy)
     (require 'init-yasnippet)
-    (require 'init-scimax-org-babel)
+    ;; (require 'init-scimax-org-babel)
     (require 'init-dired)
     (require 'init-highlight)
     ;; (require 'init-ibuffer)
     (require 'init-kill-ring)
-    (require 'init-window)
-    (require 'init-treemacs)
+    ;; (require 'init-window)
+    ;; (require 'init-treemacs)
     (require 'init-ess)
-    (require 'init-smex)
-    (require 'init-markdown)
+    ;; (require 'init-smex)
+    ;; (require 'init-markdown)
     ;; Programming
     (require 'init-flycheck)
     ;; (require 'init-projectile)
-    ;; (require 'init-lsp)
-    (require 'init-company-tabnine)
+    ;; (require 'init-company-tabnine)
     ;; (require 'init-elisp)
-    (require 'init-c)
     ;; 改变evil-insert-mode光标形状
     (setq-default evil-insert-state-cursor '("green" (bar . 2)))
     (setcdr evil-insert-state-map nil)
@@ -1073,7 +1071,7 @@ decrease this. If you experience stuttering, increase this.")
     ;;   :bind
     ;;   (("C-S-P" . pyim-convert-string-at-point) ;与 pyim-probe-dynamic-english 配合
     ;;    ("C-;" . pyim-delete-word-from-personal-buffer)))
-        ;; load theme
+    ;; load theme
     ;;pdf-tools
 ;;; pdf-tools package and reinstall both as at the start.
     ;; (use-package pdf-tools

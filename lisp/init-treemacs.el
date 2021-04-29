@@ -70,19 +70,19 @@
        (treemacs-git-mode 'simple)))
 
     ;; Projectile integration
-    (use-package treemacs-projectile
-      :after projectile
-      :bind (:map projectile-command-map
-             ("h" . treemacs-projectile)))
+    ;; (use-package treemacs-projectile
+    ;;   :after projectile
+    ;;   :bind (:map projectile-command-map
+    ;;          ("h" . treemacs-projectile)))
 
-    (use-package treemacs-magit
-      :after magit
-      :commands treemacs-magit--schedule-update
-      :hook ((magit-post-commit
-              git-commit-post-finish
-              magit-post-stage
-              magit-post-unstage)
-             . treemacs-magit--schedule-update))
+    ;; (use-package treemacs-magit
+    ;;   :after magit
+    ;;   :commands treemacs-magit--schedule-update
+    ;;   :hook ((magit-post-commit
+    ;;           git-commit-post-finish
+    ;;           magit-post-stage
+    ;;           magit-post-unstage)
+    ;;          . treemacs-magit--schedule-update))
 
     ;; (use-package treemacs-persp
     ;;   :after persp-mode
