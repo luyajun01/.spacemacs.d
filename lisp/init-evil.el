@@ -736,11 +736,17 @@ If N > 0 and working on javascript, only occurrences in current N lines are rena
           (my-search-prev-merge-conflict)))
   "ch" 'my-dired-redo-from-commands-history
   "dd" 'pwd
+  "aa" 'avy-goto-line
+  "fr" 'counsel-recentf
+  "ff" 'dired
+  "bb" 'counsel-switch-buffer
+  "SPC" 'counsel-M-x
+  "ss" 'my-swiper
   "mm" 'counsel-evil-goto-global-marker
   "mf" 'mark-defun
   "xc" 'save-buffers-kill-terminal ; not used frequently
   "cc" 'my-dired-redo-last-command
-  "ss" 'wg-create-workgroup ; save windows layout
+  ;; "ss" 'wg-create-workgroup ; save windows layout
   "sc" 'shell-command
   "ll" 'wg-open-workgroup ; load windows layout
 

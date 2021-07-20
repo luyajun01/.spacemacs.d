@@ -37,41 +37,44 @@
                                      (not (member theme '(twilight
                                                           avk-darkblue-white
                                                           sanityinc-tomorrow-bright))))
-                                (member theme '(adwaita
-                                                aliceblue
-                                                bharadwaj
-                                                black-on-gray
-                                                blippblopp
-                                                emacs-21
-                                                emacs-nw
-                                                fischmeister
-                                                github
-                                                greiner
-                                                gtk-ide
-                                                high-contrast
-                                                jb-simple
-                                                kaolin-breeze
-                                                katester
+                                (member theme '(
+                                                ;; adwaita
+                                                ;; aliceblue
+                                                ;; bharadwaj
+                                                ;; black-on-gray
+                                                ;; blippblopp
+                                                ;; emacs-21
+                                                ;; emacs-nw
+                                                ;; fischmeister
+                                                ;; github
+                                                ;; greiner
+                                                ;; gtk-ide
+                                                ;; high-contrast
+                                                ;; jb-simple
+                                                ;; kaolin-breeze
+                                                ;; katester
+                                                doom-dracula
                                                 leuven
-                                                marquardt
-                                                mccarthy
-                                                montz
-                                                occidental
-                                                oldlace
-                                                scintilla
-                                                sitaramv-nt
-                                                snowish
-                                                soft-stone
-                                                standard
-                                                tango
-                                                tango-plus
-                                                tangotango
-                                                tao-yang
-                                                vim-colors
-                                                whateveryouwant
-                                                wheat
-                                                xemacs
-                                                xp)))))
+                                                ;; marquardt
+                                                ;; mccarthy
+                                                ;; montz
+                                                ;; occidental
+                                                ;; oldlace
+                                                ;; scintilla
+                                                ;; sitaramv-nt
+                                                ;; snowish
+                                                ;; soft-stone
+                                                ;; standard
+                                                ;; tango
+                                                ;; tango-plus
+                                                ;; tangotango
+                                                ;; tao-yang
+                                                ;; vim-colors
+                                                ;; whateveryouwant
+                                                ;; wheat
+                                                ;; xemacs
+                                                ;; xp
+                                                )))))
         (when (if prefer-light-p light-theme-p (not light-theme-p))
           (push theme themes))))
   (my-pickup-random-color-theme themes)))
@@ -114,6 +117,36 @@
       (my-delete-selected-region)
       ;; insert theme package names
       (insert (mapconcat 'identity names "\n")))))
+
+;;(load-theme 'monokai)
+
+
+;; ====================================Themes automatically change =====================================
+;; (defun reapply-themes ()
+;;   "Forcibly load the themes listed in `custom-enabled-themes'."
+;;   (dolist (theme custom-enabled-themes)
+;;   (unless (custom-theme-p theme)
+;;   (load-theme theme)))
+
+;; (custom-set-variables `(custom-enabled-themes (quote ,custom-enabled-themes))))
+;; (add-hook 'after-init-hook 'reapply-themes)
+
+;; (defun synchronize-theme ()
+;;   (setq hour
+;;         (string-to-number
+;;          (substring (current-time-string) 11 13))) ;;closes (setq hour...
+;;   (if (member hour (number-sequence 6 17))
+;;       (setq now '(sanityinc-tomorrow-day))
+;;     (setq now '(sanityinc-tomorrow-bright))) ;; end of (if ...
+;;   (if (eq now custom-enabled-themes)
+;;       nil
+;;     (setq custom-enabled-themes now)
+;;     (reapply-themes) ) ) ;; end of (defun ...
+
+;; (run-with-timer 0 3600 'synchronize-theme)
+
+
+
 
 (provide 'init-theme)
 ;;; init-theme.el ends here

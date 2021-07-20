@@ -54,6 +54,10 @@
 
   (setq default-input-method "pyim")
 
+  (pyim-default-scheme 'pyim-shuangpin)
+
+;; 显示5个候选词。
+(setq pyim-page-length 7)
   (cond
    (my-pyim-enable-wubi-dict
     ;; load wubi dictionary
@@ -96,7 +100,10 @@
       (unless disable-basedict (pyim-basedict-enable)))))
 
   ;; don't use tooltip
-  (setq pyim-use-tooltip 'popup))
+  ;; (setq pyim-use-tooltip 'popup)
+  (setq pyim-use-tooltip 'posframe)
+  )
+
 ;; }}
 
 ;; {{ cal-china-x setup

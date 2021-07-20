@@ -80,13 +80,18 @@
 (let* ((file-name-handler-alist nil))
 
   (require-init 'init-autoload)
+  (require-init 'init-defaults)
   ;; `package-initialize' takes 35% of startup time
   ;; need check https://github.com/hlissner/doom-emacs/wiki/FAQ#how-is-dooms-startup-so-fast for solution
+  (require-init 'init-quelpa)
+  (require-init 'init-private)
+  ;; (require-init 'init-awesome-tray)
   (require-init 'init-modeline)
+  (require-init 'init-meow)
   (require-init 'init-utils)
   (require-init 'init-file-type)
-  (require-init 'init-elpa)
-
+  ;; (require-init 'init-elpa)
+  (require-init 'init-wiki-lib)
   ;; for unit test
   (when my-disable-idle-timer
     (my-add-subdirs-to-load-path (file-name-as-directory my-site-lisp-dir)))
@@ -97,6 +102,7 @@
   (require-init 'init-ivy)
   (require-init 'init-windows)
   (require-init 'init-javascript t)
+ ; (require-init 'init-org-roam t)
   (require-init 'init-org t)
   (require-init 'init-python t)
   (require-init 'init-lisp t)
@@ -110,10 +116,10 @@
   (require-init 'init-ctags t)
   (require-init 'init-bbdb t)
   (require-init 'init-gnus t)
-  (require-init 'init-lua-mode t)
+  ;;(require-init 'init-lua-mode t)
   (require-init 'init-workgroups2 t) ; use native API in lightweight mode
   (require-init 'init-term-mode t)
-  (require-init 'init-web-mode t)
+  ;;(require-init 'init-web-mode t)
   (require-init 'init-company t)
   (require-init 'init-chinese t) ;; cannot be idle-required
   ;; need statistics of keyfreq asap
@@ -137,7 +143,7 @@
   (require-init 'init-writting t)
   (require-init 'init-hydra) ; hotkey is required everywhere
   ;; use evil mode (vi key binding)
-  (require-init 'init-evil) ; init-evil dependent on init-clipboard
+  ;;(require-init 'init-evil) ; init-evil dependent on init-clipboard
 
   ;; ediff configuration should be last so it can override
   ;; the key bindings in previous configuration

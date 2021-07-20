@@ -233,4 +233,87 @@ skip user's own code in `org-mode-hook'."
         ;; @see http://irreal.org/blog/1
         org-src-fontify-natively t))
 
+;;org-roam
+;; (use-package org-roam
+;;   :commands (org-roam-insert org-roam-find-file org-roam org-roam-show-graph)
+;;   :diminish org-roam-mode
+;;   :init
+;;   (setq org-roam-directory "~/org-roam")
+;;   ;; (setq org-roam-graph-viewer "/usr/bin/open")
+;;   )
+;;
+;; (setq org-roam-buffer-position 'bottom)
+;; (setq org-roam-completion-system 'ivy)
+;;
+;; ;;whicher
+;; (use-package whicher
+;;   :quelpa (whicher :fetcher github :repo "abo-abo/whicher")
+;;   :ensure t
+;;   )
+;;
+;; (whicher "dot")
+;;
+;; (setq org-roam-capture-templates
+;;       '(("d"
+;;          "default"
+;;          plain
+;;          #'org-roam-capture--get-point
+;;          "%?"
+;;          :file-name "%<%Y-%m-%d_%H:%M>-${slug}"
+;;          :head "#+title: ${title}\n* Tasks\n"
+;;          :unnarrowed t)))
+;;
+;; (defhydra hydra-org-roam (:exit t :idle 0.8)
+;;   "Launcher for `org-roam'."
+;;   ("i" org-roam-insert "insert")
+;;   ("f" ora-org-roam-find-file "find-file")
+;;   ("v" org-roam-buffer-activate "backlinks")
+;;   ("t" ora-roam-todo "todo"))
+;;
+;; (org-roam-mode)
+;;
+;; (defun ora-org-roam-find-file-action (x)
+;;   (if (consp x)
+;;       (let ((file-path (plist-get (cdr x) :path)))
+;;         (org-roam--find-file file-path))
+;;     (let* ((title-with-tags x)
+;;            (org-roam-capture--info
+;;             `((title . ,title-with-tags)
+;;               (slug . ,(funcall org-roam-title-to-slug-function title-with-tags))))
+;;            (org-roam-capture--context 'title))
+;;       (setq org-roam-capture-additional-template-props (list :finalize 'find-file))
+;;       (org-roam-capture--capture))))
+;;
+;; (defun ora-org-roam-find-file ()
+;;   (interactive)
+;;   (unless org-roam-mode (org-roam-mode))
+;;   (ivy-read "File: " (org-roam--get-title-path-completions)
+;;             :action #'ora-org-roam-find-file-action
+;;             :caller 'ora-org-roam-find-file))
+;;
+;; (defun ora-roam-todo ()
+;;   "An ad-hoc agenda for `org-roam'."
+;;   (interactive)
+;;   (let* ((regex "^\\* TODO")
+;;          (b (get-buffer (concat "*ivy-occur counsel-rg \"" regex "\"*"))))
+;;     (if b
+;;         (progn
+;;           (switch-to-buffer b)
+;;           (ivy-occur-revert-buffer))
+;;       (setq unread-command-events (listify-key-sequence (kbd "C-c C-o M->")))
+;;       (counsel-rg regex org-roam-directory "--sort modified"))))
+;;
+;;
+;; (setq org-roam-server-host "127.0.0.1"
+;;       org-roam-server-port 9090
+;;       org-roam-server-export-inline-images t
+;;       org-roam-server-authenticate nil
+;;       org-roam-server-network-label-truncate t
+;;       org-roam-server-network-label-truncate-length 60
+;;       org-roam-server-network-label-wrap-length 20)
+;; (org-roam-server-mode)
+;;
+;; (require 'org-roam-protocol)
+;; (org-roam-server-mode 1)
+
 (provide 'init-org)
